@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/main.css'
+import './index.css'; // custom styling if necessary, currently bg color aqua
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
