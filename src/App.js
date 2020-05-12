@@ -5,21 +5,21 @@ import Navbar from "./components/Navbar";
 import CategoryView from "./components/CategoryView";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
-// import Wrapper from "./components/Wrapper";
+import Wrapper from "./components/Wrapper";
 // import Footer from "./components/Footer";
 
 const App = () => {
   document.title = "RocketList";
   return (
     <Router>
+      <Wrapper>
       <Navbar />
-      {/* <Wrapper> */}
       <Switch>
         <Route exact path="/" component={Main} />
         <Route exact path="/category" component={CategoryView} />
         <Route path="*" component={NoMatch} />
       </Switch>
-      {/* </Wrapper> */}
+      </Wrapper>
       {/* <Footer /> */}
     </Router>
   );
