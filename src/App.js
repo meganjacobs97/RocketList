@@ -1,13 +1,14 @@
-import React from 'react';
-// import logo from './logo.svg';
-import './App.css';
-// import RocketList from './components/Rocketlist';
-import Navbar from './components/Navbar';
+import React from "react";
+import "./App.css";
+import Main from "./pages/Main";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    // <RocketList />,
-    <Navbar />
+    <div>
+      <Navbar />
+      <Main />
+    </div>
   );
 }
 
