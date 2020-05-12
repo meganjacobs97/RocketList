@@ -1,15 +1,28 @@
 import React from "react";
 import "./App.css";
-import Main from "./pages/Main";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import CategoryView from "./components/CategoryView";
+import Main from "./pages/Main";
+import NoMatch from "./pages/NoMatch";
+// import Wrapper from "./components/Wrapper";
+// import Footer from "./components/Footer";
 
-function App() {
+const App = () => {
+  document.title = "RocketList";
   return (
-    <div>
+    <Router>
       <Navbar />
-      <Main />
-    </div>
+      {/* <Wrapper> */}
+      <Switch>
+        <Route exact path="/" component={Main} />
+        <Route exact path="/category" component={CategoryView} />
+        <Route path="*" component={NoMatch} />
+      </Switch>
+      {/* </Wrapper> */}
+      {/* <Footer /> */}
+    </Router>
   );
-}
+};
 
 export default App;
