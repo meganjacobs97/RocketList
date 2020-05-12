@@ -3,7 +3,7 @@ import React from "react";
 export default function Navbar() {
   return (
     <div id="top-of-page" className="grid grid-rows-2">
-      <div id="header" className="flex justify-around">
+      <div id="header" className="flex justify-between">
         <div className="flex align-center">
           <h1 className="text-2xl">RocketList</h1>
           <img
@@ -12,15 +12,15 @@ export default function Navbar() {
             alt="logo"
           />
         </div>
-        {/* <div> */}
-        <h1 className="align-center">Hamburger</h1>
-        {/* </div> */}
+        <div>
+          <h1 className="align-center">Hamburger</h1>
+        </div>
       </div>
       <div id="navbar" className="flex flex-col">
         <div>
           <h1 className="flex justify-center">Welcome to RocketList!</h1>
         </div>
-        <div className="flex flex-row justify-around">
+        <div className="flex flex-row justify-around visible lg:invisible">
           <div>Explore</div>
           <div>Answer</div>
           <div>Ask</div>
