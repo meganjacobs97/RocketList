@@ -17,6 +17,12 @@ module.exports = {
 
       black: '#000',
       white: '#fff',
+      RocketRed: '#FF6161',
+      RocketSteel: '#D9D9D9',
+      RocketBlack: '#220000',
+      RocketJames: '#A36AD1',
+      RocketJessie: '#BC3287',
+      RocketMeowth: '#FFFCC8',
 
       gray: {
         100: '#f7fafc',
