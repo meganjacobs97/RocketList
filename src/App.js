@@ -1,11 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import RocketList from './components/Rocketlist';
+import Main from './pages/Main';
 
 function App() {
   return (
-    <RocketList />
+    <Main />
   );
 }
 
