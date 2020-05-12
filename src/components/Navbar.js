@@ -12,13 +12,8 @@ export default function Navbar() {
             alt="logo"
           />
         </div>
-<<<<<<< HEAD
-        <div>
-          <h1 className="align-center">Hamburger</h1>
-=======
         <div className="align-center">
           <h1>Hamburger</h1>
->>>>>>> development
         </div>
       </div>
       <div id="navbar" className="flex flex-col">
