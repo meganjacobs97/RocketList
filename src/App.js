@@ -1,11 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Main from './pages/Main';
+import React from "react";
+import "./App.css";
+import Main from "./pages/Main";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <Main />
+    <div>
+      <Navbar />
+      <Main />
+    </div>
   );
 }
 
