@@ -7,9 +7,11 @@ import CategoryView from './components/CategoryView';
 
 function App() {
   return (
-    <Navbar />
-    // <RocketList />
-    <CategoryView />
+    <div>
+      <Navbar />
+      {/* <RocketList /> */}
+      <CategoryView />
+    </div>
   );
 }
 
