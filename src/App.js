@@ -12,14 +12,14 @@ const App = () => {
   document.title = "RocketList";
   return (
     <Router>
-      <Wrapper >
+      <Wrapper>
       <Navbar />
       <Switch>
         <Route exact path="/" component={Main} />
         <Route exact path="/category" component={CategoryView} />
         <Route path="*" component={NoMatch} />
       </Switch>
-      </Wrapper >
+      </Wrapper>
       {/* <Footer /> */}
     </Router>
   );
