@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Main from "../pages/Main";
 // import { connect } from 'react-redux'
 
 export class CategoryView extends Component {
