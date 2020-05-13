@@ -8,14 +8,14 @@ import AllCat from "../components/AllCat";
 function Main() {
   return (
     <VGrid size="12">
-      <Col size="2">
+      <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <TopCat name={"Rory"} />
           <br></br>
           <AllCat />
         </div>
       </Col>
-      <Col size="8">
+      <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded">
           <h1 className="text-center">placeholder for posts</h1>
           <h1 className="text-center">placeholder for posts</h1>
@@ -53,7 +53,7 @@ function Main() {
           <h1 className="text-center">placeholder for posts</h1>
         </div>
       </Col>
-      <Col size="2">
+      <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
           <div className="container rounded border-2 border-RocketJessie">
             <h1 className="text-center">Top Point Holders</h1>

@@ -1,12 +1,21 @@
 import React from "react";
 
 function Col(props) {
-  const size = props.size
+  const visibility = props.visibility;
+
+  const lgsize = props.lgsize
     .split(" ")
-    .map((size) => "col-span-" + size)
+    .map((size) => "lg:col-span-" + size)
     .join(" ");
 
-  return <div className={size} {...props} />;
+    if(props.mobsize) {
+      const mobsize = props.mobsize
+      .split(" ")
+      .map((size) => "col-span-" + size)
+      .join(" ");
+      return <div className={`${lgsize} ${mobsize} ${visibility}`} {...props} />;
+    }
+    return <div className={`${lgsize} ${visibility}`} {...props} />;
 }
 
 export default Col;
