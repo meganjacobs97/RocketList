@@ -45,7 +45,7 @@ export class CategoryView extends Component {
                 </span>
                 <svg
                   aria-hidden="true"
-                  class=""
+                  className="invisible"
                   data-reactid="266"
                   fill="none"
                   height="24"
