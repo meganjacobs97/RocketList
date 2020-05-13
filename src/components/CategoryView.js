@@ -5,13 +5,11 @@ export class CategoryView extends Component {
   render() {
     return (
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-12 lg:col-span-2">
-          <div className="grid">
+        <div className="col-span-10 lg:col-span-2 hidden lg:block">
+          <div className="grid hidden lg:block">
             <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
               <div className="w-7 h-7 flex items-center justify-center">
-                <h1 className="text-center">
-                  Subcategories here
-                </h1>
+                <h1 className="text-center">Subcategories here</h1>
                 <svg
                   aria-hidden="true"
                   className="lg:invisible rounded-full border border-grey w-7 h-7 flex items-center justify-center"
@@ -40,9 +38,7 @@ export class CategoryView extends Component {
             <br></br>
             <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
               <div className="w-7 h-7 flex items-center justify-center">
-                <h1 className="text-center">
-                  Top categories
-                </h1>
+                <h1 className="text-center">Top categories</h1>
                 <svg
                   aria-hidden="true"
                   className="lg:invisible rounded-full border border-grey w-7 h-7 flex items-center justify-center"
@@ -59,20 +55,20 @@ export class CategoryView extends Component {
                 >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                </div>
-                {/* make this into a list */}
-                <div className="ml-4 mr-4 mb-1">
-                  <p>Top categories</p>
-                  <p>Top categories</p>
-                  <p>Top categories</p>
-                  <p>Top categories</p>
-                </div>
+              </div>
+              {/* make this into a list */}
+              <div className="ml-4 mr-4 mb-1">
+                <p>Top categories</p>
+                <p>Top categories</p>
+                <p>Top categories</p>
+                <p>Top categories</p>
+              </div>
             </div>
             <br></br>
-            <div className="visible container rounded border-2 border-RocketMeowth divide-y-2 divide-RocketSteel">
-            <div className="w-7 h-7 flex items-center justify-center">
-              <h1 className="text-center">All categories</h1>
-              <svg
+            <div className="container rounded border-2 border-RocketMeowth divide-y-2 divide-RocketSteel">
+              <div className="w-7 h-7 flex items-center justify-center">
+                <h1 className="text-center">All categories</h1>
+                <svg
                   aria-hidden="true"
                   className="lg:invisible rounded-full border border-grey w-7 h-7 flex items-center justify-center"
                   data-reactid="266"
@@ -88,7 +84,7 @@ export class CategoryView extends Component {
                 >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                </div>
+              </div>
               {/* make this into a list */}
               <div className="ml-4 mb-1 mr-4">
                 <p>Category</p>
@@ -108,7 +104,7 @@ export class CategoryView extends Component {
             </div>
           </div>
         </div>
-        <div className="col-span-12 lg:col-span-8">
+        <div className="col-span-10 lg:col-span-8">
           <h1 className="text-center">
             placeholder for posts in this category
           </h1>

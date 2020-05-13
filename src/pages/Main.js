@@ -5,7 +5,7 @@ import VGrid from "../components/VGrid";
 function Main() {
   return (
     <VGrid size="12">
-      <Col lgsize="2" mobsize="12">
+      <Col lgsize="2" mobsize="10" className="invisible lg:visible">
         <div className="grid">
           <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
           <div className="w-7 h-7 flex items-center justify-center">
@@ -77,10 +77,10 @@ function Main() {
           </div>
         </div>
       </Col>
-      <Col lgsize="8" mobsize="12">
+      <Col lgsize="8" mobsize="10">
         <h1 className="text-center">placeholder for posts</h1>
       </Col>
-      <Col lgsize="2" mobsize="12">
+      <Col lgsize="2" mobsize="10">
         <div className="grid invisible lg:visible">
           <div className="container rounded border-2 border-RocketJessie">
             <h1 className="text-center">Top Point Holders</h1>
