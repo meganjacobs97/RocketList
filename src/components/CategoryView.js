@@ -5,29 +5,31 @@ export class CategoryView extends Component {
   render() {
     return (
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-12 lg:col-span-3">
+        <div className="col-span-2">
           <div className="grid invisible lg:visible">
             <div className="visible container rounded border-2 border-RocketRed">
-              <span className="text-grey-darkest font-thin text-xl">
-                Subcategories here
-              </span>
               <div className="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
+                <span className="text-grey-darkest font-thin text-xl">
+                  Subcategories here
+                </span>
+                <div className="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
+                  <svg
+                    aria-hidden="true"
+                    class=""
+                    data-reactid="266"
+                    fill="none"
+                    height="24"
+                    stroke="#606F7B"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewbox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
               </div>
               <h1>Subcategories</h1>
               <h1>Subcategories</h1>
@@ -62,41 +64,68 @@ export class CategoryView extends Component {
               <h1>Technology/Electronics</h1>
               <h1>Misc</h1>
             </div>
-            <br />
-            <div className="container rounded border-2 border-RocketRed">
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
-            </div>
             <br></br>
             <div className="container rounded border-2 border-RocketJames">
-              <h1>All categories</h1>
+            <h1 className="text-center">All categories</h1>
+            {/* make this into a list */}
+            <div className="ml-4 mb-1">
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+              <p>Category</p>
+            </div>
             </div>
           </div>
         </div>
-        <div className="col-span-6">
-          <h1>placeholder</h1>
+        <div className="col-span-8">
+          <h1 className="text-center">placeholder for posts in this category</h1>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-2">
           <div className="grid invisible lg:visible">
             <div className="container rounded border-2 border-RocketJessie">
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
-              <h1>Top categories</h1>
+            <h1 className="text-center">Top Point Holders</h1>
+            {/* make this into a list */}
+            <div className="ml-4 mb-1">
+              <p>Rory</p>
+              <p>Marlon</p>
+              <p>Paul</p>
+              <p>Dion</p>
+              <p>Louis</p>
+            </div>
             </div>
             <br></br>
             <div className="container rounded border-2 border-RocketRed">
-              <h1>All categories</h1>
+            <h1 className="text-center">Top Posters</h1>
+            {/* make this into a list */}
+            <div className="ml-4 mb-1">
+              <p>Rory</p>
+              <p>Marlon</p>
+              <p>Paul</p>
+              <p>Dion</p>
+              <p>Louis</p>
             </div>
+          </div>
             <br></br>
             <div className="container rounded border-2 border-RocketRed">
-              <h1>All categories</h1>
-              <h1>All categories</h1>
-              <h1>All categories</h1>
+            <h1 className="text-center">Mods</h1>
+            {/* make this into a list */}
+            <div className="ml-4 mb-1">
+              <p>Rory</p>
+              <p>Marlon</p>
+              <p>Paul</p>
+              <p>Dion</p>
+              <p>Louis</p>
             </div>
+          </div>
           </div>
         </div>
       </div>

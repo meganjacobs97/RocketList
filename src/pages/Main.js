@@ -6,24 +6,25 @@ function Main() {
       <div className="col-span-2">
         <div className="grid invisible lg:visible">
           <div className="container rounded border-2 border-RocketRed">
-              <div className="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-          <span className="text-grey-darkest font-thin text-xl">Top Categories</span>
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                </svg>
-                </div>
+            <div className="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
+              <span className="text-grey-darkest font-thin text-xl">
+                Top Categories
+              </span>
+              <svg
+                aria-hidden="true"
+                class=""
+                data-reactid="266"
+                fill="none"
+                height="24"
+                stroke="#606F7B"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              ></svg>
+            </div>
             <h1>Anime/Manga</h1>
             <h1>Sports</h1>
             <h1>Lifestyle</h1>
