@@ -6,7 +6,7 @@ function VGrid(props) {
     .map((size) => "grid grid-cols-" + size + " gap-4")
     .join(" ");
 
-  return <div className={size} {...props} />;
+  return <div className={`${size}`} {...props} />;
 }
 
 export default VGrid;

@@ -3,7 +3,49 @@ import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
+import Posts from "../components/Posts";
 // import TPoster from "../components/TPoster";
+
+const testPostArr = [
+  {
+    post: {
+      title: "I love pokemon",
+      body: "my favorite is chandelure",
+      date_created: "13-may-2020",
+      replies: [],
+      subcategory: {
+        name: "pokemon go",
+        description: "all about pokemon go",
+        category: {
+          name: "pokemon",
+          description: "all things pokemon related",
+        },
+      },
+      author: {
+        username: "testUserDion",
+      },
+    },
+  },
+  {
+    post: {
+      title: "I love pokemon",
+      body: "my favorite is magikarp",
+      date_created: "13-may-2020",
+      replies: [],
+      subcategory: {
+        name: "pokemon go",
+        description: "all about pokemon go",
+        category: {
+          name: "pokemon",
+          description: "all things pokemon related",
+        },
+      },
+      author: {
+        username: "louis",
+      },
+    },
+  },
+];
 
 function Main() {
   return (
@@ -16,42 +58,7 @@ function Main() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        <div className="border-2 border-RocketBlack container rounded">
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-          <h1 className="text-center">placeholder for posts</h1>
-        </div>
+        <Posts posts={testPostArr} />
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
