@@ -1,48 +1,57 @@
 import React from "react";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
+import TopCat from "../components/TopCat";
+import AllCat from "../components/AllCat";
+// import TPoster from "../components/TPoster";
 
 function Main() {
   return (
     <VGrid size="12">
       <Col size="2">
         <div className="grid invisible lg:visible">
-          <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-            <h1 className="text-center divide-y divide-RocketSteel">
-              Top categories
-            </h1>
-            {/* make this into a list */}
-            <div className="ml-4 mr-4 mb-1">
-              <p>Top categories</p>
-              <p>Top categories</p>
-              <p>Top categories</p>
-              <p>Top categories</p>
-            </div>
-          </div>
+          <TopCat name={"Rory"} />
           <br></br>
-          <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
-            <h1 className="text-center">All categories</h1>
-            {/* make this into a list */}
-            <div className="ml-4 mr-4 mb-1">
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-              <p>Category</p>
-            </div>
-          </div>
+          <AllCat />
         </div>
       </Col>
       <Col size="8">
-        <h1 className="text-center">placeholder for posts</h1>
+        <div className="border-2 border-RocketBlack container rounded">
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+          <h1 className="text-center">placeholder for posts</h1>
+        </div>
       </Col>
       <Col size="2">
         <div className="grid invisible lg:visible">
@@ -58,6 +67,7 @@ function Main() {
             </div>
           </div>
           <br></br>
+          {/* <TPoster name="Rory"/> */}
           <div className="container rounded border-2 border-RocketRed">
             <h1 className="text-center">Top Posters</h1>
             {/* make this into a list */}
