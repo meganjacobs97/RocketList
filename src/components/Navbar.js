@@ -7,8 +7,8 @@ export default function Navbar() {
         <div className="flex align-center">
           <h1 className="text-2xl">RocketList</h1>
           <img
-            className="object-none object-top h-6 w-6 m-auto m-l-12"
-            src="http://placekitten.com/g/200/300"
+            src="../Photo/R.png"
+            className="object-center ml-2"
             alt="logo"
           />
         </div>
