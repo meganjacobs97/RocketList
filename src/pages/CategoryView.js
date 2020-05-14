@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
@@ -8,6 +8,36 @@ import Posts from "../components/Posts";
 import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
+
+// Query graphql
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+
+const GET_DOGS = gql`
+  {
+    dogs {
+      id
+      breed
+    }
+  }
+`;
+
+function Dogs({ onDogSelected }) {
+  const { loading, error, data } = useQuery(GET_DOGS);
+
+  if (loading) return "Loading...";
+  if (error) return `Error! ${error.message}`;
+
+  return (
+    <select name="dog" onChange={onDogSelected}>
+      {data.dogs.map((dog) => (
+        <option key={dog.id} value={dog.breed}>
+          {dog.breed}
+        </option>
+      ))}
+    </select>
+  );
+}
 
 // import { connect } from 'react-redux'
 
@@ -52,40 +82,54 @@ const testPostArr = [
   },
 ];
 
-export class CategoryView extends Component {
-  state = {
+function CategoryView() {
+  const [subCategories, setSubCategories] = useState({
     parentCategory: "Pokemon",
     currCategory: "Pokemon Mobile",
-    subCategory: ""
-  };
+    subCategory: "",
+  });
 
-  render() {
-    return (
-      <VGrid size="12">
-        <Col lgsize="2" visibility="hidden lg:block">
-          <div className="grid invisible lg:visible">
-            <Subcategory parent_category={this.state.parentCategory} name={this.state.currCategory} />
-            <br></br>
-            <TopCat name={"Rory"} />
-            <br></br>
-            <AllCat />
-          </div>
-        </Col>
-        <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-          <Posts posts={testPostArr} />
-        </Col>
-        <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
-          <div className="grid invisible lg:visible">
-            <TPoints name={"Paul"} />
-            <br></br>
-            <TPoster name={"Dion"} />
+  const [topCategories, setTopCategories] = useState({
+    excitementLevel: 10000,
+    lifeLongLearner: true,
+    testCategories: ["Rory", "Rory again", "Rory thrice"],
+  });
+
+  return (
+    <VGrid size="12">
+      <Col lgsize="2" visibility="hidden lg:block">
+        <div className="grid invisible lg:visible">
+          <Subcategory
+            parent_category={subCategories.parentCategory}
+            name={subCategories.currCategory}
+          />
+          <br></br>
+          <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
+            <h1 className="text-center">Top categories</h1>
+            <div>
+              {topCategories.testCategories.map((category) => (
+                <TopCat name={category} />
+              ))}
+            </div>
           </div>
           <br></br>
-          <Mods name={"Louis"} />
-        </Col>
-      </VGrid>
-    );
-  }
+          <AllCat />
+        </div>
+      </Col>
+      <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        <Posts posts={testPostArr} />
+      </Col>
+      <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
+        <div className="grid invisible lg:visible">
+          <TPoints name={"Paul"} />
+          <br></br>
+          <TPoster name={"Dion"} />
+        </div>
+        <br></br>
+        <Mods name={"Louis"} />
+      </Col>
+    </VGrid>
+  );
 }
 
 // const mapStateToProps = (state) => ({
