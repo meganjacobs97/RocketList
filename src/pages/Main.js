@@ -56,6 +56,10 @@ function Main() {
     testCategories: ["Rory", "Rory again", "Rory thrice"],
   });
 
+  const [tempPostArr, setTempPostArr] = useState({
+    query: testPostArr,
+  })
+
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
@@ -73,8 +77,10 @@ function Main() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        {/* {testPostArr.map(post => <Posts posts={testPostArr}>)} */}
-        <Posts posts={testPostArr} />
+      <div className="border-2 border-RocketBlack container rounded px-2">
+        {tempPostArr.query.map(post => <Posts title={post.post.title} body={post.post.body} date_created={post.post.date_created} subcategory={post.post.subcategory.name} category={post.post.subcategory.category.name} author={post.post.author.username}/>)}
+        {/* <Posts posts={testPostArr} /> */}
+      </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
