@@ -1,155 +1,89 @@
 import React, { Component } from "react";
-import Main from "../pages/Main";
+import Subcategory from "../components/Subcategory";
+import Col from "../components/Col";
+import VGrid from "../components/VGrid";
+import TopCat from "../components/TopCat";
+import AllCat from "../components/AllCat";
+import Posts from "../components/Posts";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
+
 // import { connect } from 'react-redux'
 
+const testPostArr = [
+  {
+    post: {
+      title: "I love pokemon",
+      body: "my favorite is chandelure",
+      date_created: "13-may-2020",
+      replies: [],
+      subcategory: {
+        name: "pokemon go",
+        description: "all about pokemon go",
+        category: {
+          name: "pokemon",
+          description: "all things pokemon related",
+        },
+      },
+      author: {
+        username: "testUserDion",
+      },
+    },
+  },
+  {
+    post: {
+      title: "I love pokemon",
+      body: "my favorite is magikarp",
+      date_created: "13-may-2020",
+      replies: [],
+      subcategory: {
+        name: "pokemon go",
+        description: "all about pokemon go",
+        category: {
+          name: "pokemon",
+          description: "all things pokemon related",
+        },
+      },
+      author: {
+        username: "louis",
+      },
+    },
+  },
+];
+
 export class CategoryView extends Component {
+  state = {
+    parentCategory: "Pokemon",
+    currCategory: "Pokemon Go",
+    subCategory: ""
+  };
+
   render() {
     return (
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-10 lg:col-span-2 hidden lg:block">
-          <div className="grid hidden lg:block">
-            <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-              <div className="w-7 h-7 flex items-center justify-center">
-                <h1 className="text-center">Subcategories here</h1>
-                <svg
-                  aria-hidden="true"
-                  className="lg:invisible rounded-full border border-grey w-7 h-7 flex items-center justify-center"
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-              <div className="ml-4 mr-4 mb-1">
-                <p>Subcategories</p>
-                <p>Subcategories</p>
-                <p>Subcategories</p>
-                <p>Subcategories</p>
-                <p>Subcategories</p>
-              </div>
-            </div>
-            <br></br>
-            <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
-              <div className="w-7 h-7 flex items-center justify-center">
-                <h1 className="text-center">Top categories</h1>
-                <svg
-                  aria-hidden="true"
-                  className="lg:invisible rounded-full border border-grey w-7 h-7 flex items-center justify-center"
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-              {/* make this into a list */}
-              <div className="ml-4 mr-4 mb-1">
-                <p>Top categories</p>
-                <p>Top categories</p>
-                <p>Top categories</p>
-                <p>Top categories</p>
-              </div>
-            </div>
-            <br></br>
-            <div className="container rounded border-2 border-RocketMeowth divide-y-2 divide-RocketSteel">
-              <div className="w-7 h-7 flex items-center justify-center">
-                <h1 className="text-center">All categories</h1>
-                <svg
-                  aria-hidden="true"
-                  className="lg:invisible rounded-full border border-grey w-7 h-7 flex items-center justify-center"
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-              {/* make this into a list */}
-              <div className="ml-4 mb-1 mr-4">
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-                <p>Category</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-span-10 lg:col-span-8">
-          <h1 className="text-center">
-            placeholder for posts in this category
-          </h1>
-        </div>
-        <div className="col-span-2">
+      <VGrid size="12">
+        <Col lgsize="2" visibility="hidden lg:block">
           <div className="grid invisible lg:visible">
-            <div className="container rounded border-2 border-RocketJessie">
-              <h1 className="text-center">Top Point Holders</h1>
-              {/* make this into a list */}
-              <div className="ml-4 mb-1">
-                <p>Rory</p>
-                <p>Marlon</p>
-                <p>Paul</p>
-                <p>Dion</p>
-                <p>Louis</p>
-              </div>
-            </div>
+            <Subcategory parent_category={this.state.parentCategory} name={this.state.currCategory} />
             <br></br>
-            <div className="container rounded border-2 border-RocketRed">
-              <h1 className="text-center">Top Posters</h1>
-              {/* make this into a list */}
-              <div className="ml-4 mb-1">
-                <p>Rory</p>
-                <p>Marlon</p>
-                <p>Paul</p>
-                <p>Dion</p>
-                <p>Louis</p>
-              </div>
-            </div>
+            <TopCat name={"Rory"} />
             <br></br>
-            <div className="container rounded border-2 border-RocketRed">
-              <h1 className="text-center">Mods</h1>
-              {/* make this into a list */}
-              <div className="ml-4 mb-1">
-                <p>Rory</p>
-                <p>Marlon</p>
-                <p>Paul</p>
-                <p>Dion</p>
-                <p>Louis</p>
-              </div>
-            </div>
+            <AllCat />
           </div>
-        </div>
-      </div>
+        </Col>
+        <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+          <Posts posts={testPostArr} />
+        </Col>
+        <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
+          <div className="grid invisible lg:visible">
+            <TPoints name={"Paul"} />
+            <br></br>
+            <TPoster name={"Dion"} />
+          </div>
+          <br></br>
+          <Mods name={"Louis"} />
+        </Col>
+      </VGrid>
     );
   }
 }
