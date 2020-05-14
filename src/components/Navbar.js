@@ -1,19 +1,16 @@
 import React from "react";
+import Menu from "./Menu";
+import Logo from "./Photo/log.png";
 
 export default function Navbar() {
   return (
     <div id="top-of-page" className="grid grid-rows-2">
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
-          <h1 className="text-2xl">RocketList</h1>
-          <img
-            src="../Photo/R.png"
-            className="object-center ml-2"
-            alt="logo"
-          />
+          <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
         </div>
         <div className="align-center">
-          <h1>Hamburger</h1>
+          <Menu />
         </div>
       </div>
       <div id="navbar" className="flex flex-col">
