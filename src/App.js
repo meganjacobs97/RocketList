@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import CategoryView from "./components/CategoryView";
+import CategoryView from "./pages/CategoryView";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
 import Wrapper from "./components/Wrapper";

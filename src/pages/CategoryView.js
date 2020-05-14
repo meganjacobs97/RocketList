@@ -55,7 +55,7 @@ const testPostArr = [
 export class CategoryView extends Component {
   state = {
     parentCategory: "Pokemon",
-    currCategory: "Pokemon Go",
+    currCategory: "Pokemon Mobile",
     subCategory: ""
   };
 
