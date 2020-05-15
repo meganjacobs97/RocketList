@@ -6,11 +6,7 @@ export default function Navbar() {
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
           <h1 className="text-2xl">RocketList</h1>
-          <img
-            src="../Photo/R.png"
-            className="object-center ml-2"
-            alt="logo"
-          />
+          <img src="../Photo/R.png" className="object-center ml-2" alt="logo" />
         </div>
         <div className="align-center">
           <h1>Hamburger</h1>
