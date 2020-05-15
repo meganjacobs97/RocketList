@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-import TopCat from "../components/TopCat";
-import AllCat from "../components/AllCat";
+// import TopCat from "../components/TopCat";
+// import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
-import TPoster from "../components/TPoster";
-import Mods from "../components/Mods";
+// import TPoints from "../components/TPoints";
+// import TPoster from "../components/TPoster";
+// import Mods from "../components/Mods";
+import OrderedList from "../components/OrderedList";
+import UnorderedList from "../components/UnorderedList";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -95,6 +97,22 @@ function CategoryView() {
     testCategories: ["Rory", "Rory again", "Rory thrice"],
   });
 
+  const [allCategories, setAllCategories] = useState({
+    allCategories: ["Anime/Manga", "World News", "Literature"],
+  });
+
+  const [topPoints, setTopPoints] = useState({
+    topPoints: ["Paul", "Paul again", "Paul x 3"],
+  });
+
+  const [topPosters, setTopPosters] = useState({
+    topPosters: ["Louis", "Louis again", "Louis x 3"],
+  });
+
+  const [categoryMods, setCategoryMods] = useState({
+    mods: ["Dion", "Dion again", "Dion x 3"],
+  });
+
   const [tempPostArr, setTempPostArr] = useState({
     query: testPostArr,
   });
@@ -108,16 +126,15 @@ function CategoryView() {
             name={subCategories.currCategory}
           />
           <br></br>
-          <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-            <h1 className="text-center">Top categories</h1>
-            <div>
-              {topCategories.testCategories.map((category) => (
-                <TopCat name={category} />
-              ))}
-            </div>
-          </div>
+          <OrderedList
+            category="Top Categories"
+            list={topCategories.testCategories}
+          />
           <br></br>
-          <AllCat />
+          <UnorderedList
+            category="All categories"
+            list={allCategories.allCategories}
+          />
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -136,12 +153,18 @@ function CategoryView() {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          <TPoints name={"Paul"} />
+          <OrderedList
+            category="Top Points Holders"
+            list={topPoints.topPoints}
+          />
           <br></br>
-          <TPoster name={"Dion"} />
+          <OrderedList
+            category="Top Posters"
+            list={topPosters.topPosters}
+          />
         </div>
         <br></br>
-        <Mods name={"Louis"} />
+        <UnorderedList category="Mods" list={categoryMods.mods}/>
       </Col>
     </VGrid>
   );
