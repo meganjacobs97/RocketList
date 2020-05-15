@@ -9,7 +9,7 @@ export default function Navbar() {
         <div className="flex align-center">
           <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
         </div>
-        <div className="align-center">
+        <div className="flex align-center">
           <Menu />
         </div>
       </div>
