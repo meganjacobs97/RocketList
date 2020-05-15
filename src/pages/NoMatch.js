@@ -1,10 +1,14 @@
 import React from "react";
+import Col from "../components/Col";
+import VGrid from "../components/VGrid";
 
 function NoMatch() {
   return (
-    <div className="grid grid-cols-12 gap-4">
-      <h1>Error: Page Not Found</h1>
-    </div>
+    <VGrid size="12">
+      <Col lgsize="12" mobsize="12">
+      <h1 className="text-center">Error: Page Not Found</h1>
+      </Col>
+    </VGrid>
   );
 }
 

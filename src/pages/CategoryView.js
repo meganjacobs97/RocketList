@@ -1,13 +1,75 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-import TopCat from "../components/TopCat";
-import AllCat from "../components/AllCat";
+// import TopCat from "../components/TopCat";
+// import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
-import TPoster from "../components/TPoster";
-import Mods from "../components/Mods";
+// import TPoints from "../components/TPoints";
+// import TPoster from "../components/TPoster";
+// import Mods from "../components/Mods";
+import OrderedList from "../components/OrderedList";
+import UnorderedList from "../components/UnorderedList";
+
+// Query graphql
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+//Dave
+const GET_DOGS = gql`
+  {
+    dogs {
+      id
+      breed
+    }
+  }
+`;
+// Dion
+const GET_USERS = gql`
+  query {
+    users {
+      _id
+      username
+      email
+    }
+  }
+`;
+
+function Dogs({ onDogSelected }) {
+  const { loading, error, data } = useQuery(GET_DOGS);
+
+  if (loading) return "Loading...";
+  if (error) return `Error! ${error.message}`;
+
+  return (
+    <select name="dog" onChange={onDogSelected}>
+      {data.dogs.map((dog) => (
+        <option key={dog.id} value={dog.breed}>
+          {dog.breed}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+function Users() {
+  const { loading, error, data } = useQuery(GET_USERS);
+
+  if (loading) return "Loading...";
+  if (error) return `Error! ${error.message}`;
+
+  return (
+    // <select name="dog" onChange={onUserSelected}>
+      data.users.map(user => (
+        console.log(user)
+        // <option key={dog.id} value={dog.breed}>
+        //   {dog.breed}
+        // </option>
+      ))
+    // </select>
+  );
+}
+
+
 
 // import { connect } from 'react-redux'
 
@@ -52,40 +114,97 @@ const testPostArr = [
   },
 ];
 
-export class CategoryView extends Component {
-  state = {
+function CategoryView() {
+  const [subCategories, setSubCategories] = useState({
     parentCategory: "Pokemon",
     currCategory: "Pokemon Mobile",
-    subCategory: ""
-  };
+    subCategory: "",
+  });
 
-  render() {
-    return (
-      <VGrid size="12">
-        <Col lgsize="2" visibility="hidden lg:block">
-          <div className="grid invisible lg:visible">
-            <Subcategory parent_category={this.state.parentCategory} name={this.state.currCategory} />
-            <br></br>
-            <TopCat name={"Rory"} />
-            <br></br>
-            <AllCat />
-          </div>
-        </Col>
-        <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-          <Posts posts={testPostArr} />
-        </Col>
-        <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
-          <div className="grid invisible lg:visible">
-            <TPoints name={"Paul"} />
-            <br></br>
-            <TPoster name={"Dion"} />
-          </div>
+  const [topCategories, setTopCategories] = useState({
+    excitementLevel: 10000,
+    lifeLongLearner: true,
+    testCategories: ["Rory", "Rory again", "Rory thrice"],
+  });
+
+  const [allCategories, setAllCategories] = useState({
+    allCategories: ["Anime/Manga", "World News", "Literature"],
+  });
+
+  const [topPoints, setTopPoints] = useState({
+    topPoints: ["Paul", "Paul again", "Paul x 3"],
+  });
+
+  const [topPosters, setTopPosters] = useState({
+    topPosters: ["Louis", "Louis again", "Louis x 3"],
+  });
+
+  const [categoryMods, setCategoryMods] = useState({
+    mods: ["Dion", "Dion again", "Dion x 3"],
+  });
+
+  const [tempPostArr, setTempPostArr] = useState({
+    query: testPostArr,
+  });
+
+  useEffect(() => {
+    console.log("used an effect")
+    // Users().then();
+  })
+
+  return (
+    <VGrid size="12">
+      <Col lgsize="2" visibility="hidden lg:block">
+        <div className="grid invisible lg:visible">
+          <Subcategory
+            parent_category={subCategories.parentCategory}
+            name={subCategories.currCategory}
+          />
           <br></br>
-          <Mods name={"Louis"} />
-        </Col>
-      </VGrid>
-    );
-  }
+          {/* {Users()} */}
+          {/* {console.log("Hello")} */}
+          <OrderedList
+            category="Top Categories"
+            list={topCategories.testCategories}
+          />
+          <br></br>
+          <UnorderedList
+            category="All categories"
+            list={allCategories.allCategories}
+          />
+        </div>
+      </Col>
+      <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+      <div className="border-2 border-RocketBlack container rounded px-2">
+          {tempPostArr.query.map((post) => (
+            <Posts
+              title={post.post.title}
+              body={post.post.body}
+              date_created={post.post.date_created}
+              subcategory={post.post.subcategory.name}
+              category={post.post.subcategory.category.name}
+              author={post.post.author.username}
+            />
+          ))}
+        </div>
+      </Col>
+      <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
+        <div className="grid invisible lg:visible">
+          <OrderedList
+            category="Top Points Holders"
+            list={topPoints.topPoints}
+          />
+          <br></br>
+          <OrderedList
+            category="Top Posters"
+            list={topPosters.topPosters}
+          />
+        </div>
+        <br></br>
+        <UnorderedList category="Mods" list={categoryMods.mods}/>
+      </Col>
+    </VGrid>
+  );
 }
 
 // const mapStateToProps = (state) => ({
