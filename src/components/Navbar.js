@@ -7,12 +7,7 @@ export default function Navbar() {
     <div id="top-of-page" className="grid grid-rows-2">
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
-<<<<<<< HEAD
-          <h1 className="text-2xl">RocketList</h1>
-          <img src="../Photo/R.png" className="object-center ml-2" alt="logo" />
-=======
           <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
->>>>>>> a7250583059c227ea94285905a84e0059a1cbf78
         </div>
         <div className="align-center">
           <Menu />
