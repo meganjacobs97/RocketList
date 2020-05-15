@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
@@ -147,6 +147,11 @@ function CategoryView() {
     query: testPostArr,
   });
 
+  useEffect(() => {
+    console.log("used an effect")
+    // Users().then();
+  })
+
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
@@ -156,7 +161,7 @@ function CategoryView() {
             name={subCategories.currCategory}
           />
           <br></br>
-          {Users()}
+          {/* {Users()} */}
           {/* {console.log("Hello")} */}
           <OrderedList
             category="Top Categories"
