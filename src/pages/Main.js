@@ -56,6 +56,10 @@ function Main() {
     testCategories: ["Rory", "Rory again", "Rory thrice"],
   });
 
+  const [allCategories, setAllCategories] = useState({
+    allCategories: ["Anime/Manga", "World News", "Literature"],
+  });
+
   const [tempPostArr, setTempPostArr] = useState({
     query: testPostArr,
   });
@@ -66,11 +70,11 @@ function Main() {
         <div className="grid invisible lg:visible">
           <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
             <h1 className="text-center">Top categories</h1>
-            <div>
+            <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
               {topCategories.testCategories.map((category) => (
                 <TopCat name={category} />
               ))}
-            </div>
+            </ol>
           </div>
           <br></br>
           <AllCat />
@@ -88,7 +92,6 @@ function Main() {
               author={post.post.author.username}
             />
           ))}
-          {/* <Posts posts={testPostArr} /> */}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">

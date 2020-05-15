@@ -94,7 +94,7 @@ function CategoryView() {
     lifeLongLearner: true,
     testCategories: ["Rory", "Rory again", "Rory thrice"],
   });
-  
+
   const [tempPostArr, setTempPostArr] = useState({
     query: testPostArr,
   });
@@ -132,7 +132,6 @@ function CategoryView() {
               author={post.post.author.username}
             />
           ))}
-          {/* <Posts posts={testPostArr} /> */}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
