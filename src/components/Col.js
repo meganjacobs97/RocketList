@@ -1,5 +1,6 @@
 import React from "react";
-function Col(props) {
+
+export default function Col(props) {
   const visibility = props.visibility;
   const lgsize = props.lgsize
     .split(" ")
@@ -14,4 +15,3 @@ function Col(props) {
     }
     return <div className={`${lgsize} ${visibility}`} {...props} />;
 }
-export default Col;
