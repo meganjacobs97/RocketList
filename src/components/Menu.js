@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import R from "./Photo/R.png";
 import Popper from "popper.js";
+import Login from "./Login";
 
 export default function Hamburger() {
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
@@ -12,6 +13,7 @@ export default function Hamburger() {
     });
     setDropdownPopoverShow(true);
   };
+
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
@@ -53,13 +55,14 @@ export default function Hamburger() {
           >
             account settings
           </a>
-          <a
+          <Login />
+          {/* <a
             href="#"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => e.preventDefault()}
           >
             logout
-          </a>
+          </a> */}
         </div>
       </div>
     </div>
