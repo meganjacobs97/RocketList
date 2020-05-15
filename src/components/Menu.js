@@ -27,7 +27,6 @@ export default function Hamburger() {
             dropdownPopoverShow
               ? closeDropdownPopover()
               : openDropdownPopover();
-            console.log("hi");
           }}
           className="block"
         >
