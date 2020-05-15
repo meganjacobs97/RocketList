@@ -148,8 +148,8 @@ function CategoryView() {
   });
 
   useEffect(() => {
-    console.log("used an effect")
-    // Users().then();
+    // console.log("used an effect")
+    Users()
   })
 
   return (
