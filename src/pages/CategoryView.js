@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Subcategory from "../components/Subcategory";
+// import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 // import TopCat from "../components/TopCat";
@@ -14,16 +14,6 @@ import UnorderedList from "../components/UnorderedList";
 // Query graphql
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-//Dave
-const GET_DOGS = gql`
-  {
-    dogs {
-      id
-      breed
-    }
-  }
-`;
-// Dion
 const GET_USERS = gql`
   query {
     users {
@@ -33,43 +23,50 @@ const GET_USERS = gql`
     }
   }
 `;
+const GET_SUBCATS = gql`
+  query {
+    subcategories {
+      _id
+      name
+      description
+      category {
+        name
+        _id
+      }
+    }
+  }
+`;
+const GET_ALLCATS = gql`
+  query {
+    categories {
+      name
+      _id
+      subcategories {
+        post {
+          title
+          _id
+        }
+      }
+    }
+  }
+`;
 
-function Dogs({ onDogSelected }) {
-  const { loading, error, data } = useQuery(GET_DOGS);
+// function Dogs({ onDogSelected }) {
+//   const { loading, error, data } = useQuery(GET_DOGS);
 
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
+//   if (loading) return "Loading...";
+//   if (error) return `Error! ${error.message}`;
 
-  return (
-    <select name="dog" onChange={onDogSelected}>
-      {data.dogs.map((dog) => (
-        <option key={dog.id} value={dog.breed}>
-          {dog.breed}
-        </option>
-      ))}
-    </select>
-  );
-}
-
-function Users() {
-  const { loading, error, data } = useQuery(GET_USERS);
-
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
-
-  return (
-    // <select name="dog" onChange={onUserSelected}>
-      data.users.map(user => (
-        console.log(user)
-        // <option key={dog.id} value={dog.breed}>
-        //   {dog.breed}
-        // </option>
-      ))
-    // </select>
-  );
-}
-
-
+//   return (
+//     <select name="dog" onChange={onDogSelected}>
+//       {data.dogs.map((dog) => (
+//         <option key={dog.id} value={dog.breed}>
+//           {dog.breed}
+//         </option>
+//       ))}
+//     </select>
+//   );
+// }
 
 // import { connect } from 'react-redux'
 
@@ -115,10 +112,11 @@ const testPostArr = [
 ];
 
 function CategoryView() {
+  // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
-    parentCategory: "Pokemon",
-    currCategory: "Pokemon Mobile",
-    subCategory: "",
+    parentCategory: "Video Games (hardcoded)",
+    currCategory: "Pokemon (hardcoded)",
+    subCategories: [],
   });
 
   const [topCategories, setTopCategories] = useState({
@@ -128,7 +126,7 @@ function CategoryView() {
   });
 
   const [allCategories, setAllCategories] = useState({
-    allCategories: ["Anime/Manga", "World News", "Literature"],
+    allCategories: [],
   });
 
   const [topPoints, setTopPoints] = useState({
@@ -147,22 +145,83 @@ function CategoryView() {
     query: testPostArr,
   });
 
+  // Queries database to get users (placeholder, will get mods)
+  const { loading: userLoading, error: userError, data: userData } = useQuery(
+    GET_USERS
+  );
+
+  // Queries database to get all subcategories
+  const {
+    loading: subCatLoading,
+    error: subCatError,
+    data: subCatData,
+  } = useQuery(GET_SUBCATS);
+
+  // Queries database to get all categories
+  const {
+    loading: allCatLoading,
+    error: allCatError,
+    data: allCatData,
+  } = useQuery(GET_ALLCATS);
+
+  // Queries database to get top points holders (placeholder)
+  const { loading: topPointsLoading, error: topPointsError, data: topPointsData } = useQuery(
+    GET_USERS
+  );
+
   useEffect(() => {
-    // console.log("used an effect")
-    Users()
-  })
+    // if(userLoading) console.log("help")
+    // if(userError) console.log("I need somebody")
+    // if(userLoading) return "Loading...";
+    // if(userError) return `Error! $s{error.message}`;
+    if (userData)
+      setCategoryMods({
+        ...categoryMods,
+        mods: userData.users.map((user) => user.username),
+      });
+    if (subCatData) {
+      setSubCategories({
+        ...subCategories,
+        subCategories: subCatData.subcategories.map(
+          (subcategory) => subcategory.name
+        ),
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        allCategories: allCatData.categories.map(
+          (category) => category.name
+        ),
+      });
+    }
+    if (topPointsData)
+      setTopPoints({
+        ...topPoints,
+        topPoints: topPointsData.users.map((user) => user.username),
+      });
+  }, [userData, subCatData, allCatData, topPointsData]);
+
+  // return (
+  //     data.users.map(user => (
+  //       // console.log(user)
+  //       user
+  //     ))
+  // );
+
+  // useEffect(() => {
+  //   // console.log("used an effect")
+  //   console.log(Users());
+  // })
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
-          <Subcategory
-            parent_category={subCategories.parentCategory}
-            name={subCategories.currCategory}
+          <UnorderedList
+            category={`Subcategories in ${subCategories.parentCategory}`}
+            list={subCategories.subCategories}
           />
           <br></br>
-          {/* {Users()} */}
-          {/* {console.log("Hello")} */}
           <OrderedList
             category="Top Categories"
             list={topCategories.testCategories}
@@ -175,7 +234,8 @@ function CategoryView() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-      <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="border-2 border-RocketBlack container rounded px-2">
+          <h1>Current category: {subCategories.currCategory}</h1>
           {tempPostArr.query.map((post) => (
             <Posts
               title={post.post.title}
@@ -195,13 +255,10 @@ function CategoryView() {
             list={topPoints.topPoints}
           />
           <br></br>
-          <OrderedList
-            category="Top Posters"
-            list={topPosters.topPosters}
-          />
+          <OrderedList category="Top Posters" list={topPosters.topPosters} />
         </div>
         <br></br>
-        <UnorderedList category="Mods" list={categoryMods.mods}/>
+        <UnorderedList category="Mods" list={categoryMods.mods} />
       </Col>
     </VGrid>
   );
