@@ -14,12 +14,22 @@ import UnorderedList from "../components/UnorderedList";
 // Query graphql
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-
+//Dave
 const GET_DOGS = gql`
   {
     dogs {
       id
       breed
+    }
+  }
+`;
+// Dion
+const GET_USERS = gql`
+  query {
+    users {
+      _id
+      username
+      email
     }
   }
 `;
@@ -40,6 +50,26 @@ function Dogs({ onDogSelected }) {
     </select>
   );
 }
+
+function Users() {
+  const { loading, error, data } = useQuery(GET_USERS);
+
+  if (loading) return "Loading...";
+  if (error) return `Error! ${error.message}`;
+
+  return (
+    // <select name="dog" onChange={onUserSelected}>
+      data.users.map(user => (
+        console.log(user)
+        // <option key={dog.id} value={dog.breed}>
+        //   {dog.breed}
+        // </option>
+      ))
+    // </select>
+  );
+}
+
+
 
 // import { connect } from 'react-redux'
 
@@ -126,6 +156,8 @@ function CategoryView() {
             name={subCategories.currCategory}
           />
           <br></br>
+          {Users()}
+          {/* {console.log("Hello")} */}
           <OrderedList
             category="Top Categories"
             list={topCategories.testCategories}
