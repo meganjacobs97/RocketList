@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import R from "./Photo/R.png";
 
 export default function Hamburger() {
-  state = {
-    isOpen: true
-  }
+  const [isOpen, setIsOpen] = useState(true)
+  
   return (
     <div>
       <div className="relative">
