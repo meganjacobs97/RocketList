@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 // import TopCat from "../components/TopCat";
@@ -9,6 +9,56 @@ import Posts from "../components/Posts";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
+
+// Query graphql
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+const GET_USERS = gql`
+  query {
+    users {
+      _id
+      username
+      email
+    }
+  }
+`;
+const GET_SUBCATS = gql`
+  query {
+    subcategories {
+      _id
+      name
+      description
+      category {
+        name
+        _id
+      }
+    }
+  }
+`;
+
+const GET_ALLCATS = gql`
+  query {
+    categories {
+      name
+      _id
+    }
+  }
+`;
+
+const GET_SUBCATS_BY_CATID = (parentId) => {
+  return gql`
+    {
+      category(id: "${parentId}") {
+        name
+        _id
+        subcategories {
+          name
+          _id
+        }
+      }
+    }
+  `;
+};
 
 const testPostArr = [
   {
@@ -53,9 +103,7 @@ const testPostArr = [
 
 function Main() {
   const [topCategories, setTopCategories] = useState({
-    excitementLevel: 10000,
-    lifeLongLearner: true,
-    testCategories: ["Rory", "Rory again", "Rory thrice"],
+    topCategories: [],
   });
 
   const [allCategories, setAllCategories] = useState({
@@ -78,13 +126,113 @@ function Main() {
     query: testPostArr,
   });
 
+  // Queries database to get users (placeholder, will get mods)
+  // const { loading: userLoading, error: userError, data: userData } = useQuery(
+  //   GET_USERS
+  // );
+  // Queries database to get all subcategories
+  // const {
+  //   loading: subCatLoading,
+  //   error: subCatError,
+  //   data: subCatData,
+  // } = useQuery(GET_SUBCATS);
+  // Queries database to get all subcategories for a given ID!
+  // const {
+  //   loading: subCatIdLoading,
+  //   error: subCatIdError,
+  //   data: subCatIdData,
+  // } = useQuery(GET_SUBCATS_BY_CATID("5ebe3b5dad332d50981177ef"));
+  // Queries database to get all categories
+  const {
+    loading: allCatLoading,
+    error: allCatError,
+    data: allCatData,
+  } = useQuery(GET_ALLCATS);
+  // Queries database to get top categories (placeholder)
+  const {
+    loading: topCatLoading,
+    error: topCatError,
+    data: topCatData,
+  } = useQuery(GET_ALLCATS);
+  // Queries database to get top points holders (placeholder)
+  const {
+    loading: topPointsLoading,
+    error: topPointsError,
+    data: topPointsData,
+  } = useQuery(GET_USERS);
+  // Queries database to get top posters (placeholder)
+  const {
+    loading: topPostersLoading,
+    error: topPostersError,
+    data: topPostersData,
+  } = useQuery(GET_USERS);
+  // Queries database to get mods (placeholder)
+  const { loading: modLoading, error: modError, data: modData } = useQuery(
+    GET_USERS
+  );
+
+  // on page load, updates state objects
+  useEffect(() => {
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        ...allCategories,
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+    if (topPointsData) {
+      setTopPoints({
+        ...topPoints,
+        topPoints: topPointsData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+    if (topPostersData) {
+      setTopPosters({
+        ...topPosters,
+        topPosters: topPostersData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+    if (modData) {
+      setCategoryMods({
+        ...categoryMods,
+        mods: modData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+  }, [
+    topCatData,
+    allCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+  ]);
+
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <OrderedList
             category="Top Categories"
-            list={topCategories.testCategories}
+            list={topCategories.topCategories}
           />
           <br></br>
           <UnorderedList

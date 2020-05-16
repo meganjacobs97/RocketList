@@ -36,20 +36,30 @@ const GET_SUBCATS = gql`
     }
   }
 `;
+
 const GET_ALLCATS = gql`
   query {
     categories {
       name
       _id
-      subcategories {
-        post {
-          title
+    }
+  }
+`;
+
+const GET_SUBCATS_BY_CATID = (parentId) => {
+  return gql`
+    {
+      category(id: "${parentId}") {
+        name
+        _id
+        subcategories {
+          name
           _id
         }
       }
     }
-  }
-`;
+  `;
+};
 
 // function Dogs({ onDogSelected }) {
 //   const { loading, error, data } = useQuery(GET_DOGS);
@@ -114,104 +124,160 @@ const testPostArr = [
 function CategoryView() {
   // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
-    parentCategory: "Video Games (hardcoded)",
-    currCategory: "Pokemon (hardcoded)",
+    parentCategory: "",
+    currCategory: "",
     subCategories: [],
   });
-
   const [topCategories, setTopCategories] = useState({
-    excitementLevel: 10000,
-    lifeLongLearner: true,
-    testCategories: ["Rory", "Rory again", "Rory thrice"],
+    topCategories: [],
   });
-
   const [allCategories, setAllCategories] = useState({
     allCategories: [],
   });
-
   const [topPoints, setTopPoints] = useState({
-    topPoints: ["Paul", "Paul again", "Paul x 3"],
+    topPoints: [],
   });
-
   const [topPosters, setTopPosters] = useState({
-    topPosters: ["Louis", "Louis again", "Louis x 3"],
+    topPosters: [],
   });
-
   const [categoryMods, setCategoryMods] = useState({
-    mods: ["Dion", "Dion again", "Dion x 3"],
+    mods: [],
   });
-
   const [tempPostArr, setTempPostArr] = useState({
     query: testPostArr,
   });
 
   // Queries database to get users (placeholder, will get mods)
-  const { loading: userLoading, error: userError, data: userData } = useQuery(
-    GET_USERS
-  );
-
+  // const { loading: userLoading, error: userError, data: userData } = useQuery(
+  //   GET_USERS
+  // );
   // Queries database to get all subcategories
+  // const {
+  //   loading: subCatLoading,
+  //   error: subCatError,
+  //   data: subCatData,
+  // } = useQuery(GET_SUBCATS);
+  // Queries database to get all subcategories for a given ID!
   const {
-    loading: subCatLoading,
-    error: subCatError,
-    data: subCatData,
-  } = useQuery(GET_SUBCATS);
-
+    loading: subCatIdLoading,
+    error: subCatIdError,
+    data: subCatIdData,
+  } = useQuery(GET_SUBCATS_BY_CATID("5ebe3b5dad332d50981177ef"));
   // Queries database to get all categories
   const {
     loading: allCatLoading,
     error: allCatError,
     data: allCatData,
   } = useQuery(GET_ALLCATS);
-
+  // Queries database to get top categories (placeholder)
+  const {
+    loading: topCatLoading,
+    error: topCatError,
+    data: topCatData,
+  } = useQuery(GET_ALLCATS);
   // Queries database to get top points holders (placeholder)
-  const { loading: topPointsLoading, error: topPointsError, data: topPointsData } = useQuery(
+  const {
+    loading: topPointsLoading,
+    error: topPointsError,
+    data: topPointsData,
+  } = useQuery(GET_USERS);
+  // Queries database to get top posters (placeholder)
+  const {
+    loading: topPostersLoading,
+    error: topPostersError,
+    data: topPostersData,
+  } = useQuery(GET_USERS);
+  // Queries database to get mods (placeholder)
+  const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
 
+  const handleCategoryClick = (event) => {
+    console.log(event.target)
+  }
+
+  // on page load, updates state objects
   useEffect(() => {
     // if(userLoading) console.log("help")
     // if(userError) console.log("I need somebody")
     // if(userLoading) return "Loading...";
     // if(userError) return `Error! $s{error.message}`;
-    if (userData)
-      setCategoryMods({
-        ...categoryMods,
-        mods: userData.users.map((user) => user.username),
-      });
-    if (subCatData) {
+    // if (subCatData) {
+    //   setSubCategories({
+    //     ...subCategories,
+    //     subCategories: subCatData.subcategories.map(
+    //       (subcategory) => subcategory.name
+    //     ),
+    //   });
+    // }
+    if (subCatIdData) {
+      // console.log(subCatIdData)
       setSubCategories({
         ...subCategories,
-        subCategories: subCatData.subcategories.map(
-          (subcategory) => subcategory.name
+        parentCategory: subCatIdData.category.name,
+        currCategory: subCatIdData.category.name,
+        subCategories: subCatIdData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id
+          })
         ),
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
       });
     }
     if (allCatData) {
       setAllCategories({
-        allCategories: allCatData.categories.map(
-          (category) => category.name
-        ),
+        ...allCategories,
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
       });
     }
-    if (topPointsData)
+    if (topPointsData) {
       setTopPoints({
         ...topPoints,
-        topPoints: topPointsData.users.map((user) => user.username),
+        topPoints: topPointsData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
       });
-  }, [userData, subCatData, allCatData, topPointsData]);
-
-  // return (
-  //     data.users.map(user => (
-  //       // console.log(user)
-  //       user
-  //     ))
-  // );
-
-  // useEffect(() => {
-  //   // console.log("used an effect")
-  //   console.log(Users());
-  // })
+    }
+    if (topPostersData) {
+      setTopPosters({
+        ...topPosters,
+        topPosters: topPostersData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+    if (modData) {
+      setCategoryMods({
+        ...categoryMods,
+        mods: modData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+  }, [
+    // subCatData,
+    subCatIdData,
+    topCatData,
+    allCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+  ]);
 
   return (
     <VGrid size="12">
@@ -224,7 +290,7 @@ function CategoryView() {
           <br></br>
           <OrderedList
             category="Top Categories"
-            list={topCategories.testCategories}
+            list={topCategories.topCategories}
           />
           <br></br>
           <UnorderedList
