@@ -1,7 +1,6 @@
 import React from "react";
 
 function PostCard(props) {
-  console.log(props)
   return (
     <div className="border-2 border-RocketJames container rounded my-2" id={props.postId}>
       <h1>Title: {props.title}</h1>
