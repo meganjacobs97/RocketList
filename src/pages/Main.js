@@ -9,6 +9,7 @@ import Posts from "../components/Posts";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
+import LoginBox from "../components/LoginBox";
 
 const testPostArr = [
   {
@@ -51,7 +52,8 @@ const testPostArr = [
   },
 ];
 
-function Main() {
+function Main(props) {
+  const isLoggedIn = props.isLoggedIn;
   const [topCategories, setTopCategories] = useState({
     excitementLevel: 10000,
     lifeLongLearner: true,
@@ -110,20 +112,19 @@ function Main() {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
+          {props.isLoggedIn ? "" : <LoginBox isLoggedIn={isLoggedIn} />}
+          <br></br>
           <OrderedList
             category="Top Points Holders"
             list={topPoints.topPoints}
           />
           {/* <TPoints name={"Paul"} /> */}
           <br></br>
-          <OrderedList
-            category="Top Posters"
-            list={topPosters.topPosters}
-          />
+          <OrderedList category="Top Posters" list={topPosters.topPosters} />
           {/* <TPoster name={"Dion"} /> */}
+          <br></br>
+          <UnorderedList category="Mods" list={categoryMods.mods} />
         </div>
-        <br></br>
-        <UnorderedList category="Mods" list={categoryMods.mods}/>
         {/* <Mods name={"Louis"} /> */}
       </Col>
     </VGrid>
