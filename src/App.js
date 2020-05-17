@@ -14,12 +14,22 @@ const App = () => {
   return (
     <Router>
       <Wrapper>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
-      <Switch>
-        <Route exact path="/"> <Main isLoggedIn={isLoggedIn}></Main></Route>
-        <Route exact path="/category" component={CategoryView} />
-        <Route path="*" component={NoMatch} />
-      </Switch>
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Switch>
+          <Route exact path="/">
+            {" "}
+            <Main isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></Main>
+          </Route>
+          <Route exact path="/category">
+            {" "}
+            <CategoryView
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              // component={CategoryView}
+            ></CategoryView>
+          </Route>
+          <Route path="*" component={NoMatch} />
+        </Switch>
       </Wrapper>
       {/* <Footer /> */}
     </Router>

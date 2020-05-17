@@ -10,7 +10,7 @@ export default function Navbar(props) {
           <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
         </div>
         <div className="flex align-center">
-          {props.isLoggedIn ? <Menu /> :""}
+          {props.isLoggedIn ? <Menu /> : ""}
         </div>
       </div>
       <div id="navbar" className="flex flex-col">
