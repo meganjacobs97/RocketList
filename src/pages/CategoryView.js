@@ -11,6 +11,8 @@ import Posts from "../components/Posts";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
+import LoginBox from "../components/LoginBox";
+import InputPost from "../components/InputPost";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -139,7 +141,7 @@ const useSearch = (categoryId) => {
   console.log("i used a search lol");
 };
 
-function CategoryView() {
+function CategoryView(props) {
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
   // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
@@ -478,6 +480,9 @@ function CategoryView() {
 
     // useQuery(queryForSubCatsByParent)
     // console.log(queryForSubCatsByParent)
+  // };
+    console.log("used an effect");
+    // Users().then();
   };
 
   return (
@@ -521,6 +526,9 @@ function CategoryView() {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
+          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          <br></br>
           <OrderedList
             selectItem={handleUserClick}
             category="Top Points Holders"

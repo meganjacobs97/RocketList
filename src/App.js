@@ -37,10 +37,15 @@ const App = () => {
         <Switch>
           <Route exact path="/">
             {" "}
-            <Main isLoggedIn={isLoggedIn}></Main>
+            <Main isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></Main>
           </Route>
           <Route exact path="/category">
-            <CategoryView/>
+            {" "}
+            <CategoryView
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              // component={CategoryView}
+            ></CategoryView>
           </Route>
           <Route path="*" component={NoMatch} />
         </Switch>
