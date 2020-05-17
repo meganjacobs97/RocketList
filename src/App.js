@@ -18,6 +18,7 @@ const App = () => {
         <Route exact path="/" component={Main} />
         <Route exact path="/category" component={CategoryView} />
         <Route path="*" component={NoMatch} />
+        
       </Switch>
       </Wrapper>
       {/* <Footer /> */}
