@@ -15,7 +15,7 @@ function OrderedList(props) {
             className="state-rendered-item"
             id={item.id}
             onClick={() => {
-              clickTest(item.id);
+              props.selectItem(item.id);
             }}
           >
             {item.name}

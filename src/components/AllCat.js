@@ -12,6 +12,7 @@ function AllCat(props) {
         {props.list ? (
           props.list.map((item) => (
             <li
+              key={item.id}
               className="state-rendered-item"
               data-name={item.name}
               id={item.id}

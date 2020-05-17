@@ -11,15 +11,39 @@ import Wrapper from "./components/Wrapper";
 const App = () => {
   document.title = "RocketList";
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [subCategories, setSubCategories] = useState({
+  //   parentCategory: "",
+  //   parentCategoryId: "",
+  //   currCategory: "",
+  //   subCategories: [],
+  // });
+
+  // const handleCatChange = (id) => {
+  //   if (id === "5ebe3b5dad332d50981177ef") {
+  //     setSubCategories({
+  //       ...subCategories,
+  //       parentCategory: "Video Games",
+  //       parentCategoryId: `${id}`,
+  //       currCategory: "Video Games",
+  //       subCategories: ["WoW", "Minecraft", "Misc"],
+  //     });
+  //   }
+  // };
+
   return (
     <Router>
       <Wrapper>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
-      <Switch>
-        <Route exact path="/"> <Main isLoggedIn={isLoggedIn}></Main></Route>
-        <Route exact path="/category" component={CategoryView} />
-        <Route path="*" component={NoMatch} />
-      </Switch>
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Switch>
+          <Route exact path="/">
+            {" "}
+            <Main isLoggedIn={isLoggedIn}></Main>
+          </Route>
+          <Route exact path="/category">
+            <CategoryView/>
+          </Route>
+          <Route path="*" component={NoMatch} />
+        </Switch>
       </Wrapper>
       {/* <Footer /> */}
     </Router>

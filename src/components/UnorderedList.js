@@ -26,6 +26,7 @@ function UnorderedList(props) {
         {props.list ? (
           props.list.map((item) => (
             <li
+              key={item.id}
               className="state-rendered-item"
               id={item.id}
               onClick={() => {
