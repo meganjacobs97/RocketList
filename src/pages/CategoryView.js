@@ -10,6 +10,8 @@ import Posts from "../components/Posts";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
+import LoginBox from "../components/LoginBox";
+import InputPost from "../components/InputPost";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -59,17 +61,15 @@ function Users() {
 
   return (
     // <select name="dog" onChange={onUserSelected}>
-      data.users.map(user => (
-        console.log(user)
-        // <option key={dog.id} value={dog.breed}>
-        //   {dog.breed}
-        // </option>
-      ))
+    data.users.map(
+      (user) => console.log(user)
+      // <option key={dog.id} value={dog.breed}>
+      //   {dog.breed}
+      // </option>
+    )
     // </select>
   );
 }
-
-
 
 // import { connect } from 'react-redux'
 
@@ -114,7 +114,7 @@ const testPostArr = [
   },
 ];
 
-function CategoryView() {
+function CategoryView(props) {
   const [subCategories, setSubCategories] = useState({
     parentCategory: "Pokemon",
     currCategory: "Pokemon Mobile",
@@ -148,9 +148,9 @@ function CategoryView() {
   });
 
   useEffect(() => {
-    console.log("used an effect")
+    console.log("used an effect");
     // Users().then();
-  })
+  });
 
   return (
     <VGrid size="12">
@@ -175,7 +175,7 @@ function CategoryView() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-      <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="border-2 border-RocketBlack container rounded px-2">
           {tempPostArr.query.map((post) => (
             <Posts
               title={post.post.title}
@@ -190,18 +190,18 @@ function CategoryView() {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
+          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          <br></br>
           <OrderedList
             category="Top Points Holders"
             list={topPoints.topPoints}
           />
           <br></br>
-          <OrderedList
-            category="Top Posters"
-            list={topPosters.topPosters}
-          />
+          <OrderedList category="Top Posters" list={topPosters.topPosters} />
+          <br></br>
+          <UnorderedList category="Mods" list={categoryMods.mods} />
         </div>
-        <br></br>
-        <UnorderedList category="Mods" list={categoryMods.mods}/>
       </Col>
     </VGrid>
   );
