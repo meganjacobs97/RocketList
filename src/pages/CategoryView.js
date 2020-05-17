@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 // import TopCat from "../components/TopCat";
-// import AllCat from "../components/AllCat";
+import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
 // import TPoster from "../components/TPoster";
@@ -36,7 +36,6 @@ const GET_SUBCATS = gql`
     }
   }
 `;
-
 const GET_ALLCATS = gql`
   query {
     categories {
@@ -45,7 +44,6 @@ const GET_ALLCATS = gql`
     }
   }
 `;
-
 const GET_SUBCATS_BY_CATID = (parentId) => {
   return gql`
     {
@@ -121,6 +119,10 @@ const testPostArr = [
   },
 ];
 
+const useSearch = (categoryId) => {
+  console.log("i used a search lol");
+};
+
 function CategoryView() {
   // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
@@ -158,11 +160,12 @@ function CategoryView() {
   //   data: subCatData,
   // } = useQuery(GET_SUBCATS);
   // Queries database to get all subcategories for a given ID!
-  const {
-    loading: subCatIdLoading,
-    error: subCatIdError,
-    data: subCatIdData,
-  } = useQuery(GET_SUBCATS_BY_CATID("5ebe3b5dad332d50981177ef"));
+  // let queryId = "";
+  // const {
+  //   loading: subCatIdLoading,
+  //   error: subCatIdError,
+  //   data: subCatIdData,
+  // } = useQuery(GET_SUBCATS_BY_CATID(queryId || "5ebe3b67ad332d50981177f0"));
   // Queries database to get all categories
   const {
     loading: allCatLoading,
@@ -193,8 +196,8 @@ function CategoryView() {
   );
 
   const handleCategoryClick = (event) => {
-    console.log(event.target)
-  }
+    console.log(event.target);
+  };
 
   // on page load, updates state objects
   useEffect(() => {
@@ -210,20 +213,20 @@ function CategoryView() {
     //     ),
     //   });
     // }
-    if (subCatIdData) {
-      // console.log(subCatIdData)
-      setSubCategories({
-        ...subCategories,
-        parentCategory: subCatIdData.category.name,
-        currCategory: subCatIdData.category.name,
-        subCategories: subCatIdData.category.subcategories.map(
-          (subcategory) => ({
-            name: subcategory.name,
-            id: subcategory._id
-          })
-        ),
-      });
-    }
+    // if (subCatIdData) {
+    //   // console.log(subCatIdData)
+    //   setSubCategories({
+    //     ...subCategories,
+    //     parentCategory: subCatIdData.category.name,
+    //     currCategory: subCatIdData.category.name,
+    //     subCategories: subCatIdData.category.subcategories.map(
+    //       (subcategory) => ({
+    //         name: subcategory.name,
+    //         id: subcategory._id
+    //       })
+    //     ),
+    //   });
+    // }
     if (topCatData) {
       setTopCategories({
         ...topCategories,
@@ -271,7 +274,7 @@ function CategoryView() {
     }
   }, [
     // subCatData,
-    subCatIdData,
+    // subCatIdData,
     topCatData,
     allCatData,
     topPointsData,
@@ -279,11 +282,84 @@ function CategoryView() {
     modData,
   ]);
 
+  const selectCat = (id) => {
+    // GET_SUBCATS_BY_CATID(id)
+    // useSearch();
+    // console.log(queryId)
+    // queryId = id;
+    // console.log(queryId)
+    console.log(id);
+  };
+
+  useEffect(
+    (parentCatId) => {
+      // console.log(parentCatId)
+      // const {
+      //     loading: subCatIdLoading,
+      //     error: subCatIdError,
+      //     data: subCatIdData,
+      //   }
+      //   = GET_SUBCATS_BY_CATID(parentCatId);
+      // if (subCatIdData) {
+      // console.log(subCatIdData)
+      // console.log("No data")
+      // setSubCategories({
+      //   ...subCategories,
+      //   parentCategory: subCatIdData.category.name,
+      //   currCategory: subCatIdData.category.name,
+      //   subCategories: subCatIdData.category.subcategories.map(
+      //     (subcategory) => ({
+      //       name: subcategory.name,
+      //       id: subcategory._id
+      //     })
+      //   ),
+      // });
+      // }
+      // const [subCategories, setSubCategories] = useState({
+      //   parentCategory: "",
+      //   currCategory: "",
+      //   subCategories: [],
+      // });
+      // const GET_SUBCATS_BY_CATID = (parentId) => {
+      //   return gql`
+      //     {
+      //       category(id: "${parentId}") {
+      //         name
+      //         _id
+      //         subcategories {
+      //           name
+      //           _id
+      //         }
+      //       }
+      //     }
+      //   `;
+      // };
+      console.log("subCats changed");
+    },
+    [subCategories]
+  );
+
+  const changeSubCatState = (id) => {
+    // const {
+    //   loading: subCatIdLoading,
+    //   error: subCatIdError,
+    //   data: subCatIdData,
+    // } = GET_SUBCATS_BY_CATID(id);
+    // console.log(GET_SUBCATS_BY_CATID(id))
+    // console.log(subCatIdData);
+    setSubCategories({
+      ...subCategories,
+      categoryId: id,
+    });
+    // console.log("subcats changed from subcatstates")
+  };
+
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <UnorderedList
+            selectItem={selectCat}
             category={`Subcategories in ${subCategories.parentCategory}`}
             list={subCategories.subCategories}
           />
@@ -293,7 +369,8 @@ function CategoryView() {
             list={topCategories.topCategories}
           />
           <br></br>
-          <UnorderedList
+          <AllCat
+            selectCat={changeSubCatState}
             category="All categories"
             list={allCategories.allCategories}
           />
@@ -324,7 +401,11 @@ function CategoryView() {
           <OrderedList category="Top Posters" list={topPosters.topPosters} />
         </div>
         <br></br>
-        <UnorderedList category="Mods" list={categoryMods.mods} />
+        <UnorderedList
+          selectItem={selectCat}
+          category="Mods"
+          list={categoryMods.mods}
+        />
       </Col>
     </VGrid>
   );
