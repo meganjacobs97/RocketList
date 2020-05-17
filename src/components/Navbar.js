@@ -2,15 +2,15 @@ import React from "react";
 import Menu from "./Menu";
 import Logo from "./Photo/log.png";
 
-export default function Navbar() {
+export default function Navbar(props) {
   return (
     <div id="top-of-page" className="grid grid-rows-2">
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
           <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
         </div>
-        <div className="align-center">
-          <Menu />
+        <div className="flex align-center">
+          {props.isLoggedIn ? <Menu /> :""}
         </div>
       </div>
       <div id="navbar" className="flex flex-col">
