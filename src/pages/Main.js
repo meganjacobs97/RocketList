@@ -220,13 +220,7 @@ function Main(props) {
         })),
       });
     }
-  }, [
-    topCatData,
-    allCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-  ]);
+  }, [topCatData, allCatData, topPointsData, topPostersData, modData]);
 
   return (
     <VGrid size="12">

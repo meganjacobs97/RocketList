@@ -515,20 +515,20 @@ function CategoryView(props) {
   useEffect(() => {}, [subCategories]);
 
   const handleCategoryClick = (parentId) => {
-//     const tempQuery = `
-//   query {
-//     category(id: "${parentId}") {
-//       name
-//       _id
-//       subcategories {
-//         name
-//         _id
-//       }
-//     }
-//   }
-// `;
-//   const result = gql(tempQuery)
-//   const newRes = useLazyQuery(tempQuery)
+    //     const tempQuery = `
+    //   query {
+    //     category(id: "${parentId}") {
+    //       name
+    //       _id
+    //       subcategories {
+    //         name
+    //         _id
+    //       }
+    //     }
+    //   }
+    // `;
+    //   const result = gql(tempQuery)
+    //   const newRes = useLazyQuery(tempQuery)
     // console.log(result);
     console.log(parentId);
     // if (parentId === "5ebe3b5dad332d50981177ef") {
@@ -628,7 +628,7 @@ function CategoryView(props) {
     console.log(diySubCatData);
     console.log(pkmnData);
     console.log(vidGamLazyData);
-  }
+  };
 
   // return (
   //   <div>
@@ -663,6 +663,11 @@ function CategoryView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        {props.isLoggedIn ? (
+          <InputPost list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
           <button
@@ -704,7 +709,7 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {props.isLoggedIn ? "" : <LoginBox />}
           {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList

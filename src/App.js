@@ -10,7 +10,7 @@ import Wrapper from "./components/Wrapper";
 
 const App = () => {
   document.title = "RocketList";
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   // const [subCategories, setSubCategories] = useState({
   //   parentCategory: "",
   //   parentCategoryId: "",
