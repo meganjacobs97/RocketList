@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -10,16 +10,28 @@ import Wrapper from "./components/Wrapper";
 
 const App = () => {
   document.title = "RocketList";
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Router>
       <Wrapper>
-      <Navbar />
-      <Switch>
-        <Route exact path="/" component={Main} />
-        <Route exact path="/category" component={CategoryView} />
-        <Route path="*" component={NoMatch} />
-        
-      </Switch>
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Switch>
+          <Route exact path="/">
+            {" "}
+            <Main isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></Main>
+          </Route>
+          <Route exact path="/category">
+            {" "}
+            <CategoryView
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              // component={CategoryView}
+            ></CategoryView>
+          </Route>
+          <Route path="*" component={NoMatch} />
+          <Route path="/join" exact component={Join} />
+          <Route path="/chat" component={Chat} />
+        </Switch>
       </Wrapper>
       {/* <Footer /> */}
     </Router>

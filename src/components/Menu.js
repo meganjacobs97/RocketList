@@ -12,8 +12,13 @@ export default function Hamburger() {
     });
     setDropdownPopoverShow(true);
   };
+
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
+  };
+
+  const handleLogoutClick = () => {
+    // setIsLoggedIn(false);
   };
 
   return (
@@ -56,7 +61,10 @@ export default function Hamburger() {
           <a
             href="#"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogoutClick();
+            }}
           >
             logout
           </a>
