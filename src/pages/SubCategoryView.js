@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 // import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
@@ -185,7 +186,11 @@ const useSearch = (categoryId) => {
   console.log("i used a search lol");
 };
 
-function CategoryPokemon(props) {
+function SubCategoryView(props) {
+  const { catid } = useParams();
+  console.log(catid)
+  const { subcatid } = useParams();
+  console.log(subcatid)
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
   // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
@@ -639,8 +644,8 @@ function CategoryPokemon(props) {
 
 // }
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CategoryPokemon)
-export default CategoryPokemon;
+// export default connect(mapStateToProps, mapDispatchToProps)(SubCategoryView)
+export default SubCategoryView;
 
 // check class repo, week 10, folder 19, activity 15 for class based components
 
