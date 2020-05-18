@@ -1,31 +1,22 @@
 import React, { useState, useEffect } from "react";
-import Subcategory from "../components/Subcategory";
+// import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 // import TopCat from "../components/TopCat";
-// import AllCat from "../components/AllCat";
+import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
 // import TPoster from "../components/TPoster";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
+import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
 
 // Query graphql
 import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
-//Dave
-const GET_DOGS = gql`
-  {
-    dogs {
-      id
-      breed
-    }
-  }
-`;
-// Dion
+import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 const GET_USERS = gql`
   query {
     users {
@@ -35,155 +26,678 @@ const GET_USERS = gql`
     }
   }
 `;
-
-function Dogs({ onDogSelected }) {
-  const { loading, error, data } = useQuery(GET_DOGS);
-
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
-
-  return (
-    <select name="dog" onChange={onDogSelected}>
-      {data.dogs.map((dog) => (
-        <option key={dog.id} value={dog.breed}>
-          {dog.breed}
-        </option>
-      ))}
-    </select>
+const GET_SUBCATS = gql`
+  query {
+    subcategories {
+      _id
+      name
+      description
+      category {
+        name
+        _id
+      }
+    }
+  }
+`;
+const GET_ALLCATS = gql`
+  query {
+    categories {
+      name
+      _id
+    }
+  }
+`;
+const GET_SUBCATS_BY_CATID = (parentId) => {
+  console.log(
+    useQuery(gql`
+  query {
+    category(id: "${parentId}") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`)
   );
-}
+  return useQuery(gql`
+    {
+      category(id: "${parentId}") {
+        name
+        _id
+        subcategories {
+          name
+          _id
+        }
+      }
+    }
+  `);
+};
 
-function Users() {
-  const { loading, error, data } = useQuery(GET_USERS);
+const GET_SUBCATS_BY_VIDEOGAME = gql`
+  query {
+    category(id: "5ebe3b5dad332d50981177ef") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`;
 
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
+const GET_SUBCATS_BY_DIY = gql`
+  query {
+    category(id: "5ebe3b67ad332d50981177f0") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`;
 
-  return (
-    // <select name="dog" onChange={onUserSelected}>
-    data.users.map(
-      (user) => console.log(user)
-      // <option key={dog.id} value={dog.breed}>
-      //   {dog.breed}
-      // </option>
-    )
-    // </select>
-  );
-}
+const GET_SUBCATS_BY_PKMN = gql`
+  query {
+    category(id: "5ebe3b77ad332d50981177f1") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`;
+
+const GET_ALL_POSTS = gql`
+  {
+    posts {
+      _id
+      title
+      body
+      date_created
+      category {
+        name
+      }
+      subcategory {
+        name
+      }
+      author {
+        username
+      }
+    }
+  }
+`;
+
+// Lazy query to update subcategories
+// example
+// function DelayedQuery() {
+//   const [dog, setDog] = useState(null);
+//   const [getDog, { loading, data }] = useLazyQuery(GET_DOG_PHOTO);
+
+//   if (loading) return <p>Loading ...</p>;
+
+//   if (data && data.dog) {
+//     setDog(data.dog);
+//   }
+
+//   return (
+//     <div>
+//       {dog && <img src={dog.displayImage} />}
+//       <button onClick={() => getDog({ variables: { breed: 'bulldog' } })}>
+//         Click me!
+//       </button>
+//     </div>
+//   );
+// }
+
+// Dion
+// function delayedDIY() {
+//   // const [dog, setDog] = useState(null);
+//   const [getDIYSubCats, { loading, data }] = useLazyQuery(GET_SUBCATS_BY_DIY);
+
+//   // if (loading) return <p>Loading ...</p>;
+
+//   if (data && data.category) {
+//     setSubCategories(data.category.subcategories.map(subcategory => subcategory.name))
+//   }
+
+//   return (
+//     <div>
+//       {dog && <img src={dog.displayImage} />}
+//       <button onClick={() => getDIYSubCats({ variables: { breed: 'bulldog' } })}>
+//         Click me!
+//       </button>
+//     </div>
+//   );
+// }
 
 // import { connect } from 'react-redux'
 
-const testPostArr = [
-  {
-    post: {
-      title: "I love pokemon",
-      body: "my favorite is chandelure",
-      date_created: "13-may-2020",
-      replies: [],
-      subcategory: {
-        name: "pokemon go",
-        description: "all about pokemon go",
-        category: {
-          name: "pokemon",
-          description: "all things pokemon related",
-        },
-      },
-      author: {
-        username: "testUserDion",
-      },
-    },
-  },
-  {
-    post: {
-      title: "I love pokemon",
-      body: "my favorite is magikarp",
-      date_created: "13-may-2020",
-      replies: [],
-      subcategory: {
-        name: "pokemon go",
-        description: "all about pokemon go",
-        category: {
-          name: "pokemon",
-          description: "all things pokemon related",
-        },
-      },
-      author: {
-        username: "louis",
-      },
-    },
-  },
-];
+const useSearch = (categoryId) => {
+  console.log("i used a search lol");
+};
 
 function CategoryView(props) {
+  // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
+  // const hamburger = props.chicken;
+  // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
-    parentCategory: "Pokemon",
-    currCategory: "Pokemon Mobile",
-    subCategory: "",
+    parentCategory: "",
+    parentCategoryId: "",
+    currCategory: "",
+    subCategories: [],
   });
-
   const [topCategories, setTopCategories] = useState({
-    excitementLevel: 10000,
-    lifeLongLearner: true,
-    testCategories: ["Rory", "Rory again", "Rory thrice"],
+    topCategories: [],
+    title: "",
   });
-
   const [allCategories, setAllCategories] = useState({
-    allCategories: ["Anime/Manga", "World News", "Literature"],
+    allCategories: [],
+    title: "",
   });
-
   const [topPoints, setTopPoints] = useState({
-    topPoints: ["Paul", "Paul again", "Paul x 3"],
+    topPoints: [],
   });
-
   const [topPosters, setTopPosters] = useState({
-    topPosters: ["Louis", "Louis again", "Louis x 3"],
+    topPosters: [],
   });
-
   const [categoryMods, setCategoryMods] = useState({
-    mods: ["Dion", "Dion again", "Dion x 3"],
+    mods: [],
+  });
+  const [posts, setPosts] = useState({
+    postsDisplay: [],
   });
 
-  const [tempPostArr, setTempPostArr] = useState({
-    query: testPostArr,
-  });
+  // Queries database to get users (placeholder, will get mods)
+  // const { loading: userLoading, error: userError, data: userData } = useQuery(
+  //   GET_USERS
+  // );
+  // Queries database to get all subcategories
+  const {
+    loading: subCatLoading,
+    error: subCatError,
+    data: subCatData,
+  } = useQuery(GET_SUBCATS);
 
+  // Queries database to get all subcategories in video games
+  const {
+    loading: videoGameLoading,
+    error: videoGameError,
+    data: videoGameData,
+  } = useQuery(GET_SUBCATS_BY_VIDEOGAME);
+
+  // Queries database to get all subcategories in pokemon
+  const {
+    loading: pokemonLoading,
+    error: pokemonError,
+    data: pokemonData,
+  } = useQuery(GET_SUBCATS_BY_PKMN);
+
+  // Queries database to get all subcategories for a given ID!
+  // let queryId = "5ebe3b5dad332d50981177ef";
+  // const {
+  //   loading: subCatIdLoading,
+  //   error: subCatIdError,
+  //   data: subCatIdData,
+  // } = useQuery(GET_SUBCATS_BY_CATID(queryId || "5ebe3b67ad332d50981177f0"));
+
+  // Queries database to get all categories
+  const {
+    loading: allCatLoading,
+    error: allCatError,
+    data: allCatData,
+  } = useQuery(GET_ALLCATS);
+  // Queries database to get top categories (placeholder)
+  const {
+    loading: topCatLoading,
+    error: topCatError,
+    data: topCatData,
+  } = useQuery(GET_ALLCATS);
+  // Queries database to get top points holders (placeholder)
+  const {
+    loading: topPointsLoading,
+    error: topPointsError,
+    data: topPointsData,
+  } = useQuery(GET_USERS);
+  // Queries database to get top posters (placeholder)
+  const {
+    loading: topPostersLoading,
+    error: topPostersError,
+    data: topPostersData,
+  } = useQuery(GET_USERS);
+  // Queries database to get mods (placeholder)
+  const { loading: modLoading, error: modError, data: modData } = useQuery(
+    GET_USERS
+  );
+  // Queries database to get all posts
+  const {
+    loading: postsLoading,
+    error: postsError,
+    data: postsData,
+  } = useQuery(GET_ALL_POSTS);
+
+  const handleUserClick = (userId) => {
+    console.log(userId);
+  };
+
+  // on page load, updates state objects
   useEffect(() => {
-    console.log("used an effect");
+    // if(userLoading) console.log("help")
+    // if(userError) console.log("I need somebody")
+    // if(userLoading) return "Loading...";
+    // if(userError) return `Error! $s{error.message}`;
+    // if (subCatData) {
+    //   console.log("hey")
+    //   console.log(subCatData)
+    // setSubCategories({
+    //   ...subCategories,
+    //   parentCategory: subCatData.category.name,
+    //   currCategory: subCatData.category.name,
+    //   subCategories: subCatData.subcategories.map(
+    //     (subcategory) => subcategory.name
+    //   ),
+    // });
+    // }
+    // if (videoGameData) {
+    //   setSubCategories({
+    //     ...subCategories,
+    //     parentCategory: videoGameData.category.name,
+    //     currCategory: videoGameData.category.name,
+    //     subCategories: videoGameData.category.subcategories.map(
+    //       (subcategory) => ({ name: subcategory.name, id: subcategory._id })
+    //     ),
+    //   });
+    // }
+    // if (pokemonData) {
+    //   setSubCategories({
+    //     ...subCategories,
+    //     parentCategory: pokemonData.category.name,
+    //     currCategory: pokemonData.category.name,
+    //     subCategories: pokemonData.category.subcategories.map(
+    //       (subcategory) => ({ name: subcategory.name, id: subcategory._id })
+    //     ),
+    //   });
+    // }
+    // if (subCatIdData.length) {
+    //   console.log(subCatIdData);
+    // setSubCategories({
+    //   ...subCategories,
+    //   parentCategory: subCatIdData.category.name,
+    //   currCategory: subCatIdData.category.name,
+    //   subCategories: subCatIdData.category.subcategories.map(
+    //     (subcategory) => ({
+    //       name: subcategory.name,
+    //       id: subcategory._id,
+    //     })
+    //   ),
+    // });
+    // }
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading...",
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        title: "Top Categories",
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+    if (allCatLoading) {
+      setAllCategories({
+        ...allCategories,
+        title: "Loading...",
+        allCategories: ["Loading categories..."],
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        ...allCategories,
+        title: "All Categories",
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+    if (topPointsData) {
+      setTopPoints({
+        ...topPoints,
+        topPoints: topPointsData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+    if (topPostersData) {
+      setTopPosters({
+        ...topPosters,
+        topPosters: topPostersData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+    if (modData) {
+      setCategoryMods({
+        ...categoryMods,
+        mods: modData.users.map((user) => ({
+          name: user.username,
+          id: user._id,
+        })),
+      });
+    }
+    if (postsData) {
+      // console.log(postsData.posts);
+      setPosts({
+        ...posts,
+        postsDisplay: postsData.posts.map((post) => ({
+          id: post._id,
+          author: post.author.username,
+          title: post.title,
+          date_created: post.date_created,
+          body: post.body,
+          parentCategory: post.category.name,
+          subCategory: post.subcategory.name,
+        })),
+      });
+    }
+  }, [
+    // subCatData,
+    // subCatIdData,
+    // videoGameData,
+    // pokemonData,
+    topCatData,
+    allCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+    postsData,
+  ]);
+
+  const selectCat = (id) => {
+    // GET_SUBCATS_BY_CATID(id)
+    // useSearch();
+    // console.log(queryId)
+    // queryId = id;
+    // console.log(queryId)
+    console.log(id);
+  };
+
+  // useEffect(() => {
+  // if (subCategories.parentCategoryId === "5ebe3b5dad332d50981177ef") {
+  //   setSubCategories({
+  //     ...subCategories,
+  //     parentCategory: "Video Games",
+  //     currCategory: "Video Games",
+  //     subCategories: ["WoW", "Minecraft", "Misc"],
+  //   });
+  // } else if (subCategories.parentCategoryId === "5ebe3b67ad332d50981177f0") {
+  //   setSubCategories({
+  //     ...subCategories,
+  //     parentCategory: "DIY",
+  //     currCategory: "DIY",
+  //     subCategories: ["Misc"],
+  //   });
+  // } else if (subCategories.parentCategoryId === "5ebe3b67ad332d50981177f0") {
+  //   setSubCategories({
+  //     ...subCategories,
+  //     parentCategory: "Pokemon",
+  //     currCategory: "Pokemon",
+  //     subCategories: ["Pokmeon Go"],
+  //   });
+  // }
+  // setSubCategories({
+  //   ...subCategories,
+  //   parentCategory: subCatResData.category.name,
+  //   currCategory: subCatResData.category.name,
+  //   subCategories: subCatResData.subcategories.map((subcategory) => ({
+  //     name: subcategory.name,
+  //     id: subcategory._id,
+  //   })),
+  // });
+  // console.log(parentCatId)
+  // const queryForSubCatsByParent = `gql
+  //   {
+  //     category(id: "${parentCatId}") {
+  //       name
+  //       _id
+  //       subcategories {
+  //         name
+  //         _id
+  //       }
+  //     }
+  //   }
+  // `;
+  // useQuery(queryForSubCatsByParent);
+  // console.log(queryForSubCatsByParent)
+  // const {
+  //     loading: subCatIdLoading,
+  //     error: subCatIdError,
+  //     data: subCatIdData,
+  //   }
+  //   = GET_SUBCATS_BY_CATID(parentCatId);
+  // if (subCatIdData) {
+  // console.log(subCatIdData)
+  // console.log("No data")
+  // setSubCategories({
+  //   ...subCategories,
+  //   parentCategory: subCatIdData.category.name,
+  //   currCategory: subCatIdData.category.name,
+  //   subCategories: subCatIdData.category.subcategories.map(
+  //     (subcategory) => ({
+  //       name: subcategory.name,
+  //       id: subcategory._id
+  //     })
+  //   ),
+  // });
+  // }
+  // const [subCategories, setSubCategories] = useState({
+  //   parentCategory: "",
+  //   currCategory: "",
+  //   subCategories: [],
+  // });
+  //   console.log("subCats changed");
+  // });
+
+  useEffect(() => {}, [subCategories]);
+
+  const handleCategoryClick = (parentId) => {
+//     const tempQuery = `
+//   query {
+//     category(id: "${parentId}") {
+//       name
+//       _id
+//       subcategories {
+//         name
+//         _id
+//       }
+//     }
+//   }
+// `;
+//   const result = gql(tempQuery)
+//   const newRes = useLazyQuery(tempQuery)
+    // console.log(result);
+    console.log(parentId);
+    // if (parentId === "5ebe3b5dad332d50981177ef") {
+    //   setSubCategories({
+    //     ...subCategories,
+    //     parentCategory: "Video Games",
+    //     parentCategoryId: `${parentId}`,
+    //     currCategory: "Video Games",
+    //     subCategories: ["WoW", "Minecraft", "Misc"],
+    //   });
+    // }
+    // const {
+    //   loading: subCatIdLoading,
+    //   error: subCatIdError,
+    //   data: subCatIdData,
+    // } = GET_SUBCATS_BY_CATID(id);
+    // console.log(GET_SUBCATS_BY_CATID(id))
+    // console.log(subCatIdData);
+    // setSubCategories({
+    //   ...subCategories,
+    //   parentCategoryId: parentId,
+    // });
+    // console.log("subcats changed from subcatstates");
+
+    // useQuery(queryForSubCatsByParent)
+    // console.log(queryForSubCatsByParent)
+    // };
     // Users().then();
-  });
+  };
+
+  // Lazy query for DIY
+  // const [dog, setDog] = useState(null);
+  let [
+    getDIYSubCats,
+    { loading: diySubCatLoading, data: diySubCatData },
+  ] = useLazyQuery(GET_SUBCATS_BY_DIY);
+
+  // if (loading) return <p>Loading ...</p>;
+
+  if (diySubCatData && diySubCatData.category) {
+    console.log("I got clicked and have DIY data");
+    console.log(diySubCatData.category.subcategories);
+    // setSubCategories({
+    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
+    //     ...subCategories,
+    //     name: subcategory.name,
+    //     id: subcategory._id,
+    //   })),
+    // });
+  }
+
+  // Lazy query for Pokemon
+  // const [dog, setDog] = useState(null);
+  const [
+    getPkmnSubCats,
+    { loading: pkmnLoading, data: pkmnData },
+  ] = useLazyQuery(GET_SUBCATS_BY_PKMN);
+
+  // if (loading) return <p>Loading ...</p>;
+
+  if (pkmnData && pkmnData.category) {
+    console.log("I got clicked and have pokemon data");
+    console.log(pkmnData.category.subcategories);
+    // setSubCategories({
+    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
+    //     ...subCategories,
+    //     name: subcategory.name,
+    //     id: subcategory._id,
+    //   })),
+    // });
+  }
+
+  // Lazy query for video games
+  // const [dog, setDog] = useState(null);
+  const [
+    getVideoGameSubCats,
+    { loading: vidGamLazyLoading, data: vidGamLazyData },
+  ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
+
+  // if (loading) return <p>Loading ...</p>;
+
+  if (vidGamLazyData && vidGamLazyData.category) {
+    console.log("I got clicked and have video game data");
+    console.log(vidGamLazyData.category.subcategories);
+    // setSubCategories({
+    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
+    //     ...subCategories,
+    //     name: subcategory.name,
+    //     id: subcategory._id,
+    //   })),
+    // });
+  }
+
+  const clearSubCatData = () => {
+    // diySubCatData = undefined;
+    // diySubCatData.delete;
+    console.log(diySubCatData);
+    console.log(pkmnData);
+    console.log(vidGamLazyData);
+  }
+
+  // return (
+  //   <div>
+  //     {dog && <img src={dog.displayImage} />}
+  //     <button onClick={() => getDIYSubCats({ variables: { breed: 'bulldog' } })}>
+  //       Click me!
+  //     </button>
+  //   </div>
+  // );
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
-          <Subcategory
-            parent_category={subCategories.parentCategory}
-            name={subCategories.currCategory}
-          />
-          <br></br>
-          {/* {Users()} */}
-          {/* {console.log("Hello")} */}
-          <OrderedList
-            category="Top Categories"
-            list={topCategories.testCategories}
-          />
-          <br></br>
           <UnorderedList
-            category="All categories"
+            selectItem={handleCategoryClick}
+            category={`Subcategories in ${subCategories.parentCategory}`}
+            list={subCategories.subCategories}
+          />
+          <br></br>
+          <OrderedList
+            selectItem={handleCategoryClick}
+            category={topCategories.title}
+            list={topCategories.topCategories}
+          />
+          <br></br>
+          <AllCat
+            selectCat={handleCategoryClick}
+            category={allCategories.title}
             list={allCategories.allCategories}
           />
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
-          {tempPostArr.query.map((post) => (
+          <h1>Current category: {subCategories.currCategory}</h1>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => getDIYSubCats()}
+          >
+            I console log DIY queries
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => getPkmnSubCats()}
+          >
+            I console log Pokemon queries
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => getVideoGameSubCats()}
+          >
+            I console log video game queries
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => clearSubCatData()}
+          >
+            I clear subcategory data
+          </button>
+          {posts.postsDisplay.map((post) => (
             <Posts
-              title={post.post.title}
-              body={post.post.body}
-              date_created={post.post.date_created}
-              subcategory={post.post.subcategory.name}
-              category={post.post.subcategory.category.name}
-              author={post.post.author.username}
+              title={post.title}
+              body={post.body}
+              date_created={post.date_created}
+              subcategory={post.subCategory}
+              category={post.parentCategory}
+              author={post.author}
+              postId={post.id}
             />
           ))}
         </div>
@@ -194,14 +708,23 @@ function CategoryView(props) {
           {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList
+            selectItem={handleUserClick}
             category="Top Points Holders"
             list={topPoints.topPoints}
           />
           <br></br>
-          <OrderedList category="Top Posters" list={topPosters.topPosters} />
-          <br></br>
-          <UnorderedList category="Mods" list={categoryMods.mods} />
+          <OrderedList
+            selectItem={handleUserClick}
+            category="Top Posters"
+            list={topPosters.topPosters}
+          />
         </div>
+        <br></br>
+        <UnorderedList
+          selectItem={handleUserClick}
+          category="Mods"
+          list={categoryMods.mods}
+        />
       </Col>
     </VGrid>
   );
