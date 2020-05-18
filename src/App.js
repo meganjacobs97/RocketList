@@ -11,6 +11,25 @@ import Wrapper from "./components/Wrapper";
 const App = () => {
   document.title = "RocketList";
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [subCategories, setSubCategories] = useState({
+  //   parentCategory: "",
+  //   parentCategoryId: "",
+  //   currCategory: "",
+  //   subCategories: [],
+  // });
+
+  // const handleCatChange = (id) => {
+  //   if (id === "5ebe3b5dad332d50981177ef") {
+  //     setSubCategories({
+  //       ...subCategories,
+  //       parentCategory: "Video Games",
+  //       parentCategoryId: `${id}`,
+  //       currCategory: "Video Games",
+  //       subCategories: ["WoW", "Minecraft", "Misc"],
+  //     });
+  //   }
+  // };
+
   return (
     <Router>
       <Wrapper>
