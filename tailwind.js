@@ -155,6 +155,18 @@ module.exports = {
       '48': '12rem',
       '56': '14rem',
       '64': '16rem',
+      'sm': '5px',
+      'md': '10px',
+      'lg': '15px',
+      'xl': '20px',
+      '5p': '5%',
+      '60': '60%',
+      '50': '50%',
+      'vh': '100vh',
+      '20p': '20%',
+      '60': '60px',
+      'xx': '80vh',
+      'yy': '10vh'
     },
     backgroundColor: theme => theme('colors'),
     backgroundOpacity: theme => theme('opacity'),
@@ -186,6 +198,8 @@ module.exports = {
       md: '0.375rem',
       lg: '0.5rem',
       full: '9999px',
+      twen: '20px',
+      fiv: '5px'
     },
     borderWidth: {
       default: '1px',
