@@ -17,6 +17,7 @@ import InputPost from "../components/InputPost";
 // Query graphql
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import Subcategory from "../components/Subcategory";
 const GET_USERS = gql`
   query {
     users {
@@ -215,10 +216,6 @@ function CategoryView(props) {
     postsDisplay: [],
   });
 
-  // Queries database to get users (placeholder, will get mods)
-  // const { loading: userLoading, error: userError, data: userData } = useQuery(
-  //   GET_USERS
-  // );
   // Queries database to get all subcategories
   const {
     loading: subCatLoading,
@@ -282,10 +279,6 @@ function CategoryView(props) {
     error: postsError,
     data: postsData,
   } = useQuery(GET_ALL_POSTS);
-
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
 
   // on page load, updates state objects
   useEffect(() => {
@@ -415,10 +408,10 @@ function CategoryView(props) {
       });
     }
   }, [
-    // subCatData,
+    subCatData,
     // subCatIdData,
-    // videoGameData,
-    // pokemonData,
+    videoGameData,
+    pokemonData,
     topCatData,
     allCatData,
     topPointsData,
@@ -436,99 +429,108 @@ function CategoryView(props) {
     console.log(id);
   };
 
-  // useEffect(() => {
-  // if (subCategories.parentCategoryId === "5ebe3b5dad332d50981177ef") {
-  //   setSubCategories({
-  //     ...subCategories,
-  //     parentCategory: "Video Games",
-  //     currCategory: "Video Games",
-  //     subCategories: ["WoW", "Minecraft", "Misc"],
-  //   });
-  // } else if (subCategories.parentCategoryId === "5ebe3b67ad332d50981177f0") {
-  //   setSubCategories({
-  //     ...subCategories,
-  //     parentCategory: "DIY",
-  //     currCategory: "DIY",
-  //     subCategories: ["Misc"],
-  //   });
-  // } else if (subCategories.parentCategoryId === "5ebe3b67ad332d50981177f0") {
-  //   setSubCategories({
-  //     ...subCategories,
-  //     parentCategory: "Pokemon",
-  //     currCategory: "Pokemon",
-  //     subCategories: ["Pokmeon Go"],
-  //   });
-  // }
-  // setSubCategories({
-  //   ...subCategories,
-  //   parentCategory: subCatResData.category.name,
-  //   currCategory: subCatResData.category.name,
-  //   subCategories: subCatResData.subcategories.map((subcategory) => ({
-  //     name: subcategory.name,
-  //     id: subcategory._id,
-  //   })),
-  // });
-  // console.log(parentCatId)
-  // const queryForSubCatsByParent = `gql
-  //   {
-  //     category(id: "${parentCatId}") {
-  //       name
-  //       _id
-  //       subcategories {
-  //         name
-  //         _id
-  //       }
-  //     }
-  //   }
-  // `;
-  // useQuery(queryForSubCatsByParent);
-  // console.log(queryForSubCatsByParent)
-  // const {
-  //     loading: subCatIdLoading,
-  //     error: subCatIdError,
-  //     data: subCatIdData,
-  //   }
-  //   = GET_SUBCATS_BY_CATID(parentCatId);
-  // if (subCatIdData) {
-  // console.log(subCatIdData)
-  // console.log("No data")
-  // setSubCategories({
-  //   ...subCategories,
-  //   parentCategory: subCatIdData.category.name,
-  //   currCategory: subCatIdData.category.name,
-  //   subCategories: subCatIdData.category.subcategories.map(
-  //     (subcategory) => ({
-  //       name: subcategory.name,
-  //       id: subcategory._id
-  //     })
-  //   ),
-  // });
-  // }
-  // const [subCategories, setSubCategories] = useState({
-  //   parentCategory: "",
-  //   currCategory: "",
-  //   subCategories: [],
-  // });
-  //   console.log("subCats changed");
-  // });
+  // lazy queries
+  // Lazy query for DIY
+  const [subCatsLoaded, setSubCatsLoaded] = useState(false);
+  const [
+    getDIYSubCats,
+    { loading: diySubCatLoading, data: diySubCatData },
+  ] = useLazyQuery(GET_SUBCATS_BY_DIY);
 
-  useEffect(() => {}, [subCategories]);
+  // updates subcategories state if DIY category is clicked
+  useEffect(() => {
+    if (!subCatsLoaded && diySubCatData && diySubCatData.category) {
+      console.log("I got clicked and have DIY data");
+      console.log(diySubCatData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: diySubCatData.category.name,
+        parentCategoryId: diySubCatData.category._id,
+        currCategory: diySubCatData.category.name,
+        subCategories: diySubCatData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+      setSubCatsLoaded(true);
+    }
+  }, [diySubCatData, subCategories]);
+
+  // Lazy query for Pokemon
+  const [pkmnCatsLoaded, setPkmnCatsLoaded] = useState(false);
+  const [
+    getPkmnSubCats,
+    { loading: pkmnLoading, data: pkmnData },
+  ] = useLazyQuery(GET_SUBCATS_BY_PKMN);
+
+  // updates subcategories state if pokemon category is clicked
+  useEffect(() => {
+    if (!pkmnCatsLoaded && pkmnData && pkmnData.category) {
+      console.log("I got clicked and have pokemon data");
+      console.log(pkmnData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: pkmnData.category.name,
+        parentCategoryId: pkmnData.category._id,
+        currCategory: pkmnData.category.name,
+        subCategories: pkmnData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+      setPkmnCatsLoaded(true);
+    }
+  }, [pkmnData, subCategories]);
+
+  // Lazy query for videogames
+  const [vgCatsLoaded, setVgCatsLoaded] = useState(false);
+  const [
+    getVideoGameSubCats,
+    { loading: vidGamLazyLoading, data: vidGamLazyData },
+  ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
+
+  // updates subcategories state if video game category is clicked
+  useEffect(() => {
+    if (!vgCatsLoaded && vidGamLazyData && vidGamLazyData.category) {
+      console.log("I got clicked and have video game data");
+      console.log(vidGamLazyData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: vidGamLazyData.category.name,
+        parentCategoryId: vidGamLazyData.category._id,
+        currCategory: vidGamLazyData.category.name,
+        subCategories: vidGamLazyData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+      setVgCatsLoaded(true);
+    }
+  }, [vidGamLazyData, subCategories]);
+
+  // useEffect(() => {}, [subCategories]);
 
   const handleCategoryClick = (parentId) => {
-//     const tempQuery = `
-//   query {
-//     category(id: "${parentId}") {
-//       name
-//       _id
-//       subcategories {
-//         name
-//         _id
-//       }
-//     }
-//   }
-// `;
-//   const result = gql(tempQuery)
-//   const newRes = useLazyQuery(tempQuery)
+    //     const tempQuery = `
+    //   query {
+    //     category(id: "${parentId}") {
+    //       name
+    //       _id
+    //       subcategories {
+    //         name
+    //         _id
+    //       }
+    //     }
+    //   }
+    // `;
+    //   const result = gql(tempQuery)
+    //   const newRes = useLazyQuery(tempQuery)
     // console.log(result);
     console.log(parentId);
     // if (parentId === "5ebe3b5dad332d50981177ef") {
@@ -559,68 +561,6 @@ function CategoryView(props) {
     // Users().then();
   };
 
-  // Lazy query for DIY
-  // const [dog, setDog] = useState(null);
-  let [
-    getDIYSubCats,
-    { loading: diySubCatLoading, data: diySubCatData },
-  ] = useLazyQuery(GET_SUBCATS_BY_DIY);
-
-  // if (loading) return <p>Loading ...</p>;
-
-  if (diySubCatData && diySubCatData.category) {
-    console.log("I got clicked and have DIY data");
-    console.log(diySubCatData.category.subcategories);
-    // setSubCategories({
-    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
-    //     ...subCategories,
-    //     name: subcategory.name,
-    //     id: subcategory._id,
-    //   })),
-    // });
-  }
-
-  // Lazy query for Pokemon
-  // const [dog, setDog] = useState(null);
-  const [
-    getPkmnSubCats,
-    { loading: pkmnLoading, data: pkmnData },
-  ] = useLazyQuery(GET_SUBCATS_BY_PKMN);
-
-  // if (loading) return <p>Loading ...</p>;
-
-  if (pkmnData && pkmnData.category) {
-    console.log("I got clicked and have pokemon data");
-    console.log(pkmnData.category.subcategories);
-    // setSubCategories({
-    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
-    //     ...subCategories,
-    //     name: subcategory.name,
-    //     id: subcategory._id,
-    //   })),
-    // });
-  }
-
-  // Lazy query for video games
-  // const [dog, setDog] = useState(null);
-  const [
-    getVideoGameSubCats,
-    { loading: vidGamLazyLoading, data: vidGamLazyData },
-  ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // if (loading) return <p>Loading ...</p>;
-
-  if (vidGamLazyData && vidGamLazyData.category) {
-    console.log("I got clicked and have video game data");
-    console.log(vidGamLazyData.category.subcategories);
-    // setSubCategories({
-    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
-    //     ...subCategories,
-    //     name: subcategory.name,
-    //     id: subcategory._id,
-    //   })),
-    // });
-  }
 
   const clearSubCatData = () => {
     // diySubCatData = undefined;
@@ -628,24 +568,19 @@ function CategoryView(props) {
     console.log(diySubCatData);
     console.log(pkmnData);
     console.log(vidGamLazyData);
-  }
+  };
 
-  // return (
-  //   <div>
-  //     {dog && <img src={dog.displayImage} />}
-  //     <button onClick={() => getDIYSubCats({ variables: { breed: 'bulldog' } })}>
-  //       Click me!
-  //     </button>
-  //   </div>
-  // );
+  const handleUserClick = (userId) => {
+    console.log(userId);
+  };
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
-          <UnorderedList
-            selectItem={handleCategoryClick}
-            category={`Subcategories in ${subCategories.parentCategory}`}
+          <Subcategory
+            selectCat={handleCategoryClick}
+            category={subCategories.parentCategory}
             list={subCategories.subCategories}
           />
           <br></br>
