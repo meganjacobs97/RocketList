@@ -6,6 +6,8 @@ import CategoryView from "./pages/CategoryView";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
 import Wrapper from "./components/Wrapper";
+import Chat from './components/Chat';
+import Join from './components/Join';
 // import Footer from "./components/Footer";
 
 const App = () => {

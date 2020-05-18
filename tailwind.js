@@ -199,7 +199,7 @@ module.exports = {
       lg: '0.5rem',
       full: '9999px',
       twen: '20px',
-      fiv: '5px's
+      fiv: '5px'
     },
     borderWidth: {
       default: '1px',
