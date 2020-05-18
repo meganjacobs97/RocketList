@@ -60,7 +60,7 @@ const GET_ALL_POSTS = gql`
 
 function SubCategoryView(props) {
   const { catid } = useParams();
-  console.log(catid)
+  console.log(catid);
   const { subcatid } = useParams();
   const GET_SUBCATS_BY_CATID = gql`
   query {
@@ -74,7 +74,7 @@ function SubCategoryView(props) {
     }
   }
 `;
-console.log(GET_SUBCATS_BY_CATID)
+  console.log(GET_SUBCATS_BY_CATID);
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -112,8 +112,8 @@ console.log(GET_SUBCATS_BY_CATID)
     error: subCatIdError,
     data: subCatIdData,
   } = useQuery(GET_SUBCATS_BY_CATID);
-  console.log(subCatIdData)
-  console.log(subCatIdError)
+  console.log(subCatIdData);
+  console.log(subCatIdError);
 
   // Queries database to get all categories
   const {
@@ -183,7 +183,6 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-    
   }, [
     // subCatData,
     topPointsData,
@@ -207,7 +206,7 @@ console.log(GET_SUBCATS_BY_CATID)
         ),
       });
     }
-  },[subCatIdData,])
+  }, [subCatIdData]);
 
   // when top category changes, update top categories state
   useEffect(() => {
@@ -227,7 +226,7 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-  },[topCatData])
+  }, [topCatData]);
 
   // when all category changes, update top categories state
   useEffect(() => {
@@ -248,7 +247,7 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-  },[allCatData])
+  }, [allCatData]);
 
   // when posts, update posts state
   useEffect(() => {
@@ -266,7 +265,7 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-  }, [postsData])
+  }, [postsData]);
 
   // useEffect(() => {}, [subCategories]);
 
@@ -307,6 +306,11 @@ console.log(GET_SUBCATS_BY_CATID)
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        {props.isLoggedIn ? (
+          <InputPost list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
           {posts.postsDisplay.map((post) => (
