@@ -1,39 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
 const ADD_POST = gql`
-  mutation AddPost($type: Post) {
+  mutation AddPost(
+    $title: String
+    $body: String
+    $subcategory: String
+    $category: String
+  ) {
     createPost(
       postInput: {
         title: $title
         body: $body
-        subcategory: $subcategory
-        category: $category
-        author: "5ec2b5b1664bd0451c6468d4"
+        subcategoryId: $subcategory
+        categoryId: $category
+        authorId: "5ec2b5b1664bd0451c6468d4"
       }
-    )
+    ) {
+      title
+    }
   }
 `;
 
 function InputPost(props) {
+  const subCat = props.list;
+  console.log(subCat);
+  const [dropDownValue, setDropDownValue] = useState("");
+  useEffect(() => {
+    if (props.list.length > 0) {
+      setDropDownValue(props.list[0].id);
+    }
+  }, [props.list]);
+  function handleChange(e) {
+    setDropDownValue(e.target.value);
+  }
+
   let input;
   const [addPost, { data }] = useMutation(ADD_POST);
-  const subCat = props.list;
-  const ParentCategory = props.subcategory.category.id;
+  // console.log(subCat);
+  const ParentCategory = props.category;
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
         addPost({
           variables: {
-            title: input.postTitle,
-            body: input.postBody,
-            subcategory: input.subcategory.id,
+            title: e.target.postTitle.value,
+            body: e.target.postBody.value,
+            subcategory: dropDownValue,
             category: ParentCategory,
           },
         });
-        input.value = "";
+        e.target.postTitle.value = "";
+        e.target.postBody.value = "";
       }}
       className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed"
     >
@@ -61,10 +81,15 @@ function InputPost(props) {
       <div className="flex items-center justify-between">
         <label className="block">
           <span className="text-sm font-bold mb-2">Subcategory</span>
-          <select className="form-select block w-full mt-1">
+          <select
+            onChange={handleChange}
+            value={dropDownValue}
+            className="form-select block w-full mt-1"
+          >
             {subCat.map((subcategory) => {
+              console.log(subcategory);
               return (
-                <option id={subcategory.id} name="subcategory">
+                <option value={subcategory.id} name="subcategory">
                   {subcategory.name}
                 </option>
               );

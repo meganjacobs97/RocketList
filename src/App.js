@@ -7,8 +7,8 @@ import SubCategoryView from "./pages/SubCategoryView";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
 import Wrapper from "./components/Wrapper";
-import Chat from './components/Chat';
-import Join from './components/Join';
+import Chat from "./components/Chat";
+import Join from "./components/Join";
 // import Footer from "./components/Footer";
 
 const App = () => {
