@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 // import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-// import TopCat from "../components/TopCat";
+import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
@@ -28,19 +28,6 @@ const GET_USERS = gql`
     }
   }
 `;
-const GET_SUBCATS = gql`
-  query {
-    subcategories {
-      _id
-      name
-      description
-      category {
-        name
-        _id
-      }
-    }
-  }
-`;
 const GET_ALLCATS = gql`
   query {
     categories {
@@ -49,74 +36,6 @@ const GET_ALLCATS = gql`
     }
   }
 `;
-const GET_SUBCATS_BY_CATID = (parentId) => {
-  console.log(
-    useQuery(gql`
-  query {
-    category(id: "${parentId}") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`)
-  );
-  return useQuery(gql`
-    {
-      category(id: "${parentId}") {
-        name
-        _id
-        subcategories {
-          name
-          _id
-        }
-      }
-    }
-  `);
-};
-
-const GET_SUBCATS_BY_VIDEOGAME = gql`
-  query {
-    category(id: "5ebe3b5dad332d50981177ef") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`;
-
-const GET_SUBCATS_BY_DIY = gql`
-  query {
-    category(id: "5ebe3b67ad332d50981177f0") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`;
-
-const GET_SUBCATS_BY_PKMN = gql`
-  query {
-    category(id: "5ebe3b77ad332d50981177f1") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`;
-
 const GET_ALL_POSTS = gql`
   {
     posts {
@@ -137,60 +56,26 @@ const GET_ALL_POSTS = gql`
   }
 `;
 
-// Lazy query to update subcategories
-// example
-// function DelayedQuery() {
-//   const [dog, setDog] = useState(null);
-//   const [getDog, { loading, data }] = useLazyQuery(GET_DOG_PHOTO);
-
-//   if (loading) return <p>Loading ...</p>;
-
-//   if (data && data.dog) {
-//     setDog(data.dog);
-//   }
-
-//   return (
-//     <div>
-//       {dog && <img src={dog.displayImage} />}
-//       <button onClick={() => getDog({ variables: { breed: 'bulldog' } })}>
-//         Click me!
-//       </button>
-//     </div>
-//   );
-// }
-
-// Dion
-// function delayedDIY() {
-//   // const [dog, setDog] = useState(null);
-//   const [getDIYSubCats, { loading, data }] = useLazyQuery(GET_SUBCATS_BY_DIY);
-
-//   // if (loading) return <p>Loading ...</p>;
-
-//   if (data && data.category) {
-//     setSubCategories(data.category.subcategories.map(subcategory => subcategory.name))
-//   }
-
-//   return (
-//     <div>
-//       {dog && <img src={dog.displayImage} />}
-//       <button onClick={() => getDIYSubCats({ variables: { breed: 'bulldog' } })}>
-//         Click me!
-//       </button>
-//     </div>
-//   );
-// }
-
 // import { connect } from 'react-redux'
-
-const useSearch = (categoryId) => {
-  console.log("i used a search lol");
-};
 
 function SubCategoryView(props) {
   const { catid } = useParams();
   console.log(catid)
   const { subcatid } = useParams();
-  console.log(subcatid)
+  const GET_SUBCATS_BY_CATID = gql`
+  query {
+    category(id: "${catid}") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`;
+console.log(GET_SUBCATS_BY_CATID)
+
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
   // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
@@ -221,34 +106,14 @@ function SubCategoryView(props) {
     postsDisplay: [],
   });
 
-  // Queries database to get all subcategories
-  const {
-    loading: subCatLoading,
-    error: subCatError,
-    data: subCatData,
-  } = useQuery(GET_SUBCATS);
-
-  // Queries database to get all subcategories in video games
-  const {
-    loading: videoGameLoading,
-    error: videoGameError,
-    data: videoGameData,
-  } = useQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // Queries database to get all subcategories in pokemon
-  const {
-    loading: pokemonLoading,
-    error: pokemonError,
-    data: pokemonData,
-  } = useQuery(GET_SUBCATS_BY_PKMN);
-
   // Queries database to get all subcategories for a given ID!
-  // let queryId = "5ebe3b5dad332d50981177ef";
-  // const {
-  //   loading: subCatIdLoading,
-  //   error: subCatIdError,
-  //   data: subCatIdData,
-  // } = useQuery(GET_SUBCATS_BY_CATID(queryId || "5ebe3b67ad332d50981177f0"));
+  const {
+    loading: subCatIdLoading,
+    error: subCatIdError,
+    data: subCatIdData,
+  } = useQuery(GET_SUBCATS_BY_CATID);
+  console.log(subCatIdData)
+  console.log(subCatIdError)
 
   // Queries database to get all categories
   const {
@@ -291,85 +156,6 @@ function SubCategoryView(props) {
     // if(userError) console.log("I need somebody")
     // if(userLoading) return "Loading...";
     // if(userError) return `Error! $s{error.message}`;
-    // if (subCatData) {
-    //   console.log("hey")
-    //   console.log(subCatData)
-    // setSubCategories({
-    //   ...subCategories,
-    //   parentCategory: subCatData.category.name,
-    //   currCategory: subCatData.category.name,
-    //   subCategories: subCatData.subcategories.map(
-    //     (subcategory) => subcategory.name
-    //   ),
-    // });
-    // }
-    // if (videoGameData) {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     parentCategory: videoGameData.category.name,
-    //     currCategory: videoGameData.category.name,
-    //     subCategories: videoGameData.category.subcategories.map(
-    //       (subcategory) => ({ name: subcategory.name, id: subcategory._id })
-    //     ),
-    //   });
-    // }
-    // if (pokemonData) {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     parentCategory: pokemonData.category.name,
-    //     currCategory: pokemonData.category.name,
-    //     subCategories: pokemonData.category.subcategories.map(
-    //       (subcategory) => ({ name: subcategory.name, id: subcategory._id })
-    //     ),
-    //   });
-    // }
-    // if (subCatIdData.length) {
-    //   console.log(subCatIdData);
-    // setSubCategories({
-    //   ...subCategories,
-    //   parentCategory: subCatIdData.category.name,
-    //   currCategory: subCatIdData.category.name,
-    //   subCategories: subCatIdData.category.subcategories.map(
-    //     (subcategory) => ({
-    //       name: subcategory.name,
-    //       id: subcategory._id,
-    //     })
-    //   ),
-    // });
-    // }
-    if (topCatLoading) {
-      setTopCategories({
-        ...topCategories,
-        title: "Loading...",
-      });
-    }
-    if (topCatData) {
-      setTopCategories({
-        ...topCategories,
-        title: "Top Categories",
-        topCategories: topCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
-    if (allCatLoading) {
-      setAllCategories({
-        ...allCategories,
-        title: "Loading...",
-        allCategories: ["Loading categories..."],
-      });
-    }
-    if (allCatData) {
-      setAllCategories({
-        ...allCategories,
-        title: "All Categories",
-        allCategories: allCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
@@ -397,8 +183,76 @@ function SubCategoryView(props) {
         })),
       });
     }
+    
+  }, [
+    // subCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+  ]);
+
+  // when subcatid changes, update subcat state
+  useEffect(() => {
+    if (subCatIdData) {
+      console.log(subCatIdData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: subCatIdData.category.name,
+        currCategory: subCatIdData.category.name,
+        subCategories: subCatIdData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+    }
+  },[subCatIdData,])
+
+  // when top category changes, update top categories state
+  useEffect(() => {
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading...",
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        title: "Top Categories",
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  },[topCatData])
+
+  // when all category changes, update top categories state
+  useEffect(() => {
+    if (allCatLoading) {
+      setAllCategories({
+        ...allCategories,
+        title: "Loading...",
+        allCategories: ["Loading categories..."],
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        ...allCategories,
+        title: "All Categories",
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  },[allCatData])
+
+  // when posts, update posts state
+  useEffect(() => {
     if (postsData) {
-      // console.log(postsData.posts);
       setPosts({
         ...posts,
         postsDisplay: postsData.posts.map((post) => ({
@@ -412,112 +266,7 @@ function SubCategoryView(props) {
         })),
       });
     }
-  }, [
-    subCatData,
-    // subCatIdData,
-    videoGameData,
-    pokemonData,
-    topCatData,
-    allCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-    postsData,
-  ]);
-
-  const selectCat = (id) => {
-    // GET_SUBCATS_BY_CATID(id)
-    // useSearch();
-    // console.log(queryId)
-    // queryId = id;
-    // console.log(queryId)
-    console.log(id);
-  };
-
-  // lazy queries
-  // Lazy query for DIY
-  const [subCatsLoaded, setSubCatsLoaded] = useState(false);
-  const [
-    getDIYSubCats,
-    { loading: diySubCatLoading, data: diySubCatData },
-  ] = useLazyQuery(GET_SUBCATS_BY_DIY);
-
-  // updates subcategories state if DIY category is clicked
-  useEffect(() => {
-    if (!subCatsLoaded && diySubCatData && diySubCatData.category) {
-      console.log("I got clicked and have DIY data");
-      console.log(diySubCatData);
-      setSubCategories({
-        ...subCategories,
-        parentCategory: diySubCatData.category.name,
-        parentCategoryId: diySubCatData.category._id,
-        currCategory: diySubCatData.category.name,
-        subCategories: diySubCatData.category.subcategories.map(
-          (subcategory) => ({
-            name: subcategory.name,
-            id: subcategory._id,
-          })
-        ),
-      });
-      setSubCatsLoaded(true);
-    }
-  }, [diySubCatData, subCategories]);
-
-  // Lazy query for Pokemon
-  const [pkmnCatsLoaded, setPkmnCatsLoaded] = useState(false);
-  const [
-    getPkmnSubCats,
-    { loading: pkmnLoading, data: pkmnData },
-  ] = useLazyQuery(GET_SUBCATS_BY_PKMN);
-
-  // updates subcategories state if pokemon category is clicked
-  useEffect(() => {
-    if (!pkmnCatsLoaded && pkmnData && pkmnData.category) {
-      console.log("I got clicked and have pokemon data");
-      console.log(pkmnData);
-      setSubCategories({
-        ...subCategories,
-        parentCategory: pkmnData.category.name,
-        parentCategoryId: pkmnData.category._id,
-        currCategory: pkmnData.category.name,
-        subCategories: pkmnData.category.subcategories.map(
-          (subcategory) => ({
-            name: subcategory.name,
-            id: subcategory._id,
-          })
-        ),
-      });
-      setPkmnCatsLoaded(true);
-    }
-  }, [pkmnData, subCategories]);
-
-  // Lazy query for videogames
-  const [vgCatsLoaded, setVgCatsLoaded] = useState(false);
-  const [
-    getVideoGameSubCats,
-    { loading: vidGamLazyLoading, data: vidGamLazyData },
-  ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // updates subcategories state if video game category is clicked
-  useEffect(() => {
-    if (!vgCatsLoaded && vidGamLazyData && vidGamLazyData.category) {
-      console.log("I got clicked and have video game data");
-      console.log(vidGamLazyData);
-      setSubCategories({
-        ...subCategories,
-        parentCategory: vidGamLazyData.category.name,
-        parentCategoryId: vidGamLazyData.category._id,
-        currCategory: vidGamLazyData.category.name,
-        subCategories: vidGamLazyData.category.subcategories.map(
-          (subcategory) => ({
-            name: subcategory.name,
-            id: subcategory._id,
-          })
-        ),
-      });
-      setVgCatsLoaded(true);
-    }
-  }, [vidGamLazyData, subCategories]);
+  }, [postsData])
 
   // useEffect(() => {}, [subCategories]);
 
@@ -525,20 +274,8 @@ function SubCategoryView(props) {
     console.log(parentId);
     setSubCategories({
       ...subCategories,
-      parentCategoryId: parentId
-    })
-  };
-
-
-  const clearSubCatData = () => {
-    // diySubCatData = undefined;
-    // diySubCatData.delete;
-    setSubCatsLoaded(false);
-    setPkmnCatsLoaded(false);
-    setVgCatsLoaded(false);
-    // console.log(diySubCatData);
-    // console.log(pkmnData);
-    // console.log(vidGamLazyData);
+      parentCategoryId: parentId,
+    });
   };
 
   const handleUserClick = (userId) => {
@@ -552,10 +289,11 @@ function SubCategoryView(props) {
           <Subcategory
             selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
+            parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
           />
           <br></br>
-          <OrderedList
+          <TopCat
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
@@ -571,30 +309,6 @@ function SubCategoryView(props) {
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getDIYSubCats()}
-          >
-            I console log DIY queries
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getPkmnSubCats()}
-          >
-            I console log Pokemon queries
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getVideoGameSubCats()}
-          >
-            I console log video game queries
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => clearSubCatData()}
-          >
-            I clear subcategory data
-          </button>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
@@ -648,134 +362,3 @@ function SubCategoryView(props) {
 export default SubCategoryView;
 
 // check class repo, week 10, folder 19, activity 15 for class based components
-
-/*
-  <body>
-    <main class="w-3/5 p-8 mx-auto">
-      <h1 class="mb-4">tailwind collapsible</h1>
-      <section class="shadow">
-        <article class="border-b">
-          <div class="border-l-2 border-transparent">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-grey-darkest font-thin text-xl">
-                Massa vitae tortor condimentum lacinia quis vel eros donec
-              </span>
-              <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-            </header>
-          </div>
-        </article>
-        <article class="border-b">
-          <div class="border-l-2 bg-grey-lightest border-indigo">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-indigo font-thin text-xl">
-                Lorem ipsum dolor sit amet
-              </span>
-              <div class="rounded-full border border border-indigo w-7 h-7 flex items-center justify-center bg-indigo">
-                <svg
-                  aria-hidden="true"
-                  data-reactid="281"
-                  fill="none"
-                  height="24"
-                  stroke="white"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </div>
-            </header>
-            <div>
-              <div class="pl-8 pr-8 pb-5 text-grey-darkest">
-                <ul class="pl-4">
-                  <li class="pb-2">consectetur adipiscing elit</li>
-                  <li class="pb-2">
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua
-                  </li>
-                  <li class="pb-2">
-                    Viverra orci sagittis eu volutpat odio facilisis mauris
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="border-b">
-          <div class="border-l-2 border-transparent">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-grey-darkest font-thin text-xl">
-                Lorem dolor sed viverra ipsum
-              </span>
-              <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-            </header>
-          </div>
-        </article>
-        <article class="border-b">
-          <div class="border-l-2 border-transparent">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-grey-darkest font-thin text-xl">
-                Egestas sed tempus urna
-              </span>
-              <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-            </header>
-          </div>
-        </article>
-      </section>
-    </main>
-  </body>;
-*/

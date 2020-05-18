@@ -1,7 +1,6 @@
 import React from "react";
 
 function TopCat(props) {
-  const TopCats = props.name
   return (
     <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
       <h1 className="text-center">{props.category}</h1>

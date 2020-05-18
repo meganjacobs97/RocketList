@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-// import TopCat from "../components/TopCat";
+import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
@@ -259,7 +259,7 @@ function Main(props) {
     topPointsData,
     topPostersData,
     modData,
-    postsData
+    postsData,
   ]);
 
   const handleUserClick = (userId) => {
@@ -272,7 +272,8 @@ function Main(props) {
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
-          <OrderedList
+          <TopCat
+            selectItem={handleCategoryClick}
             category="Top Categories"
             list={topCategories.topCategories}
           />

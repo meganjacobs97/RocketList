@@ -59,13 +59,8 @@ const GET_ALL_POSTS = gql`
 
 // import { connect } from 'react-redux'
 
-const useSearch = (categoryId) => {
-  console.log("i used a search lol");
-};
-
 function CategoryView(props) {
   const { catid } = useParams();
-  // console.log(catid);
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -155,66 +150,6 @@ function CategoryView(props) {
     // if(userError) console.log("I need somebody")
     // if(userLoading) return "Loading...";
     // if(userError) return `Error! $s{error.message}`;
-    // if (subCatData) {
-    //   console.log("hey")
-    //   console.log(subCatData)
-    // setSubCategories({
-    //   ...subCategories,
-    //   parentCategory: subCatData.category.name,
-    //   currCategory: subCatData.category.name,
-    //   subCategories: subCatData.subcategories.map(
-    //     (subcategory) => subcategory.name
-    //   ),
-    // });
-    // }
-    if (subCatIdData) {
-      console.log(subCatIdData);
-      setSubCategories({
-        ...subCategories,
-        parentCategory: subCatIdData.category.name,
-        parentCategoryId: subCatIdData.category._id,
-        currCategory: subCatIdData.category.name,
-        subCategories: subCatIdData.category.subcategories.map(
-          (subcategory) => ({
-            name: subcategory.name,
-            id: subcategory._id,
-          })
-        ),
-      });
-    }
-    if (topCatLoading) {
-      setTopCategories({
-        ...topCategories,
-        title: "Loading...",
-      });
-    }
-    if (topCatData) {
-      setTopCategories({
-        ...topCategories,
-        title: "Top Categories",
-        topCategories: topCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
-    if (allCatLoading) {
-      setAllCategories({
-        ...allCategories,
-        title: "Loading...",
-        allCategories: ["Loading categories..."],
-      });
-    }
-    if (allCatData) {
-      setAllCategories({
-        ...allCategories,
-        title: "All Categories",
-        allCategories: allCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
@@ -242,6 +177,74 @@ function CategoryView(props) {
         })),
       });
     }
+  }, [
+    // subCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+  ]);
+
+  // when subcatid changes, update subcat state
+  useEffect(() => {
+    if (subCatIdData) {
+      console.log(subCatIdData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: subCatIdData.category.name,
+        currCategory: subCatIdData.category.name,
+        subCategories: subCatIdData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+    }
+  }, [subCatIdData]);
+
+  // when top category changes, update top categories state
+  useEffect(() => {
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading...",
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        title: "Top Categories",
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  }, [topCatData]);
+
+  // when all category changes, update top categories state
+  useEffect(() => {
+    if (allCatLoading) {
+      setAllCategories({
+        ...allCategories,
+        title: "Loading...",
+        allCategories: ["Loading categories..."],
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        ...allCategories,
+        title: "All Categories",
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  }, [allCatData]);
+
+  // when posts, update posts state
+  useEffect(() => {
     if (postsData) {
       setPosts({
         ...posts,
@@ -256,17 +259,7 @@ function CategoryView(props) {
         })),
       });
     }
-  }, [
-    // subCatData,
-    subCatIdData,
-    topCatData,
-    allCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-    postsData,
-  ]);
-
+  }, [postsData]);
 
   // lazy queries
 
@@ -319,7 +312,7 @@ function CategoryView(props) {
           <Subcategory
             selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
-            parentId={subCategories.parentCategoryId}
+            parentId={catid}
             list={subCategories.subCategories}
           />
           <br></br>
