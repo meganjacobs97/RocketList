@@ -515,6 +515,21 @@ function CategoryView(props) {
   useEffect(() => {}, [subCategories]);
 
   const handleCategoryClick = (parentId) => {
+//     const tempQuery = `
+//   query {
+//     category(id: "${parentId}") {
+//       name
+//       _id
+//       subcategories {
+//         name
+//         _id
+//       }
+//     }
+//   }
+// `;
+//   const result = gql(tempQuery)
+//   const newRes = useLazyQuery(tempQuery)
+    // console.log(result);
     console.log(parentId);
     // if (parentId === "5ebe3b5dad332d50981177ef") {
     //   setSubCategories({
@@ -541,13 +556,15 @@ function CategoryView(props) {
     // useQuery(queryForSubCatsByParent)
     // console.log(queryForSubCatsByParent)
     // };
-    console.log("used an effect");
     // Users().then();
   };
 
   // Lazy query for DIY
   // const [dog, setDog] = useState(null);
-  const [getDIYSubCats, { loading: diySubCatLoading, data: diySubCatData }] = useLazyQuery(GET_SUBCATS_BY_DIY);
+  let [
+    getDIYSubCats,
+    { loading: diySubCatLoading, data: diySubCatData },
+  ] = useLazyQuery(GET_SUBCATS_BY_DIY);
 
   // if (loading) return <p>Loading ...</p>;
 
@@ -565,7 +582,10 @@ function CategoryView(props) {
 
   // Lazy query for Pokemon
   // const [dog, setDog] = useState(null);
-  const [getPkmnSubCats, { loading: pkmnLoading, data: pkmnData }] = useLazyQuery(GET_SUBCATS_BY_PKMN);
+  const [
+    getPkmnSubCats,
+    { loading: pkmnLoading, data: pkmnData },
+  ] = useLazyQuery(GET_SUBCATS_BY_PKMN);
 
   // if (loading) return <p>Loading ...</p>;
 
@@ -583,7 +603,10 @@ function CategoryView(props) {
 
   // Lazy query for video games
   // const [dog, setDog] = useState(null);
-  const [getVideoGameSubCats, { loading: vidGamLazyLoading, data: vidGamLazyData }] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
+  const [
+    getVideoGameSubCats,
+    { loading: vidGamLazyLoading, data: vidGamLazyData },
+  ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
 
   // if (loading) return <p>Loading ...</p>;
 
@@ -597,6 +620,14 @@ function CategoryView(props) {
     //     id: subcategory._id,
     //   })),
     // });
+  }
+
+  const clearSubCatData = () => {
+    // diySubCatData = undefined;
+    // diySubCatData.delete;
+    console.log(diySubCatData);
+    console.log(pkmnData);
+    console.log(vidGamLazyData);
   }
 
   // return (
@@ -634,9 +665,30 @@ function CategoryView(props) {
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => getDIYSubCats()}>I console log DIY queries</button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => getPkmnSubCats()}>I console log Pokemon queries</button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => getVideoGameSubCats()}>I console log video game queries</button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => getDIYSubCats()}
+          >
+            I console log DIY queries
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => getPkmnSubCats()}
+          >
+            I console log Pokemon queries
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => getVideoGameSubCats()}
+          >
+            I console log video game queries
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => clearSubCatData()}
+          >
+            I clear subcategory data
+          </button>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
