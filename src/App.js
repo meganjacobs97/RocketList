@@ -50,7 +50,7 @@ const App = () => {
             ></CategoryView>
           </Route>
 
-          <Route path="/join" exact component={Join} />
+          <Route path="/join/:id" exact component={Join} />
           <Route path="/chat" component={Chat} />
           
           <Route path="*" component={NoMatch} />

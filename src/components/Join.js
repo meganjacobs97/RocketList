@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 export default function SignIn() {
-  const [name, setName] = useState('Test'); // username
-  const [room, setRoom] = useState('Room'); // post unqiue id
+  const urlPath = window.location.pathname
+  const splitUrl = urlPath.split("/")
+  const newRoom = splitUrl[2]
 
-  // setName()
-  // ^ inside will be the username
+  // need to grab from session the username
 
-  // setRoom()
-  // ^ inside will be the unqiue post id
+
+  const [name, setName] = useState('user'); // username
+  const [room, setRoom] = useState(newRoom);
+
 
   return (
       <div className="display-flex justify-center text-center item-center h-vh bg-white">

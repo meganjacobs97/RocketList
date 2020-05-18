@@ -64,6 +64,7 @@ const GET_SUBCATS_BY_CATID = (parentId) => {
 const testPostArr = [
   {
     post: {
+      _id: "test",
       title: "I love pokemon",
       body: "my favorite is chandelure",
       date_created: "13-may-2020",
@@ -78,25 +79,6 @@ const testPostArr = [
       },
       author: {
         username: "testUserDion",
-      },
-    },
-  },
-  {
-    post: {
-      title: "I love pokemon",
-      body: "my favorite is magikarp",
-      date_created: "13-may-2020",
-      replies: [],
-      subcategory: {
-        name: "pokemon go",
-        description: "all about pokemon go",
-        category: {
-          name: "pokemon",
-          description: "all things pokemon related",
-        },
-      },
-      author: {
-        username: "louis",
       },
     },
   },
@@ -254,6 +236,7 @@ function Main(props) {
               subcategory={post.post.subcategory.name}
               category={post.post.subcategory.category.name}
               author={post.post.author.username}
+              postId={post.post._id}
             />
           ))}
         </div>
