@@ -3,9 +3,12 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CategoryView from "./pages/CategoryView";
+import SubCategoryView from "./pages/SubCategoryView";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
 import Wrapper from "./components/Wrapper";
+import Chat from './components/Chat';
+import Join from './components/Join';
 // import Footer from "./components/Footer";
 
 const App = () => {
@@ -39,15 +42,23 @@ const App = () => {
             {" "}
             <Main isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></Main>
           </Route>
-          <Route exact path="/category">
+          <Route exact path="/category/:catid">
             {" "}
             <CategoryView
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
-              // component={CategoryView}
             ></CategoryView>
           </Route>
+          <Route exact path="/category/:catid/subcategory/:subcatid">
+            {" "}
+            <SubCategoryView
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+            ></SubCategoryView>
+          </Route>
           <Route path="*" component={NoMatch} />
+          <Route path="/join" exact component={Join} />
+          <Route path="/chat" component={Chat} />
         </Switch>
       </Wrapper>
       {/* <Footer /> */}
