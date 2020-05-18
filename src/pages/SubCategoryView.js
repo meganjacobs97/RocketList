@@ -60,7 +60,6 @@ const GET_ALL_POSTS = gql`
 
 function SubCategoryView(props) {
   const { catid } = useParams();
-  console.log(catid)
   const { subcatid } = useParams();
   const GET_SUBCATS_BY_CATID = gql`
   query {
@@ -74,7 +73,23 @@ function SubCategoryView(props) {
     }
   }
 `;
-console.log(GET_SUBCATS_BY_CATID)
+  const GET_POSTS_BY_SUBCATID = gql`
+  query {
+    subcategory(id: "${subcatid}") {
+      name
+      posts {
+        _id
+        title
+        body
+        date_created
+        author {
+          username
+        }
+      }
+    }
+  }
+`;
+  console.log(GET_POSTS_BY_SUBCATID)
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -112,8 +127,8 @@ console.log(GET_SUBCATS_BY_CATID)
     error: subCatIdError,
     data: subCatIdData,
   } = useQuery(GET_SUBCATS_BY_CATID);
-  console.log(subCatIdData)
-  console.log(subCatIdError)
+  console.log(subCatIdData);
+  console.log(subCatIdError);
 
   // Queries database to get all categories
   const {
@@ -143,12 +158,12 @@ console.log(GET_SUBCATS_BY_CATID)
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
-  // Queries database to get all posts
+  // Queries database to get posts in subcategory
   const {
     loading: postsLoading,
     error: postsError,
     data: postsData,
-  } = useQuery(GET_ALL_POSTS);
+  } = useQuery(GET_POSTS_BY_SUBCATID);
 
   // on page load, updates state objects
   useEffect(() => {
@@ -183,7 +198,6 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-    
   }, [
     // subCatData,
     topPointsData,
@@ -207,7 +221,7 @@ console.log(GET_SUBCATS_BY_CATID)
         ),
       });
     }
-  },[subCatIdData,])
+  }, [subCatIdData]);
 
   // when top category changes, update top categories state
   useEffect(() => {
@@ -227,7 +241,7 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-  },[topCatData])
+  }, [topCatData]);
 
   // when all category changes, update top categories state
   useEffect(() => {
@@ -248,25 +262,27 @@ console.log(GET_SUBCATS_BY_CATID)
         })),
       });
     }
-  },[allCatData])
+  }, [allCatData]);
 
   // when posts, update posts state
   useEffect(() => {
     if (postsData) {
+      console.log(postsData);
+      console.log(postsData.subcategory.posts);
       setPosts({
         ...posts,
-        postsDisplay: postsData.posts.map((post) => ({
+        postsDisplay: postsData.subcategory.posts.map((post) => ({
           id: post._id,
           author: post.author.username,
           title: post.title,
           date_created: post.date_created,
           body: post.body,
-          parentCategory: post.category.name,
-          subCategory: post.subcategory.name,
+          // parentCategory: post.category.name,
+          // subCategory: post.subcategory.name,
         })),
       });
     }
-  }, [postsData])
+  }, [postsData]);
 
   // useEffect(() => {}, [subCategories]);
 

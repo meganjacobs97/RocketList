@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 
 export default function SignIn() {
-  const [name, setName] = useState('atmnazetm'); // username
-  const [room, setRoom] = useState('stymszem zem'); // post unqiue id
+  const urlPath = window.location.pathname
+  const splitUrl = urlPath.split("/")
+  const newRoom = splitUrl[2]
 
-  // setName()
-  // ^ inside will be the username
-
-  // setRoom()
-  // ^ inside will be the unqiue post id
+  const [name, setName] = useState('user'); // username
+  const [room, setRoom] = useState(newRoom); // post unqiue id
 
   return (
       <div className="display-flex justify-center text-center item-center h-vh bg-gray-200">
