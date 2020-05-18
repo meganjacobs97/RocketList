@@ -30,9 +30,11 @@ const App = () => {
               // component={CategoryView}
             ></CategoryView>
           </Route>
-          <Route path="*" component={NoMatch} />
+
           <Route path="/join" exact component={Join} />
           <Route path="/chat" component={Chat} />
+          
+          <Route path="*" component={NoMatch} />
         </Switch>
       </Wrapper>
       {/* <Footer /> */}

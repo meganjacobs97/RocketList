@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 
 export default function SignIn() {
-  const [name, setName] = useState('atmnazetm'); // username
-  const [room, setRoom] = useState('stymszem zem'); // post unqiue id
+  const [name, setName] = useState('Test'); // username
+  const [room, setRoom] = useState('Room'); // post unqiue id
 
   // setName()
   // ^ inside will be the username
@@ -12,7 +12,7 @@ export default function SignIn() {
   // ^ inside will be the unqiue post id
 
   return (
-      <div className="display-flex justify-center text-center item-center h-vh bg-gray-200">
+      <div className="display-flex justify-center text-center item-center h-vh bg-white">
         <div>
           <h1 className="text-4xl">Entering Chat Room:</h1>
           <br/>
