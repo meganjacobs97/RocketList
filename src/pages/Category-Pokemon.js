@@ -185,7 +185,7 @@ const useSearch = (categoryId) => {
   console.log("i used a search lol");
 };
 
-function CategoryView(props) {
+function CategoryPokemon(props) {
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
   // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
@@ -639,8 +639,8 @@ function CategoryView(props) {
 
 // }
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CategoryView)
-export default CategoryView;
+// export default connect(mapStateToProps, mapDispatchToProps)(CategoryPokemon)
+export default CategoryPokemon;
 
 // check class repo, week 10, folder 19, activity 15 for class based components
 

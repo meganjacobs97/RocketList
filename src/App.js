@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CategoryView from "./pages/CategoryView";
+import CategoryPokemon from "./pages/Category-Pokemon";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
 import Wrapper from "./components/Wrapper";
@@ -48,6 +49,14 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
               // component={CategoryView}
             ></CategoryView>
+          </Route>
+          <Route exact path="/pokemon">
+            {" "}
+            <CategoryPokemon
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              // component={CategoryView}
+            ></CategoryPokemon>
           </Route>
           <Route path="*" component={NoMatch} />
           <Route path="/join" exact component={Join} />
