@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+// import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
@@ -9,11 +11,14 @@ import Posts from "../components/Posts";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
+import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
+import InputPost from "../components/InputPost";
 
 // Query graphql
 import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import Subcategory from "../components/Subcategory";
 const GET_USERS = gql`
   query {
     users {
@@ -23,20 +28,6 @@ const GET_USERS = gql`
     }
   }
 `;
-const GET_SUBCATS = gql`
-  query {
-    subcategories {
-      _id
-      name
-      description
-      category {
-        name
-        _id
-      }
-    }
-  }
-`;
-
 const GET_ALLCATS = gql`
   query {
     categories {
@@ -45,22 +36,6 @@ const GET_ALLCATS = gql`
     }
   }
 `;
-
-const GET_SUBCATS_BY_CATID = (parentId) => {
-  return gql`
-    {
-      category(id: "${parentId}") {
-        name
-        _id
-        subcategories {
-          name
-          _id
-        }
-      }
-    }
-  `;
-};
-
 const GET_ALL_POSTS = gql`
   {
     posts {
@@ -81,82 +56,65 @@ const GET_ALL_POSTS = gql`
   }
 `;
 
-const testPostArr = [
-  {
-    post: {
-      title: "I love pokemon",
-      body: "my favorite is chandelure",
-      date_created: "13-may-2020",
-      replies: [],
-      subcategory: {
-        name: "pokemon go",
-        description: "all about pokemon go",
-        category: {
-          name: "pokemon",
-          description: "all things pokemon related",
-        },
-      },
-      author: {
-        username: "testUserDion",
-      },
-    },
-  },
-  {
-    post: {
-      title: "I love pokemon",
-      body: "my favorite is magikarp",
-      date_created: "13-may-2020",
-      replies: [],
-      subcategory: {
-        name: "pokemon go",
-        description: "all about pokemon go",
-        category: {
-          name: "pokemon",
-          description: "all things pokemon related",
-        },
-      },
-      author: {
-        username: "louis",
-      },
-    },
-  },
-];
+// import { connect } from 'react-redux'
 
-function Main(props) {
-  const isLoggedIn = props.isLoggedIn;
+function SubCategoryView(props) {
+  const { catid } = useParams();
+  console.log(catid)
+  const { subcatid } = useParams();
+  const GET_SUBCATS_BY_CATID = gql`
+  query {
+    category(id: "${catid}") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`;
+console.log(GET_SUBCATS_BY_CATID)
+
+  // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
+  // const hamburger = props.chicken;
+  // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
+  const [subCategories, setSubCategories] = useState({
+    parentCategory: "",
+    parentCategoryId: "",
+    currCategory: "",
+    subCategories: [],
+  });
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
+    title: "",
   });
   const [allCategories, setAllCategories] = useState({
-    allCategories: ["Anime/Manga", "World News", "Literature"],
+    allCategories: [],
+    title: "",
   });
   const [topPoints, setTopPoints] = useState({
-    topPoints: ["Paul", "Paul again", "Paul x 3"],
+    topPoints: [],
   });
   const [topPosters, setTopPosters] = useState({
-    topPosters: ["Louis", "Louis again", "Louis x 3"],
+    topPosters: [],
   });
   const [categoryMods, setCategoryMods] = useState({
-    mods: ["Dion", "Dion again", "Dion x 3"],
+    mods: [],
   });
   const [posts, setPosts] = useState({
     postsDisplay: [],
   });
 
-  // const [tempPostArr, setTempPostArr] = useState({
-  //   query: testPostArr,
-  // });
-
-  // Queries database to get users (placeholder, will get mods)
-  // const { loading: userLoading, error: userError, data: userData } = useQuery(
-  //   GET_USERS
-  // );
   // Queries database to get all subcategories for a given ID!
-  // const {
-  //   loading: subCatIdLoading,
-  //   error: subCatIdError,
-  //   data: subCatIdData,
-  // } = useQuery(GET_SUBCATS_BY_CATID("5ebe3b5dad332d50981177ef"));
+  const {
+    loading: subCatIdLoading,
+    error: subCatIdError,
+    data: subCatIdData,
+  } = useQuery(GET_SUBCATS_BY_CATID);
+  console.log(subCatIdData)
+  console.log(subCatIdError)
+
   // Queries database to get all categories
   const {
     loading: allCatLoading,
@@ -194,24 +152,10 @@ function Main(props) {
 
   // on page load, updates state objects
   useEffect(() => {
-    if (topCatData) {
-      setTopCategories({
-        ...topCategories,
-        topCategories: topCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
-    if (allCatData) {
-      setAllCategories({
-        ...allCategories,
-        allCategories: allCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
+    // if(userLoading) console.log("help")
+    // if(userError) console.log("I need somebody")
+    // if(userLoading) return "Loading...";
+    // if(userError) return `Error! $s{error.message}`;
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
@@ -239,6 +183,75 @@ function Main(props) {
         })),
       });
     }
+    
+  }, [
+    // subCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+  ]);
+
+  // when subcatid changes, update subcat state
+  useEffect(() => {
+    if (subCatIdData) {
+      console.log(subCatIdData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: subCatIdData.category.name,
+        currCategory: subCatIdData.category.name,
+        subCategories: subCatIdData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+    }
+  },[subCatIdData,])
+
+  // when top category changes, update top categories state
+  useEffect(() => {
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading...",
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        title: "Top Categories",
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  },[topCatData])
+
+  // when all category changes, update top categories state
+  useEffect(() => {
+    if (allCatLoading) {
+      setAllCategories({
+        ...allCategories,
+        title: "Loading...",
+        allCategories: ["Loading categories..."],
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        ...allCategories,
+        title: "All Categories",
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  },[allCatData])
+
+  // when posts, update posts state
+  useEffect(() => {
     if (postsData) {
       setPosts({
         ...posts,
@@ -253,47 +266,56 @@ function Main(props) {
         })),
       });
     }
-  }, [
-    topCatData,
-    allCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-    postsData,
-  ]);
+  }, [postsData])
+
+  // useEffect(() => {}, [subCategories]);
+
+  const handleCategoryClick = (parentId) => {
+    console.log(parentId);
+    setSubCategories({
+      ...subCategories,
+      parentCategoryId: parentId,
+    });
+  };
 
   const handleUserClick = (userId) => {
     console.log(userId);
   };
-  const handleCategoryClick = (parentId) => {
-    console.log(parentId);
-  };
+
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
+          <Subcategory
+            selectCat={handleCategoryClick}
+            category={subCategories.parentCategory}
+            parentId={subCategories.parentCategoryId}
+            list={subCategories.subCategories}
+          />
+          <br></br>
           <TopCat
             selectItem={handleCategoryClick}
-            category="Top Categories"
+            category={topCategories.title}
             list={topCategories.topCategories}
           />
           <br></br>
           <AllCat
             selectCat={handleCategoryClick}
-            category="All Categories"
+            category={allCategories.title}
             list={allCategories.allCategories}
           />
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
+          <h1>Current category: {subCategories.currCategory}</h1>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
               body={post.body}
               date_created={post.date_created}
-              subcategory={post.subCategory.name}
-              category={post.parentCategory.name}
+              subcategory={post.subCategory}
+              category={post.parentCategory}
               author={post.author}
               postId={post.id}
             />
@@ -302,23 +324,41 @@ function Main(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? "" : <LoginBox isLoggedIn={isLoggedIn} />}
+          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList
+            selectItem={handleUserClick}
             category="Top Points Holders"
             list={topPoints.topPoints}
           />
-          {/* <TPoints name={"Paul"} /> */}
           <br></br>
-          <OrderedList category="Top Posters" list={topPosters.topPosters} />
-          {/* <TPoster name={"Dion"} /> */}
-          <br></br>
-          <UnorderedList category="Mods" list={categoryMods.mods} />
+          <OrderedList
+            selectItem={handleUserClick}
+            category="Top Posters"
+            list={topPosters.topPosters}
+          />
         </div>
-        {/* <Mods name={"Louis"} /> */}
+        <br></br>
+        <UnorderedList
+          selectItem={handleUserClick}
+          category="Mods"
+          list={categoryMods.mods}
+        />
       </Col>
     </VGrid>
   );
 }
 
-export default Main;
+// const mapStateToProps = (state) => ({
+
+// })
+
+// const mapDispatchToProps = {
+
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(SubCategoryView)
+export default SubCategoryView;
+
+// check class repo, week 10, folder 19, activity 15 for class based components

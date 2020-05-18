@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 // import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-// import TopCat from "../components/TopCat";
+import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
@@ -10,13 +11,14 @@ import Posts from "../components/Posts";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
-import queryForSubCatsByParentId from "../utils/API";
+// import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
 
 // Query graphql
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import Subcategory from "../components/Subcategory";
 const GET_USERS = gql`
   query {
     users {
@@ -26,91 +28,11 @@ const GET_USERS = gql`
     }
   }
 `;
-const GET_SUBCATS = gql`
-  query {
-    subcategories {
-      _id
-      name
-      description
-      category {
-        name
-        _id
-      }
-    }
-  }
-`;
 const GET_ALLCATS = gql`
   query {
     categories {
       name
       _id
-    }
-  }
-`;
-const GET_SUBCATS_BY_CATID = (parentId) => {
-  console.log(
-    useQuery(gql`
-  query {
-    category(id: "${parentId}") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`)
-  );
-  return useQuery(gql`
-    {
-      category(id: "${parentId}") {
-        name
-        _id
-        subcategories {
-          name
-          _id
-        }
-      }
-    }
-  `);
-};
-
-const GET_SUBCATS_BY_VIDEOGAME = gql`
-  query {
-    category(id: "5ebe3b5dad332d50981177ef") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`;
-
-const GET_SUBCATS_BY_DIY = gql`
-  query {
-    category(id: "5ebe3b67ad332d50981177f0") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
-    }
-  }
-`;
-
-const GET_SUBCATS_BY_PKMN = gql`
-  query {
-    category(id: "5ebe3b77ad332d50981177f1") {
-      name
-      _id
-      subcategories {
-        name
-        _id
-      }
     }
   }
 `;
@@ -135,59 +57,24 @@ const GET_ALL_POSTS = gql`
   }
 `;
 
-// Lazy query to update subcategories
-// example
-// function DelayedQuery() {
-//   const [dog, setDog] = useState(null);
-//   const [getDog, { loading, data }] = useLazyQuery(GET_DOG_PHOTO);
-
-//   if (loading) return <p>Loading ...</p>;
-
-//   if (data && data.dog) {
-//     setDog(data.dog);
-//   }
-
-//   return (
-//     <div>
-//       {dog && <img src={dog.displayImage} />}
-//       <button onClick={() => getDog({ variables: { breed: 'bulldog' } })}>
-//         Click me!
-//       </button>
-//     </div>
-//   );
-// }
-
-// Dion
-// function delayedDIY() {
-//   // const [dog, setDog] = useState(null);
-//   const [getDIYSubCats, { loading, data }] = useLazyQuery(GET_SUBCATS_BY_DIY);
-
-//   // if (loading) return <p>Loading ...</p>;
-
-//   if (data && data.category) {
-//     setSubCategories(data.category.subcategories.map(subcategory => subcategory.name))
-//   }
-
-//   return (
-//     <div>
-//       {dog && <img src={dog.displayImage} />}
-//       <button onClick={() => getDIYSubCats({ variables: { breed: 'bulldog' } })}>
-//         Click me!
-//       </button>
-//     </div>
-//   );
-// }
-
 // import { connect } from 'react-redux'
 
-const useSearch = (categoryId) => {
-  console.log("i used a search lol");
-};
-
 function CategoryView(props) {
+  const { catid } = useParams();
+  const GET_SUBCATS_BY_CATID = gql`
+  query {
+    category(id: "${catid}") {
+      name
+      _id
+      subcategories {
+        name
+        _id
+      }
+    }
+  }
+`;
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
-  // const hamburger = props.chicken;
-  // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
+  // Creates and sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
     parentCategoryId: "",
@@ -215,38 +102,12 @@ function CategoryView(props) {
     postsDisplay: [],
   });
 
-  // Queries database to get users (placeholder, will get mods)
-  // const { loading: userLoading, error: userError, data: userData } = useQuery(
-  //   GET_USERS
-  // );
-  // Queries database to get all subcategories
-  const {
-    loading: subCatLoading,
-    error: subCatError,
-    data: subCatData,
-  } = useQuery(GET_SUBCATS);
-
-  // Queries database to get all subcategories in video games
-  const {
-    loading: videoGameLoading,
-    error: videoGameError,
-    data: videoGameData,
-  } = useQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // Queries database to get all subcategories in pokemon
-  const {
-    loading: pokemonLoading,
-    error: pokemonError,
-    data: pokemonData,
-  } = useQuery(GET_SUBCATS_BY_PKMN);
-
   // Queries database to get all subcategories for a given ID!
-  // let queryId = "5ebe3b5dad332d50981177ef";
-  // const {
-  //   loading: subCatIdLoading,
-  //   error: subCatIdError,
-  //   data: subCatIdData,
-  // } = useQuery(GET_SUBCATS_BY_CATID(queryId || "5ebe3b67ad332d50981177f0"));
+  const {
+    loading: subCatIdLoading,
+    error: subCatIdError,
+    data: subCatIdData,
+  } = useQuery(GET_SUBCATS_BY_CATID);
 
   // Queries database to get all categories
   const {
@@ -283,95 +144,12 @@ function CategoryView(props) {
     data: postsData,
   } = useQuery(GET_ALL_POSTS);
 
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
-
   // on page load, updates state objects
   useEffect(() => {
     // if(userLoading) console.log("help")
     // if(userError) console.log("I need somebody")
     // if(userLoading) return "Loading...";
     // if(userError) return `Error! $s{error.message}`;
-    // if (subCatData) {
-    //   console.log("hey")
-    //   console.log(subCatData)
-    // setSubCategories({
-    //   ...subCategories,
-    //   parentCategory: subCatData.category.name,
-    //   currCategory: subCatData.category.name,
-    //   subCategories: subCatData.subcategories.map(
-    //     (subcategory) => subcategory.name
-    //   ),
-    // });
-    // }
-    // if (videoGameData) {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     parentCategory: videoGameData.category.name,
-    //     currCategory: videoGameData.category.name,
-    //     subCategories: videoGameData.category.subcategories.map(
-    //       (subcategory) => ({ name: subcategory.name, id: subcategory._id })
-    //     ),
-    //   });
-    // }
-    // if (pokemonData) {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     parentCategory: pokemonData.category.name,
-    //     currCategory: pokemonData.category.name,
-    //     subCategories: pokemonData.category.subcategories.map(
-    //       (subcategory) => ({ name: subcategory.name, id: subcategory._id })
-    //     ),
-    //   });
-    // }
-    // if (subCatIdData.length) {
-    //   console.log(subCatIdData);
-    // setSubCategories({
-    //   ...subCategories,
-    //   parentCategory: subCatIdData.category.name,
-    //   currCategory: subCatIdData.category.name,
-    //   subCategories: subCatIdData.category.subcategories.map(
-    //     (subcategory) => ({
-    //       name: subcategory.name,
-    //       id: subcategory._id,
-    //     })
-    //   ),
-    // });
-    // }
-    if (topCatLoading) {
-      setTopCategories({
-        ...topCategories,
-        title: "Loading...",
-      });
-    }
-    if (topCatData) {
-      setTopCategories({
-        ...topCategories,
-        title: "Top Categories",
-        topCategories: topCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
-    if (allCatLoading) {
-      setAllCategories({
-        ...allCategories,
-        title: "Loading...",
-        allCategories: ["Loading categories..."],
-      });
-    }
-    if (allCatData) {
-      setAllCategories({
-        ...allCategories,
-        title: "All Categories",
-        allCategories: allCatData.categories.map((category) => ({
-          name: category.name,
-          id: category._id,
-        })),
-      });
-    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
@@ -399,8 +177,75 @@ function CategoryView(props) {
         })),
       });
     }
+  }, [
+    // subCatData,
+    topPointsData,
+    topPostersData,
+    modData,
+  ]);
+
+  // when subcatid changes, update subcat state
+  useEffect(() => {
+    if (subCatIdData) {
+      console.log(subCatIdData);
+      setSubCategories({
+        ...subCategories,
+        parentCategory: subCatIdData.category.name,
+        currCategory: subCatIdData.category.name,
+        subCategories: subCatIdData.category.subcategories.map(
+          (subcategory) => ({
+            name: subcategory.name,
+            id: subcategory._id,
+          })
+        ),
+      });
+    }
+  }, [subCatIdData]);
+
+  // when top category changes, update top categories state
+  useEffect(() => {
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading...",
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        title: "Top Categories",
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  }, [topCatData]);
+
+  // when all category changes, update top categories state
+  useEffect(() => {
+    if (allCatLoading) {
+      setAllCategories({
+        ...allCategories,
+        title: "Loading...",
+        allCategories: ["Loading categories..."],
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        ...allCategories,
+        title: "All Categories",
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  }, [allCatData]);
+
+  // when posts, update posts state
+  useEffect(() => {
     if (postsData) {
-      // console.log(postsData.posts);
       setPosts({
         ...posts,
         postsDisplay: postsData.posts.map((post) => ({
@@ -414,242 +259,64 @@ function CategoryView(props) {
         })),
       });
     }
-  }, [
-    // subCatData,
-    // subCatIdData,
-    // videoGameData,
-    // pokemonData,
-    topCatData,
-    allCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-    postsData,
-  ]);
+  }, [postsData]);
 
-  const selectCat = (id) => {
-    // GET_SUBCATS_BY_CATID(id)
-    // useSearch();
-    // console.log(queryId)
-    // queryId = id;
-    // console.log(queryId)
-    console.log(id);
-  };
+  // lazy queries
 
+  // Lazy query for videogames
+  // const [vgCatsLoaded, setVgCatsLoaded] = useState(false);
+  // const [
+  //   getVideoGameSubCats,
+  //   { loading: vidGamLazyLoading, data: vidGamLazyData },
+  // ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
+
+  // updates subcategories state if video game category is clicked
   // useEffect(() => {
-  // if (subCategories.parentCategoryId === "5ebe3b5dad332d50981177ef") {
-  //   setSubCategories({
-  //     ...subCategories,
-  //     parentCategory: "Video Games",
-  //     currCategory: "Video Games",
-  //     subCategories: ["WoW", "Minecraft", "Misc"],
-  //   });
-  // } else if (subCategories.parentCategoryId === "5ebe3b67ad332d50981177f0") {
-  //   setSubCategories({
-  //     ...subCategories,
-  //     parentCategory: "DIY",
-  //     currCategory: "DIY",
-  //     subCategories: ["Misc"],
-  //   });
-  // } else if (subCategories.parentCategoryId === "5ebe3b67ad332d50981177f0") {
-  //   setSubCategories({
-  //     ...subCategories,
-  //     parentCategory: "Pokemon",
-  //     currCategory: "Pokemon",
-  //     subCategories: ["Pokmeon Go"],
-  //   });
-  // }
-  // setSubCategories({
-  //   ...subCategories,
-  //   parentCategory: subCatResData.category.name,
-  //   currCategory: subCatResData.category.name,
-  //   subCategories: subCatResData.subcategories.map((subcategory) => ({
-  //     name: subcategory.name,
-  //     id: subcategory._id,
-  //   })),
-  // });
-  // console.log(parentCatId)
-  // const queryForSubCatsByParent = `gql
-  //   {
-  //     category(id: "${parentCatId}") {
-  //       name
-  //       _id
-  //       subcategories {
-  //         name
-  //         _id
-  //       }
-  //     }
+  //   if (!vgCatsLoaded && vidGamLazyData && vidGamLazyData.category) {
+  //     console.log("I got clicked and have video game data");
+  //     console.log(vidGamLazyData);
+  //     setSubCategories({
+  //       ...subCategories,
+  //       parentCategory: vidGamLazyData.category.name,
+  //       parentCategoryId: vidGamLazyData.category._id,
+  //       currCategory: vidGamLazyData.category.name,
+  //       subCategories: vidGamLazyData.category.subcategories.map(
+  //         (subcategory) => ({
+  //           name: subcategory.name,
+  //           id: subcategory._id,
+  //         })
+  //       ),
+  //     });
+  //     setVgCatsLoaded(true);
   //   }
-  // `;
-  // useQuery(queryForSubCatsByParent);
-  // console.log(queryForSubCatsByParent)
-  // const {
-  //     loading: subCatIdLoading,
-  //     error: subCatIdError,
-  //     data: subCatIdData,
-  //   }
-  //   = GET_SUBCATS_BY_CATID(parentCatId);
-  // if (subCatIdData) {
-  // console.log(subCatIdData)
-  // console.log("No data")
-  // setSubCategories({
-  //   ...subCategories,
-  //   parentCategory: subCatIdData.category.name,
-  //   currCategory: subCatIdData.category.name,
-  //   subCategories: subCatIdData.category.subcategories.map(
-  //     (subcategory) => ({
-  //       name: subcategory.name,
-  //       id: subcategory._id
-  //     })
-  //   ),
-  // });
-  // }
-  // const [subCategories, setSubCategories] = useState({
-  //   parentCategory: "",
-  //   currCategory: "",
-  //   subCategories: [],
-  // });
-  //   console.log("subCats changed");
-  // });
+  // }, [vidGamLazyData, subCategories]);
 
-  useEffect(() => {}, [subCategories]);
+  // useEffect(() => {}, [subCategories]);
 
   const handleCategoryClick = (parentId) => {
-//     const tempQuery = `
-//   query {
-//     category(id: "${parentId}") {
-//       name
-//       _id
-//       subcategories {
-//         name
-//         _id
-//       }
-//     }
-//   }
-// `;
-//   const result = gql(tempQuery)
-//   const newRes = useLazyQuery(tempQuery)
-    // console.log(result);
     console.log(parentId);
-    // if (parentId === "5ebe3b5dad332d50981177ef") {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     parentCategory: "Video Games",
-    //     parentCategoryId: `${parentId}`,
-    //     currCategory: "Video Games",
-    //     subCategories: ["WoW", "Minecraft", "Misc"],
-    //   });
-    // }
-    // const {
-    //   loading: subCatIdLoading,
-    //   error: subCatIdError,
-    //   data: subCatIdData,
-    // } = GET_SUBCATS_BY_CATID(id);
-    // console.log(GET_SUBCATS_BY_CATID(id))
-    // console.log(subCatIdData);
-    // setSubCategories({
-    //   ...subCategories,
-    //   parentCategoryId: parentId,
-    // });
-    // console.log("subcats changed from subcatstates");
-
-    // useQuery(queryForSubCatsByParent)
-    // console.log(queryForSubCatsByParent)
-    // };
-    // Users().then();
+    setSubCategories({
+      ...subCategories,
+      parentCategoryId: parentId,
+    });
   };
 
-  // Lazy query for DIY
-  // const [dog, setDog] = useState(null);
-  let [
-    getDIYSubCats,
-    { loading: diySubCatLoading, data: diySubCatData },
-  ] = useLazyQuery(GET_SUBCATS_BY_DIY);
-
-  // if (loading) return <p>Loading ...</p>;
-
-  if (diySubCatData && diySubCatData.category) {
-    console.log("I got clicked and have DIY data");
-    console.log(diySubCatData.category.subcategories);
-    // setSubCategories({
-    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
-    //     ...subCategories,
-    //     name: subcategory.name,
-    //     id: subcategory._id,
-    //   })),
-    // });
-  }
-
-  // Lazy query for Pokemon
-  // const [dog, setDog] = useState(null);
-  const [
-    getPkmnSubCats,
-    { loading: pkmnLoading, data: pkmnData },
-  ] = useLazyQuery(GET_SUBCATS_BY_PKMN);
-
-  // if (loading) return <p>Loading ...</p>;
-
-  if (pkmnData && pkmnData.category) {
-    console.log("I got clicked and have pokemon data");
-    console.log(pkmnData.category.subcategories);
-    // setSubCategories({
-    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
-    //     ...subCategories,
-    //     name: subcategory.name,
-    //     id: subcategory._id,
-    //   })),
-    // });
-  }
-
-  // Lazy query for video games
-  // const [dog, setDog] = useState(null);
-  const [
-    getVideoGameSubCats,
-    { loading: vidGamLazyLoading, data: vidGamLazyData },
-  ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // if (loading) return <p>Loading ...</p>;
-
-  if (vidGamLazyData && vidGamLazyData.category) {
-    console.log("I got clicked and have video game data");
-    console.log(vidGamLazyData.category.subcategories);
-    // setSubCategories({
-    //   subcategories: diySubCatData.category.subcategories.map((subcategory) => ({
-    //     ...subCategories,
-    //     name: subcategory.name,
-    //     id: subcategory._id,
-    //   })),
-    // });
-  }
-
-  const clearSubCatData = () => {
-    // diySubCatData = undefined;
-    // diySubCatData.delete;
-    console.log(diySubCatData);
-    console.log(pkmnData);
-    console.log(vidGamLazyData);
-  }
-
-  // return (
-  //   <div>
-  //     {dog && <img src={dog.displayImage} />}
-  //     <button onClick={() => getDIYSubCats({ variables: { breed: 'bulldog' } })}>
-  //       Click me!
-  //     </button>
-  //   </div>
-  // );
+  const handleUserClick = (userId) => {
+    console.log(userId);
+  };
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
-          <UnorderedList
-            selectItem={handleCategoryClick}
-            category={`Subcategories in ${subCategories.parentCategory}`}
+          <Subcategory
+            selectCat={handleCategoryClick}
+            category={subCategories.parentCategory}
+            parentId={catid}
             list={subCategories.subCategories}
           />
           <br></br>
-          <OrderedList
+          <TopCat
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
@@ -665,30 +332,6 @@ function CategoryView(props) {
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getDIYSubCats()}
-          >
-            I console log DIY queries
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getPkmnSubCats()}
-          >
-            I console log Pokemon queries
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => getVideoGameSubCats()}
-          >
-            I console log video game queries
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => clearSubCatData()}
-          >
-            I clear subcategory data
-          </button>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
