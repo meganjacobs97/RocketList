@@ -12,6 +12,7 @@ function PostCard(props) {
       <p>
         Posted under: {props.subcategory} in {props.category} by {props.author}
       </p>
+      <a href={ `/join/${props.postId}` }><button className="underline text-blue-700">Chat</button></a>
     </div>
   );
 }
