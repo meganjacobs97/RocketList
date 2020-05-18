@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 // import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-// import TopCat from "../components/TopCat";
+import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
@@ -172,6 +172,7 @@ function CategoryView(props) {
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
+        parentCategoryId: subCatIdData.category._id,
         currCategory: subCatIdData.category.name,
         subCategories: subCatIdData.category.subcategories.map(
           (subcategory) => ({
@@ -318,10 +319,11 @@ function CategoryView(props) {
           <Subcategory
             selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
+            parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
           />
           <br></br>
-          <OrderedList
+          <TopCat
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
