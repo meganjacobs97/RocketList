@@ -193,6 +193,7 @@ function SubCategoryView(props) {
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
+        parentCategoryId: catid,
         currCategory: subCatIdData.category.name,
         subCategories: subCatIdData.category.subcategories.map(
           (subcategory) => ({
@@ -248,18 +249,24 @@ function SubCategoryView(props) {
   // when posts, update posts state
   useEffect(() => {
     if (postsData) {
-      console.log(postsData);
-      console.log(postsData.subcategory.posts);
+      // console.log(postsData);
+      // console.log(postsData.subcategory.posts);
+      setSubCategories({
+        ...subCategories,
+        currCategory: postsData.subcategory.name
+      })
       setPosts({
         ...posts,
         postsDisplay: postsData.subcategory.posts.map((post) => ({
-          id: post._id,
-          author: post.author.username,
           title: post.title,
-          date_created: post.date_created,
           body: post.body,
-          // parentCategory: post.category.name,
-          // subCategory: post.subcategory.name,
+          date_created: post.date_created,
+          author: post.author.username,
+          id: post._id,
+          subCategoryId: subcatid,
+          subCategory: subCategories.currCategory,
+          parentCatId: catid,
+          parentCatName: subCategories.parentCategory,
         })),
       });
     }
@@ -316,10 +323,13 @@ function SubCategoryView(props) {
               title={post.title}
               body={post.body}
               date_created={post.date_created}
-              subcategory={post.subCategory}
-              category={post.parentCategory}
               author={post.author}
               postId={post.id}
+              subcategoryId={post.subCategoryId}
+              subcategory={post.subCategory}
+              categoryId={post.parentCatId}
+              category="Chemistry"
+              // category={post.parentCatName}
             />
           ))}
         </div>
