@@ -102,6 +102,8 @@ function CategoryView(props) {
     postsDisplay: [],
   });
 
+  const [MakeAPost, setMakeAPost] = useState(false);
+
   // Queries database to get all subcategories for a given ID!
   const {
     loading: subCatIdLoading,
@@ -330,7 +332,7 @@ function CategoryView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        {props.isLoggedIn ? (
+        {MakeAPost ? (
           <InputPost category={catid} list={subCategories.subCategories} />
         ) : (
           ""
@@ -352,8 +354,23 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? "" : <LoginBox />}
-          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          {props.isLoggedIn ? (
+            <button
+              className={
+                (MakeAPost ? "hidden " : "block ") +
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              }
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setMakeAPost(true);
+              }}
+            >
+              Make a Post
+            </button>
+          ) : (
+            <LoginBox />
+          )}
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
