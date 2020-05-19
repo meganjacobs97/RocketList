@@ -208,6 +208,12 @@ function CategoryView(props) {
 
   // when subcatid changes, update subcat state
   useEffect(() => {
+    // if (subCatIdLoading) {
+    //   setSubCategories({
+    //     ...subCategories,
+    //     title: "Loading...",
+    //   });
+    // }
     if (subCatIdData) {
       console.log(subCatIdData);
       setSubCategories({
