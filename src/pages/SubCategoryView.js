@@ -19,6 +19,7 @@ import InputPost from "../components/InputPost";
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
+
 const GET_USERS = gql`
   query {
     users {
@@ -28,6 +29,7 @@ const GET_USERS = gql`
     }
   }
 `;
+
 const GET_ALLCATS = gql`
   query {
     categories {
@@ -80,6 +82,7 @@ function SubCategoryView(props) {
     currCategory: "",
     subCategories: [],
   });
+  const subCatArray = subCategories.subCategories;
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -301,6 +304,11 @@ function SubCategoryView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        {props.isLoggedIn ? (
+          <InputPost category={catid} list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
           {posts.postsDisplay.map((post) => (
@@ -318,8 +326,7 @@ function SubCategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
-          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          {props.isLoggedIn ? "" : <LoginBox />}
           <br></br>
           <OrderedList
             selectItem={handleUserClick}

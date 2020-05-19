@@ -359,6 +359,11 @@ function CategoryView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        {props.isLoggedIn ? (
+          <InputPost category={catid} list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
           {posts.postsDisplay.map((post) => (
@@ -374,7 +379,7 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {props.isLoggedIn ? "" : <LoginBox />}
           {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList

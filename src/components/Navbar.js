@@ -15,7 +15,9 @@ export default function Navbar(props) {
       </div>
       <div id="navbar" className="flex flex-col">
         <div>
-          <h1 className="flex justify-center">Welcome to RocketList!</h1>
+          <h1 className="flex justify-center font-bold">
+            Welcome to RocketList!
+          </h1>
         </div>
         <div className="flex flex-row justify-around visible lg:invisible">
           <div>Explore</div>
