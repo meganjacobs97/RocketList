@@ -39,26 +39,6 @@ const GET_ALLCATS = gql`
   }
 `;
 
-const GET_ALL_POSTS = gql`
-  {
-    posts {
-      _id
-      title
-      body
-      date_created
-      category {
-        name
-      }
-      subcategory {
-        name
-      }
-      author {
-        username
-      }
-    }
-  }
-`;
-
 // import { connect } from 'react-redux'
 
 function SubCategoryView(props) {
@@ -92,7 +72,6 @@ function SubCategoryView(props) {
     }
   }
 `;
-  console.log(GET_POSTS_BY_SUBCATID);
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -131,8 +110,6 @@ function SubCategoryView(props) {
     error: subCatIdError,
     data: subCatIdData,
   } = useQuery(GET_SUBCATS_BY_CATID);
-  console.log(subCatIdData);
-  console.log(subCatIdError);
 
   // Queries database to get all categories
   const {
