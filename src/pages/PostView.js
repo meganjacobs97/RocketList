@@ -14,12 +14,13 @@ import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
-import Card from "../components/Card"
 
 // Query graphql
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
+
+// import { connect } from 'react-redux'
 
 const GET_USERS = gql`
   query {
@@ -30,7 +31,6 @@ const GET_USERS = gql`
     }
   }
 `;
-
 const GET_ALLCATS = gql`
   query {
     categories {
@@ -39,12 +39,52 @@ const GET_ALLCATS = gql`
     }
   }
 `;
+const GET_ALL_POSTS = gql`
+  {
+    posts {
+      _id
+      title
+      body
+      date_created
+      category {
+        name
+      }
+      subcategory {
+        name
+      }
+      author {
+        username
+      }
+    }
+  }
+`;
 
-// import { connect } from 'react-redux'
-
-function SubCategoryView(props) {
+function PostView(props) {
   const { catid } = useParams();
   const { subcatid } = useParams();
+  const { postId } = useParams();
+
+  const GET_POST_BY_ID = gql`
+  query {
+    post (id: "${postId}") {
+        _id
+        title
+        body
+        date_created
+        author {
+          username
+        }
+        category {
+            name
+            _id
+        }
+        subcategory {
+            name
+            _id
+        }
+    }
+  }
+`;
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -73,17 +113,12 @@ function SubCategoryView(props) {
     }
   }
 `;
-
-  // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
-  // const hamburger = props.chicken;
-  // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
     parentCategoryId: "",
     currCategory: "",
     subCategories: [],
   });
-  const subCatArray = subCategories.subCategories;
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -104,7 +139,10 @@ function SubCategoryView(props) {
   const [posts, setPosts] = useState({
     postsDisplay: [],
   });
-  const [MakeAPost, setMakeAPost] = useState(false);
+  const [newPosts, setNewPosts] = useState({
+    postDisplay: {},
+  });
+
 
   // Queries database to get all subcategories for a given ID!
   const {
@@ -147,9 +185,15 @@ function SubCategoryView(props) {
     error: postsError,
     data: postsData,
   } = useQuery(GET_POSTS_BY_SUBCATID);
+  // Queries database to get one post
+  const {
+    loading: postByIdLoading,
+    error: postByIdError,
+    data: postByIdData,
+  } = useQuery(GET_POST_BY_ID);
 
-  // on page load, updates state objects
-  useEffect(() => {
+   // on page load, updates state objects
+   useEffect(() => {
     // if(userLoading) console.log("help")
     // if(userError) console.log("I need somebody")
     // if(userLoading) return "Loading...";
@@ -195,7 +239,7 @@ function SubCategoryView(props) {
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
-        parentCategoryId: catid,
+        currCategory: subCatIdData.category.name,
         subCategories: subCatIdData.category.subcategories.map(
           (subcategory) => ({
             name: subcategory.name,
@@ -246,37 +290,22 @@ function SubCategoryView(props) {
       });
     }
   }, [allCatData]);
-
-  // when posts, update posts state
   useEffect(() => {
-    if (postsData) {
-      // console.log(postsData);
-      // console.log(postsData.subcategory.posts);
-      setSubCategories({
-        ...subCategories,
-        currCategory: postsData.subcategory.name
-      })
-      setPosts({
-        ...posts,
-        postsDisplay: postsData.subcategory.posts.map((post) => ({
-          title: post.title,
-          body: post.body,
-          date_created: post.date_created,
-          author: post.author.username,
-          id: post._id,
-          subCategoryId: subcatid,
-          // subCategory: "Lorem ipsum and yada, subcategory", // works
-          // subCategory: subCategories.currCategory, // doesn't work
-          parentCatId: catid,
-          // parentCatName: "Another Lorem ipsum, category", // works
-          parentCatName: subCategories.parentCategory, // doesn't work
-        })),
+    if (postByIdData) {
+      setNewPosts({
+        ...newPosts,
+        postDisplay: {
+          id: postByIdData.post._id,
+          author: postByIdData.post.author.username,
+          title: postByIdData.post.title,
+          date_created: postByIdData.post.date_created,
+          body: postByIdData.post.body,
+          parentCategory: postByIdData.post.category.name,
+          subCategory: postByIdData.post.subcategory.name,
+        },
       });
     }
-  }, [postsData]);
-
-  // useEffect(() => {}, [subCategories]);
-
+  }, [postByIdData]);
   const handleCategoryClick = (parentId) => {
     console.log(parentId);
     setSubCategories({
@@ -291,7 +320,7 @@ function SubCategoryView(props) {
 
   return (
     <VGrid size="12">
-      <Col lgsize="2" visibility="hidden lg:block">
+        <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <Subcategory
             selectCat={handleCategoryClick}
@@ -314,49 +343,23 @@ function SubCategoryView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
-        ) : (
-          ""
-        )}
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{subCategories.currCategory}</a></h1>
-          {posts.postsDisplay.map((post) => (
-            <Card
-              title={post.title}
-              body={post.body}
-              date_created={post.date_created}
-              author={post.author}
-              postId={post.id}
-              subcategoryId={post.subCategoryId}
-              // subcategory={post.subCategory} // doesn't work
-              subcategory={subCategories.currCategory} // works
-              categoryId={post.parentCatId}
-              // category={post.parentCatName} // doesn't work
-              category={subCategories.parentCategory} // works
-            />
-          ))}
+          <h1>Current category: {subCategories.currCategory}</h1>
+          <Posts
+            title={newPosts.postDisplay.title}
+            body={newPosts.postDisplay.body}
+            date_created={newPosts.postDisplay.date_created}
+            subcategory={newPosts.postDisplay.subCategory}
+            category={newPosts.postDisplay.parentCategory}
+            author={newPosts.postDisplay.author}
+            postId={newPosts.postDisplay.id}
+          />
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? (
-            <button
-              className={
-                (MakeAPost ? "hidden " : "block ") +
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              }
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                setMakeAPost(true);
-              }}
-            >
-              Make a Post
-            </button>
-          ) : (
-            <LoginBox />
-          )}
+          {/* {props.isLoggedIn ? <InputPost /> : <LoginBox />} */}
+          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
@@ -380,16 +383,4 @@ function SubCategoryView(props) {
     </VGrid>
   );
 }
-
-// const mapStateToProps = (state) => ({
-
-// })
-
-// const mapDispatchToProps = {
-
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(SubCategoryView)
-export default SubCategoryView;
-
-// check class repo, week 10, folder 19, activity 15 for class based components
+export default PostView;

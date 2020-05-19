@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 export default function SignIn() {
@@ -10,7 +10,7 @@ export default function SignIn() {
   const [room, setRoom] = useState(newRoom); // post unqiue id
 
   return (
-      <div className="display-flex justify-center text-center item-center h-vh bg-gray-200">
+      <div className="display-flex justify-center text-center item-center h-vh bg-white">
         <div>
           <h1 className="text-4xl">Entering Chat Room:</h1>
           <br/>

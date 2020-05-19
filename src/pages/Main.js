@@ -10,6 +10,7 @@ import Posts from "../components/Posts";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
 import LoginBox from "../components/LoginBox";
+import Card from "../components/Card"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -251,7 +252,7 @@ function Main(props) {
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
           {posts.postsDisplay.map((post) => (
-            <Posts
+            <Card
               title={post.title}
               body={post.body}
               date_created={post.date_created}

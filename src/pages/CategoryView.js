@@ -14,6 +14,7 @@ import UnorderedList from "../components/UnorderedList";
 // import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
+import Card from "../components/Card"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -211,12 +212,6 @@ function CategoryView(props) {
 
   // when subcatid changes, update subcat state
   useEffect(() => {
-    // if (subCatIdLoading) {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     title: "Loading...",
-    //   });
-    // }
     if (subCatIdData) {
       console.log(subCatIdData);
       setSubCategories({
@@ -382,7 +377,7 @@ function CategoryView(props) {
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.currCategory}</a></h1>
           {posts.postsDisplay.map((post) => (
-            <Posts
+            <Card
               title={post.title}
               body={post.body}
               date_created={post.date_created}
