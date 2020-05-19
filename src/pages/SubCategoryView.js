@@ -318,7 +318,7 @@ function SubCategoryView(props) {
           ""
         )}
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: {subCategories.currCategory}</h1>
+          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{subCategories.currCategory}</a></h1>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
