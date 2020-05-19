@@ -193,7 +193,7 @@ function SubCategoryView(props) {
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
-        currCategory: subCatIdData.category.name,
+        parentCategoryId: catid,
         subCategories: subCatIdData.category.subcategories.map(
           (subcategory) => ({
             name: subcategory.name,
@@ -248,18 +248,26 @@ function SubCategoryView(props) {
   // when posts, update posts state
   useEffect(() => {
     if (postsData) {
-      console.log(postsData);
-      console.log(postsData.subcategory.posts);
+      // console.log(postsData);
+      // console.log(postsData.subcategory.posts);
+      setSubCategories({
+        ...subCategories,
+        currCategory: postsData.subcategory.name
+      })
       setPosts({
         ...posts,
         postsDisplay: postsData.subcategory.posts.map((post) => ({
-          id: post._id,
-          author: post.author.username,
           title: post.title,
-          date_created: post.date_created,
           body: post.body,
-          // parentCategory: post.category.name,
-          // subCategory: post.subcategory.name,
+          date_created: post.date_created,
+          author: post.author.username,
+          id: post._id,
+          subCategoryId: subcatid,
+          // subCategory: "Lorem ipsum and yada, subcategory", // works
+          // subCategory: subCategories.currCategory, // doesn't work
+          parentCatId: catid,
+          // parentCatName: "Another Lorem ipsum, category", // works
+          parentCatName: subCategories.parentCategory, // doesn't work
         })),
       });
     }
@@ -310,16 +318,20 @@ function SubCategoryView(props) {
           ""
         )}
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: {subCategories.currCategory}</h1>
+          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{subCategories.currCategory}</a></h1>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
               body={post.body}
               date_created={post.date_created}
-              subcategory={post.subCategory}
-              category={post.parentCategory}
               author={post.author}
               postId={post.id}
+              subcategoryId={post.subCategoryId}
+              // subcategory={post.subCategory} // doesn't work
+              subcategory={subCategories.currCategory} // works
+              categoryId={post.parentCatId}
+              // category={post.parentCatName} // doesn't work
+              category={subCategories.parentCategory} // works
             />
           ))}
         </div>
