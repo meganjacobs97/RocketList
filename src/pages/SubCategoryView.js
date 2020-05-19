@@ -194,7 +194,6 @@ function SubCategoryView(props) {
         ...subCategories,
         parentCategory: subCatIdData.category.name,
         parentCategoryId: catid,
-        currCategory: subCatIdData.category.name,
         subCategories: subCatIdData.category.subcategories.map(
           (subcategory) => ({
             name: subcategory.name,
@@ -264,9 +263,11 @@ function SubCategoryView(props) {
           author: post.author.username,
           id: post._id,
           subCategoryId: subcatid,
-          subCategory: subCategories.currCategory,
+          // subCategory: "Lorem ipsum and yada, subcategory", // works
+          // subCategory: subCategories.currCategory, // doesn't work
           parentCatId: catid,
-          parentCatName: subCategories.parentCategory,
+          // parentCatName: "Another Lorem ipsum, category", // works
+          parentCatName: subCategories.parentCategory, // doesn't work
         })),
       });
     }
@@ -326,10 +327,11 @@ function SubCategoryView(props) {
               author={post.author}
               postId={post.id}
               subcategoryId={post.subCategoryId}
-              subcategory={post.subCategory}
+              // subcategory={post.subCategory} // doesn't work
+              subcategory={subCategories.currCategory} // works
               categoryId={post.parentCatId}
-              category="Chemistry"
-              // category={post.parentCatName}
+              // category={post.parentCatName} // doesn't work
+              category={subCategories.parentCategory} // works
             />
           ))}
         </div>
