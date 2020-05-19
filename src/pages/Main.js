@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
-// import TopCat from "../components/TopCat";
-// import AllCat from "../components/AllCat";
+import TopCat from "../components/TopCat";
+import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
 // import TPoints from "../components/TPoints";
 // import TPoster from "../components/TPoster";
@@ -10,6 +10,7 @@ import Posts from "../components/Posts";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
 import LoginBox from "../components/LoginBox";
+import Card from "../components/Card"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -61,6 +62,26 @@ const GET_SUBCATS_BY_CATID = (parentId) => {
   `;
 };
 
+const GET_ALL_POSTS = gql`
+  {
+    posts {
+      _id
+      title
+      body
+      date_created
+      category {
+        name
+      }
+      subcategory {
+        name
+      }
+      author {
+        username
+      }
+    }
+  }
+`;
+
 const testPostArr = [
   {
     post: {
@@ -89,37 +110,30 @@ function Main(props) {
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
   });
-
   const [allCategories, setAllCategories] = useState({
     allCategories: ["Anime/Manga", "World News", "Literature"],
   });
-
   const [topPoints, setTopPoints] = useState({
     topPoints: ["Paul", "Paul again", "Paul x 3"],
   });
-
   const [topPosters, setTopPosters] = useState({
     topPosters: ["Louis", "Louis again", "Louis x 3"],
   });
-
   const [categoryMods, setCategoryMods] = useState({
     mods: ["Dion", "Dion again", "Dion x 3"],
   });
-
-  const [tempPostArr, setTempPostArr] = useState({
-    query: testPostArr,
+  const [posts, setPosts] = useState({
+    postsDisplay: [],
   });
+
+  // const [tempPostArr, setTempPostArr] = useState({
+  //   query: testPostArr,
+  // });
 
   // Queries database to get users (placeholder, will get mods)
   // const { loading: userLoading, error: userError, data: userData } = useQuery(
   //   GET_USERS
   // );
-  // Queries database to get all subcategories
-  // const {
-  //   loading: subCatLoading,
-  //   error: subCatError,
-  //   data: subCatData,
-  // } = useQuery(GET_SUBCATS);
   // Queries database to get all subcategories for a given ID!
   // const {
   //   loading: subCatIdLoading,
@@ -154,6 +168,12 @@ function Main(props) {
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
+  // Queries database to get all posts
+  const {
+    loading: postsLoading,
+    error: postsError,
+    data: postsData,
+  } = useQuery(GET_ALL_POSTS);
 
   // on page load, updates state objects
   useEffect(() => {
@@ -202,41 +222,63 @@ function Main(props) {
         })),
       });
     }
+    if (postsData) {
+      setPosts({
+        ...posts,
+        postsDisplay: postsData.posts.map((post) => ({
+          id: post._id,
+          author: post.author.username,
+          title: post.title,
+          date_created: post.date_created,
+          body: post.body,
+          parentCategory: post.category.name,
+          subCategory: post.subcategory.name,
+        })),
+      });
+    }
   }, [
     topCatData,
     allCatData,
     topPointsData,
     topPostersData,
     modData,
+    postsData,
   ]);
 
+  const handleUserClick = (userId) => {
+    console.log(userId);
+  };
+  const handleCategoryClick = (parentId) => {
+    console.log(parentId);
+  };
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
-          <OrderedList
+          <TopCat
+            selectItem={handleCategoryClick}
             category="Top Categories"
             list={topCategories.topCategories}
           />
           <br></br>
-          <UnorderedList
-            category="All categories"
+          <AllCat
+            selectCat={handleCategoryClick}
+            category="All Categories"
             list={allCategories.allCategories}
           />
-          {/* <AllCat /> */}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
-          {tempPostArr.query.map((post) => (
-            <Posts
-              title={post.post.title}
-              body={post.post.body}
-              date_created={post.post.date_created}
-              subcategory={post.post.subcategory.name}
-              category={post.post.subcategory.category.name}
-              author={post.post.author.username}
-              postId={post.post._id}
+          {posts.postsDisplay.map((post) => (
+            <Card
+              title={post.title}
+              body={post.body}
+              date_created={post.date_created}
+              subcategory={post.subCategory.name}
+              category={post.parentCategory.name}
+              author={post.author}
+              postId={post.id}
             />
           ))}
         </div>

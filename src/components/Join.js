@@ -6,12 +6,8 @@ export default function SignIn() {
   const splitUrl = urlPath.split("/")
   const newRoom = splitUrl[2]
 
-  // need to grab from session the username
-
-
   const [name, setName] = useState('user'); // username
-  const [room, setRoom] = useState(newRoom);
-
+  const [room, setRoom] = useState(newRoom); // post unqiue id
 
   return (
       <div className="display-flex justify-center text-center item-center h-vh bg-white">

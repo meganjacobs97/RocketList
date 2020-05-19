@@ -11,7 +11,7 @@ import Posts from "../components/Posts";
 // import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
-// import queryForSubCatsByParentId from "../utils/API";
+import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
 import Card from "../components/Card"
@@ -37,7 +37,6 @@ const GET_ALLCATS = gql`
     }
   }
 `;
-
 const GET_ALL_POSTS = gql`
   {
     posts {
@@ -60,8 +59,9 @@ const GET_ALL_POSTS = gql`
 
 // import { connect } from 'react-redux'
 
-function CategoryView(props) {
+function SubCategoryView(props) {
   const { catid } = useParams();
+  const { subcatid } = useParams();
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -74,8 +74,27 @@ function CategoryView(props) {
     }
   }
 `;
+  const GET_POSTS_BY_SUBCATID = gql`
+  query {
+    subcategory(id: "${subcatid}") {
+      name
+      posts {
+        _id
+        title
+        body
+        date_created
+        author {
+          username
+        }
+      }
+    }
+  }
+`;
+  console.log(GET_POSTS_BY_SUBCATID)
+
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
-  // Creates and sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
+  // const hamburger = props.chicken;
+  // Sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
     parentCategoryId: "",
@@ -109,6 +128,8 @@ function CategoryView(props) {
     error: subCatIdError,
     data: subCatIdData,
   } = useQuery(GET_SUBCATS_BY_CATID);
+  console.log(subCatIdData);
+  console.log(subCatIdError);
 
   // Queries database to get all categories
   const {
@@ -138,12 +159,12 @@ function CategoryView(props) {
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
-  // Queries database to get all posts
+  // Queries database to get posts in subcategory
   const {
     loading: postsLoading,
     error: postsError,
     data: postsData,
-  } = useQuery(GET_ALL_POSTS);
+  } = useQuery(GET_POSTS_BY_SUBCATID);
 
   // on page load, updates state objects
   useEffect(() => {
@@ -247,50 +268,22 @@ function CategoryView(props) {
   // when posts, update posts state
   useEffect(() => {
     if (postsData) {
+      console.log(postsData);
+      console.log(postsData.subcategory.posts);
       setPosts({
         ...posts,
-        postsDisplay: postsData.posts.map((post) => ({
+        postsDisplay: postsData.subcategory.posts.map((post) => ({
           id: post._id,
           author: post.author.username,
           title: post.title,
           date_created: post.date_created,
           body: post.body,
-          parentCategory: post.category.name,
-          subCategory: post.subcategory.name,
+          // parentCategory: post.category.name,
+          // subCategory: post.subcategory.name,
         })),
       });
     }
   }, [postsData]);
-
-  // lazy queries
-
-  // Lazy query for videogames
-  // const [vgCatsLoaded, setVgCatsLoaded] = useState(false);
-  // const [
-  //   getVideoGameSubCats,
-  //   { loading: vidGamLazyLoading, data: vidGamLazyData },
-  // ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // updates subcategories state if video game category is clicked
-  // useEffect(() => {
-  //   if (!vgCatsLoaded && vidGamLazyData && vidGamLazyData.category) {
-  //     console.log("I got clicked and have video game data");
-  //     console.log(vidGamLazyData);
-  //     setSubCategories({
-  //       ...subCategories,
-  //       parentCategory: vidGamLazyData.category.name,
-  //       parentCategoryId: vidGamLazyData.category._id,
-  //       currCategory: vidGamLazyData.category.name,
-  //       subCategories: vidGamLazyData.category.subcategories.map(
-  //         (subcategory) => ({
-  //           name: subcategory.name,
-  //           id: subcategory._id,
-  //         })
-  //       ),
-  //     });
-  //     setVgCatsLoaded(true);
-  //   }
-  // }, [vidGamLazyData, subCategories]);
 
   // useEffect(() => {}, [subCategories]);
 
@@ -313,7 +306,7 @@ function CategoryView(props) {
           <Subcategory
             selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
-            parentId={catid}
+            parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
           />
           <br></br>
@@ -382,138 +375,7 @@ function CategoryView(props) {
 
 // }
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CategoryView)
-export default CategoryView;
+// export default connect(mapStateToProps, mapDispatchToProps)(SubCategoryView)
+export default SubCategoryView;
 
 // check class repo, week 10, folder 19, activity 15 for class based components
-
-/*
-  <body>
-    <main class="w-3/5 p-8 mx-auto">
-      <h1 class="mb-4">tailwind collapsible</h1>
-      <section class="shadow">
-        <article class="border-b">
-          <div class="border-l-2 border-transparent">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-grey-darkest font-thin text-xl">
-                Massa vitae tortor condimentum lacinia quis vel eros donec
-              </span>
-              <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-            </header>
-          </div>
-        </article>
-        <article class="border-b">
-          <div class="border-l-2 bg-grey-lightest border-indigo">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-indigo font-thin text-xl">
-                Lorem ipsum dolor sit amet
-              </span>
-              <div class="rounded-full border border border-indigo w-7 h-7 flex items-center justify-center bg-indigo">
-                <svg
-                  aria-hidden="true"
-                  data-reactid="281"
-                  fill="none"
-                  height="24"
-                  stroke="white"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </div>
-            </header>
-            <div>
-              <div class="pl-8 pr-8 pb-5 text-grey-darkest">
-                <ul class="pl-4">
-                  <li class="pb-2">consectetur adipiscing elit</li>
-                  <li class="pb-2">
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua
-                  </li>
-                  <li class="pb-2">
-                    Viverra orci sagittis eu volutpat odio facilisis mauris
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="border-b">
-          <div class="border-l-2 border-transparent">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-grey-darkest font-thin text-xl">
-                Lorem dolor sed viverra ipsum
-              </span>
-              <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-            </header>
-          </div>
-        </article>
-        <article class="border-b">
-          <div class="border-l-2 border-transparent">
-            <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
-              <span class="text-grey-darkest font-thin text-xl">
-                Egestas sed tempus urna
-              </span>
-              <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
-                <svg
-                  aria-hidden="true"
-                  class=""
-                  data-reactid="266"
-                  fill="none"
-                  height="24"
-                  stroke="#606F7B"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewbox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
-            </header>
-          </div>
-        </article>
-      </section>
-    </main>
-  </body>;
-*/
