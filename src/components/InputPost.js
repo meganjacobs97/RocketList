@@ -56,6 +56,7 @@ function InputPost(props) {
         e.target.postBody.value = "";
         {
           props.onChange(false);
+          alert("Post Submitted Successfully");
         }
       }}
       className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed"
