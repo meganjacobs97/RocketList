@@ -253,8 +253,8 @@ function SubCategoryView(props) {
       // console.log(postsData.subcategory.posts);
       setSubCategories({
         ...subCategories,
-        currCategory: postsData.subcategory.name
-      })
+        currCategory: postsData.subcategory.name,
+      });
       setPosts({
         ...posts,
         postsDisplay: postsData.subcategory.posts.map((post) => ({
@@ -314,12 +314,28 @@ function SubCategoryView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
+          <InputPost
+            category={catid}
+            list={subCategories.subCategories}
+            onChange={(value) => setMakeAPost(value)}
+          />
         ) : (
           ""
         )}
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{subCategories.currCategory}</a></h1>
+          <h1>
+            Current category:{" "}
+            <a className="text-RocketJessie" href={`/category/${catid}`}>
+              {subCategories.parentCategory}
+            </a>{" "}
+            >>{" "}
+            <a
+              className="text-RocketJames"
+              href={`/category/${catid}/subcategory/${subcatid}`}
+            >
+              {subCategories.currCategory}
+            </a>
+          </h1>
           {posts.postsDisplay.map((post) => (
             <Posts
               title={post.title}
