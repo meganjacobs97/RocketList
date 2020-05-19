@@ -3,8 +3,8 @@ import React from "react";
 export default function Subcategory(props) {
   // const Subcategories = props.name
   // console.log(props)
-  console.log(window.location.href);
-  console.log(props.parentId);
+  // console.log(window.location.href);
+  // console.log(props.parentId);
   return (
     <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
       {props.category ? (

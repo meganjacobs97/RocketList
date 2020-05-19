@@ -73,6 +73,28 @@ function CategoryView(props) {
     }
   }
 `;
+
+  const GET_POSTS_BY_CATID = gql`
+  query {
+    category (id: "${catid}") {
+      name
+      _id
+      subcategories {
+        name
+        posts {
+          _id
+          title
+          body
+          date_created
+          author {
+            username
+          }
+        }
+      }
+    }
+  }
+  `;
+
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // Creates and sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
@@ -137,12 +159,12 @@ function CategoryView(props) {
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
-  // Queries database to get all posts
+  // Queries database to get all posts in a given category
   const {
-    loading: postsLoading,
-    error: postsError,
-    data: postsData,
-  } = useQuery(GET_ALL_POSTS);
+    loading: postsByCatLoading,
+    error: postsByCatError,
+    data: postsByCatData,
+  } = useQuery(GET_POSTS_BY_CATID);
 
   // on page load, updates state objects
   useEffect(() => {
@@ -243,23 +265,30 @@ function CategoryView(props) {
     }
   }, [allCatData]);
 
-  // when posts, update posts state
+  // when posts come in, update posts state
   useEffect(() => {
-    if (postsData) {
+    if (postsByCatData) {
+      let holdingArr = [...posts.postsDisplay];
+      const subcategoriesQueried = postsByCatData.category.subcategories;
+      subcategoriesQueried.forEach((subcategory) => {
+        subcategory.posts.forEach(post => {
+          let item = {};
+          item.author = post.author.username;
+          item.body = post.body;
+          item.date_created = post.date_created;
+          item.title = post.title;
+          item.postId = post._id;
+          // Does this break react?
+          // setPosts(postsDisplay.push(item))
+          holdingArr.push(item);
+        })
+      });
       setPosts({
         ...posts,
-        postsDisplay: postsData.posts.map((post) => ({
-          id: post._id,
-          author: post.author.username,
-          title: post.title,
-          date_created: post.date_created,
-          body: post.body,
-          parentCategory: post.category.name,
-          subCategory: post.subcategory.name,
-        })),
-      });
+        postsDisplay: holdingArr
+      })
     }
-  }, [postsData]);
+  }, [postsByCatData]);
 
   // lazy queries
 
@@ -337,8 +366,6 @@ function CategoryView(props) {
               title={post.title}
               body={post.body}
               date_created={post.date_created}
-              subcategory={post.subCategory}
-              category={post.parentCategory}
               author={post.author}
               postId={post.id}
             />
