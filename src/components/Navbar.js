@@ -1,13 +1,14 @@
 import React from "react";
 import Menu from "./Menu";
 import Logo from "./Photo/log.png";
+import { Link } from "react-router-dom";
 
 export default function Navbar(props) {
   return (
     <div id="top-of-page" className="grid grid-rows-2">
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
-          <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
+          <Link to="/"><img src={Logo} className="object-center ml-2 h-20" alt="logo" /></Link>
         </div>
         <div className="flex align-center">
           {props.isLoggedIn ? <Menu /> : ""}
