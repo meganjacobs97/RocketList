@@ -14,7 +14,7 @@ import PostView from './pages/PostView'
 
 const App = () => {
   document.title = "RocketList";
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   // const [subCategories, setSubCategories] = useState({
   //   parentCategory: "",
   //   parentCategoryId: "",

@@ -20,6 +20,7 @@ import Card from "../components/Card"
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
+
 const GET_USERS = gql`
   query {
     users {
@@ -29,30 +30,12 @@ const GET_USERS = gql`
     }
   }
 `;
+
 const GET_ALLCATS = gql`
   query {
     categories {
       name
       _id
-    }
-  }
-`;
-const GET_ALL_POSTS = gql`
-  {
-    posts {
-      _id
-      title
-      body
-      date_created
-      category {
-        name
-      }
-      subcategory {
-        name
-      }
-      author {
-        username
-      }
     }
   }
 `;
@@ -90,7 +73,6 @@ function SubCategoryView(props) {
     }
   }
 `;
-  console.log(GET_POSTS_BY_SUBCATID)
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -101,6 +83,7 @@ function SubCategoryView(props) {
     currCategory: "",
     subCategories: [],
   });
+  const subCatArray = subCategories.subCategories;
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -128,8 +111,6 @@ function SubCategoryView(props) {
     error: subCatIdError,
     data: subCatIdData,
   } = useQuery(GET_SUBCATS_BY_CATID);
-  console.log(subCatIdData);
-  console.log(subCatIdError);
 
   // Queries database to get all categories
   const {
@@ -324,6 +305,11 @@ function SubCategoryView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        {props.isLoggedIn ? (
+          <InputPost category={catid} list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: {subCategories.currCategory}</h1>
           {posts.postsDisplay.map((post) => (
@@ -341,8 +327,7 @@ function SubCategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
-          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          {props.isLoggedIn ? "" : <LoginBox />}
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
