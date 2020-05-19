@@ -150,8 +150,6 @@ function PostView(props) {
     error: subCatIdError,
     data: subCatIdData,
   } = useQuery(GET_SUBCATS_BY_CATID);
-  console.log(subCatIdData);
-  console.log(subCatIdError);
 
   // Queries database to get all categories
   const {
@@ -360,7 +358,7 @@ function PostView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {/* {props.isLoggedIn ? <InputPost /> : <LoginBox />} */}
           {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList

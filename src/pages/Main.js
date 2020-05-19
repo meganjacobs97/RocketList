@@ -71,9 +71,11 @@ const GET_ALL_POSTS = gql`
       date_created
       category {
         name
+        _id
       }
       subcategory {
         name
+        _id
       }
       author {
         username
@@ -81,29 +83,6 @@ const GET_ALL_POSTS = gql`
     }
   }
 `;
-
-const testPostArr = [
-  {
-    post: {
-      _id: "test",
-      title: "I love pokemon",
-      body: "my favorite is chandelure",
-      date_created: "13-may-2020",
-      replies: [],
-      subcategory: {
-        name: "pokemon go",
-        description: "all about pokemon go",
-        category: {
-          name: "pokemon",
-          description: "all things pokemon related",
-        },
-      },
-      author: {
-        username: "testUserDion",
-      },
-    },
-  },
-];
 
 function Main(props) {
   const isLoggedIn = props.isLoggedIn;
@@ -232,7 +211,9 @@ function Main(props) {
           date_created: post.date_created,
           body: post.body,
           parentCategory: post.category.name,
+          parentCatId: post.category._id,
           subCategory: post.subcategory.name,
+          subCatId: post.subcategory._id,
         })),
       });
     }
@@ -275,10 +256,12 @@ function Main(props) {
               title={post.title}
               body={post.body}
               date_created={post.date_created}
-              subcategory={post.subCategory.name}
-              category={post.parentCategory.name}
               author={post.author}
               postId={post.id}
+              subcategoryId={post.subCatId}
+              subcategory={post.subCategory}
+              categoryId={post.parentCatId}
+              category={post.parentCategory}
             />
           ))}
         </div>

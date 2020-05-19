@@ -7,7 +7,7 @@ function PostCard(props) {
       <p>Body: {props.body}</p>
       <p>Date: {props.date_created}</p>
       <p>
-        Posted under: {props.subcategory} in {props.category} by {props.author}
+        Posted under: <a className="text-RocketJames" href={`/category/${props.categoryId}/subcategory/${props.subcategoryId}`}>{props.subcategory}</a> in <a className="text-RocketJessie" href={`/category/${props.categoryId}`}>{props.category}</a> by {props.author}
       </p>
       <a href={ `/join/${props.postId}` }><button className="underline text-blue-700">Chat</button></a>
     </div>
