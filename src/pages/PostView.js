@@ -14,6 +14,7 @@ import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
+import Comments from "../components/Comments"
 import Loading from "../components/Loading"
 
 // Query graphql
@@ -80,6 +81,21 @@ function PostView(props) {
   }
 `;
   
+  const GET_ALL_COMMENTS_BY_ID = gql`
+  query {
+    post (id: "${postId}") {
+        replies{
+          _id
+          body
+          date_created
+          author{
+            username
+          }
+        }
+    }
+  }
+  `;
+
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
     parentCategoryId: "",
@@ -112,6 +128,9 @@ function PostView(props) {
   const [newPosts, setNewPosts] = useState({
     postDisplay: {},
   });
+  const [comments, setComments] = useState({
+    commentsDisplay: []
+  })
 
 
   // Queries database to get all subcategories for a given ID!
@@ -155,6 +174,13 @@ function PostView(props) {
     error: postByIdError,
     data: postByIdData,
   } = useQuery(GET_POST_BY_ID);
+
+  // Queries database to get comments
+  const {
+    loading: commentsLoading,
+    error: commentsError,
+    data: commentsData,
+  } = useQuery(GET_ALL_COMMENTS_BY_ID)
 
    // on page load, updates state objects
   useEffect(() => {
@@ -274,6 +300,10 @@ function PostView(props) {
   // when the request for a single post returns data, update state
   useEffect(() => {
     if (postByIdData) {
+      setSubCategories({
+        ...subCategories,
+        currCategory: postByIdData.post.subcategory.name,
+      });
       setNewPosts({
         ...newPosts,
           postDisplay: {
@@ -295,6 +325,27 @@ function PostView(props) {
       })
     }
   }, [postByIdData]);
+
+  useEffect(() => {
+    if (commentsData) {
+      let holdingArr = [...comments.commentsDisplay]
+      const commentsById = commentsData.post.replies
+      commentsById.forEach((post) => {
+        let item = {}
+        item.body = post.body;
+        item.date_created = post.date_created;
+        item.author = post.author.username;
+        item.id = post._id;
+        holdingArr.push(item)
+      })
+      setComments({
+        ...comments,
+        commentsDisplay: holdingArr
+      });
+    }
+    console.log(comments)
+  }, [commentsData]);
+
 
   const handleCategoryClick = (parentId) => {
     console.log(parentId);
@@ -352,6 +403,16 @@ function PostView(props) {
             postId={newPosts.postDisplay.id}
           /> }
         </div>
+        <div>
+          {comments.commentsDisplay.map((post) => (
+            <Comments
+            author={post.author}
+            body={post.body}
+            date_created={post.date_created}
+            />
+          ))}
+        </div>
+
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
