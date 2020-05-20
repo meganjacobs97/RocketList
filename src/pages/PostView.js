@@ -211,6 +211,7 @@ function PostView(props) {
     error: postByIdError,
     data: postByIdData,
   } = useQuery(GET_POST_BY_ID);
+
   // Queries database to get comments
   const {
     loading: commentsLoading,
@@ -318,6 +319,10 @@ function PostView(props) {
   }, [allCatData]);
   useEffect(() => {
     if (postByIdData) {
+      setSubCategories({
+        ...subCategories,
+        currCategory: postByIdData.post.subcategory.name,
+      });
       setNewPosts({
         ...newPosts,
         postDisplay: {
@@ -331,6 +336,8 @@ function PostView(props) {
         },
       });
     }
+    console.log(GET_POST_BY_ID)
+    console.log(GET_ALL_COMMENTS_BY_ID)
   }, [postByIdData]);
 
   useEffect(() => {
@@ -338,16 +345,16 @@ function PostView(props) {
     if (commentsData) {
       // console.log(postsData);
       // console.log(postsData.subcategory.posts);
-      console.log(commentsData.posts.replies)
-      setPosts({
-        ...comments,
-        commentsDisplay: commentsData.posts.replies.map((post) => ({
-          body: post.body,
-          date_created: post.date_created,
-          author: post.author.username,
-          id: post._id,
-        })),
-      });
+      // console.log(commentsData.posts.replies)
+      // setPosts({
+      //   ...comments,
+      //   commentsDisplay: commentsData.posts.replies.map((post) => ({
+      //     body: post.body,
+      //     date_created: post.date_created,
+      //     author: post.author.username,
+      //     id: post._id,
+      //   })),
+      // });
     }
   }, [commentsData]);
 
