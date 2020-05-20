@@ -277,7 +277,7 @@ function CategoryView(props) {
       subcategoriesQueried.forEach((subcategory) => {
         let subCategId = subcategory._id;
         let subCategName = subcategory.name;
-        subcategory.posts.forEach(post => {
+        subcategory.posts.forEach((post) => {
           let item = {};
           item.title = post.title;
           item.body = post.body;
@@ -291,12 +291,12 @@ function CategoryView(props) {
           // Does this break react?
           // setPosts(postsDisplay.push(item))
           holdingArr.push(item);
-        })
+        });
       });
       setPosts({
         ...posts,
-        postsDisplay: holdingArr
-      })
+        postsDisplay: holdingArr,
+      });
     }
   }, [postsByCatData]);
 
@@ -370,12 +370,21 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
+          <InputPost
+            category={catid}
+            list={subCategories.subCategories}
+            onChange={(value) => setMakeAPost(value)}
+          />
         ) : (
           ""
         )}
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.currCategory}</a></h1>
+          <h1>
+            Current category:{" "}
+            <a className="text-RocketJessie" href={`/category/${catid}`}>
+              {subCategories.currCategory}
+            </a>
+          </h1>
           {posts.postsDisplay.map((post) => (
             <Card
               title={post.title}
@@ -383,7 +392,7 @@ function CategoryView(props) {
               date_created={post.date_created}
               author={post.author}
               postId={post.id}
-              subcategoryId={post.subCatId} 
+              subcategoryId={post.subCatId}
               subcategory={post.subCategory}
               categoryId={post.parentId}
               category={post.parentCategory}
