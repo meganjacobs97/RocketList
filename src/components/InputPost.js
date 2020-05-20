@@ -54,6 +54,10 @@ function InputPost(props) {
         });
         e.target.postTitle.value = "";
         e.target.postBody.value = "";
+        {
+          props.onChange(false);
+          alert("Post Submitted Successfully");
+        }
       }}
       className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed"
     >
@@ -139,6 +143,13 @@ function InputPost(props) {
           type="submit"
         >
           Submit
+        </button>
+        <button
+          className="bg-RocketJessie text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="button"
+          onClick={() => props.onChange(false)}
+        >
+          Cancel
         </button>
       </div>
     </form>

@@ -355,7 +355,11 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
+          <InputPost
+            category={catid}
+            list={subCategories.subCategories}
+            onChange={(value) => setMakeAPost(value)}
+          />
         ) : (
           ""
         )}
