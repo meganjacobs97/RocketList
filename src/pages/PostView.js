@@ -65,6 +65,14 @@ function PostView(props) {
             name
             _id
         }
+        replies{
+          _id
+          body
+          date_created
+          author{
+            username
+          }
+        }
     }
   }
 `;
@@ -80,21 +88,6 @@ function PostView(props) {
     }
   }
 `;
-  
-  const GET_ALL_COMMENTS_BY_ID = gql`
-  query {
-    post (id: "${postId}") {
-        replies{
-          _id
-          body
-          date_created
-          author{
-            username
-          }
-        }
-    }
-  }
-  `;
 
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
@@ -175,12 +168,6 @@ function PostView(props) {
     data: postByIdData,
   } = useQuery(GET_POST_BY_ID);
 
-  // Queries database to get comments
-  const {
-    loading: commentsLoading,
-    error: commentsError,
-    data: commentsData,
-  } = useQuery(GET_ALL_COMMENTS_BY_ID)
 
    // on page load, updates state objects
   useEffect(() => {
@@ -322,15 +309,10 @@ function PostView(props) {
         parentCategory: postByIdData.post.category.name,
         parentCategoryId: catid,
         currCategory: postByIdData.post.subcategory.name
-      })
-    }
-  }, [postByIdData]);
-
-  useEffect(() => {
-    if (commentsData) {
+      });
       let holdingArr = [...comments.commentsDisplay]
-      const commentsById = commentsData.post.replies
-      commentsById.forEach((post) => {
+      const commentData = postByIdData.post.replies
+      commentData.forEach((post) => {
         let item = {}
         item.body = post.body;
         item.date_created = post.date_created;
@@ -342,10 +324,9 @@ function PostView(props) {
         ...comments,
         commentsDisplay: holdingArr
       });
+      
     }
-    console.log(comments)
-  }, [commentsData]);
-
+  }, [postByIdData]);
 
   const handleCategoryClick = (parentId) => {
     console.log(parentId);
