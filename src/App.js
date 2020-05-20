@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CategoryView from "./pages/CategoryView";
 import SubCategoryView from "./pages/SubCategoryView";
 import Main from "./pages/Main";
 import NoMatch from "./pages/NoMatch";
 import Wrapper from "./components/Wrapper";
-import Chat from './components/Chat';
-import Join from './components/Join';
-import PostView from './pages/PostView'
+import Chat from "./components/Chat";
+import Join from "./components/Join";
+import PostView from "./pages/PostView";
 // import Footer from "./components/Footer";
 
 const App = () => {
   document.title = "RocketList";
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <Router>
@@ -39,7 +39,10 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
             ></SubCategoryView>
           </Route>
-          <Route exact path="/category/:catid/subcategory/:subcatid/post/:postId">
+          <Route
+            exact
+            path="/category/:catid/subcategory/:subcatid/post/:postId"
+          >
             {" "}
             <PostView
               isLoggedIn={isLoggedIn}
