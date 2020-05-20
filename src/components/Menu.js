@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import R from "./Photo/R.png";
 import Popper from "popper.js";
 
-export default function Hamburger() {
+export default function Hamburger(props) {
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -15,10 +15,6 @@ export default function Hamburger() {
 
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
-  };
-
-  const handleLogoutClick = () => {
-    // setIsLoggedIn(false);
   };
 
   return (
@@ -63,7 +59,7 @@ export default function Hamburger() {
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => {
               e.preventDefault();
-              handleLogoutClick();
+              props.setIsLoggedIn(false);
             }}
           >
             logout

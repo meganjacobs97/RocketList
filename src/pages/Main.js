@@ -10,8 +10,8 @@ import Posts from "../components/Posts";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
 import LoginBox from "../components/LoginBox";
-import Card from "../components/Card"
-import Loading from "../components/Loading"
+import Card from "../components/Card";
+import Loading from "../components/Loading";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -89,27 +89,27 @@ function Main(props) {
   const isLoggedIn = props.isLoggedIn;
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
-    title: ""
+    title: "",
   });
   const [allCategories, setAllCategories] = useState({
     allCategories: [],
-    title: ""
+    title: "",
   });
   const [topPoints, setTopPoints] = useState({
     topPoints: [],
-    title: ""
+    title: "",
   });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
-    title: ""
+    title: "",
   });
   const [categoryMods, setCategoryMods] = useState({
     mods: [],
-    title: ""
+    title: "",
   });
   const [posts, setPosts] = useState({
     postsDisplay: [],
-    title: ""
+    title: "",
   });
 
   // const [tempPostArr, setTempPostArr] = useState({
@@ -167,8 +167,8 @@ function Main(props) {
     if (topCatLoading) {
       setTopCategories({
         ...topCategories,
-        title: "Loading Top Categories..."
-      })
+        title: "Loading Top Categories...",
+      });
     }
     if (topCatData) {
       setTopCategories({
@@ -180,17 +180,15 @@ function Main(props) {
         })),
       });
     }
-  }, [
-    topCatData
-  ]);
+  }, [topCatData]);
 
   // if all categories load, update state
-  useEffect(()=>{
+  useEffect(() => {
     if (allCatLoading) {
       setAllCategories({
         ...allCategories,
-        title: "Loading All Categories..."
-      })
+        title: "Loading All Categories...",
+      });
     }
     if (allCatData) {
       setAllCategories({
@@ -202,15 +200,15 @@ function Main(props) {
         })),
       });
     }
-  },[allCatData])
+  }, [allCatData]);
 
   // if top points data load, update state
-  useEffect(()=>{
+  useEffect(() => {
     if (topPointsLoading) {
       setTopPoints({
         ...topPoints,
-        title: "Loading Top Points Holders..."
-      })
+        title: "Loading Top Points Holders...",
+      });
     }
     if (topPointsData) {
       setTopPoints({
@@ -222,15 +220,15 @@ function Main(props) {
         })),
       });
     }
-  },[topPointsData])
+  }, [topPointsData]);
 
   // if top posters load, update state
-  useEffect(()=>{
+  useEffect(() => {
     if (topPostersLoading) {
       setTopPosters({
         ...topPosters,
-        title: "Loading Top Posters..."
-      })
+        title: "Loading Top Posters...",
+      });
     }
     if (topPostersData) {
       setTopPosters({
@@ -242,15 +240,15 @@ function Main(props) {
         })),
       });
     }
-  },[topPostersData])
+  }, [topPostersData]);
 
   // if mods load, update state
   useEffect(() => {
     if (modLoading) {
       setCategoryMods({
         ...categoryMods,
-        title: "Loading moderators..."
-      })
+        title: "Loading moderators...",
+      });
     }
     if (modData) {
       setCategoryMods({
@@ -262,7 +260,7 @@ function Main(props) {
         })),
       });
     }
-  }, [modData])
+  }, [modData]);
 
   // if posts load, update state
   useEffect(() => {
@@ -282,7 +280,7 @@ function Main(props) {
         })),
       });
     }
-  }, [postsData])
+  }, [postsData]);
 
   const handleUserClick = (userId) => {
     console.log(userId);
@@ -298,8 +296,8 @@ function Main(props) {
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
-            />
-            {topCatLoading ? <Loading /> : ""}
+          />
+          {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
             selectCat={handleCategoryClick}
@@ -330,20 +328,27 @@ function Main(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? "" : <LoginBox isLoggedIn={isLoggedIn} />}
+          {props.isLoggedIn ? (
+            ""
+          ) : (
+            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
+          )}
           <br></br>
-          <OrderedList
-            category={topPoints.title}
-            list={topPoints.topPoints}
-          />
+          <OrderedList category={topPoints.title} list={topPoints.topPoints} />
           {topPointsLoading ? <Loading /> : ""}
           {/* <TPoints name={"Paul"} /> */}
           <br></br>
-          <OrderedList category={topPosters.title} list={topPosters.topPosters} />
+          <OrderedList
+            category={topPosters.title}
+            list={topPosters.topPosters}
+          />
           {topPostersLoading ? <Loading /> : ""}
           {/* <TPoster name={"Dion"} /> */}
           <br></br>
-          <UnorderedList category={categoryMods.title} list={categoryMods.mods} />
+          <UnorderedList
+            category={categoryMods.title}
+            list={categoryMods.mods}
+          />
           {modLoading ? <Loading /> : ""}
         </div>
         {/* <Mods name={"Louis"} /> */}
