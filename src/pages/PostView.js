@@ -14,6 +14,7 @@ import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
+import Loading from "../components/Loading"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -95,12 +96,15 @@ function PostView(props) {
   });
   const [topPoints, setTopPoints] = useState({
     topPoints: [],
+    title: "",
   });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
+    title: "",
   });
   const [categoryMods, setCategoryMods] = useState({
     mods: [],
+    title: "",
   });
   // const [posts, setPosts] = useState({
   //   postsDisplay: [],
@@ -154,50 +158,65 @@ function PostView(props) {
 
    // on page load, updates state objects
   useEffect(() => {
-    // if(userLoading) console.log("help")
-    // if(userError) console.log("I need somebody")
-    // if(userLoading) return "Loading...";
-    // if(userError) return `Error! $s{error.message}`;
+    if (topPointsLoading) {
+      setTopPoints({
+        ...topPoints,
+        title: "Loading Top Points Holders...",
+      });
+    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
+        title: "Top Points Holders",
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
+  }, [topPointsData]);
+
+  useEffect(() => {
+    if (topPostersLoading) {
+      setTopPosters({
+        ...topPosters,
+        title: "Loading Top Posters...",
+      });
+    }
     if (topPostersData) {
       setTopPosters({
         ...topPosters,
+        title: "Top Posters",
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
+  }, [topPostersData]);
+
+  useEffect(() => {
+    if (modLoading) {
+      setCategoryMods({
+        ...categoryMods,
+        title: "Loading Moderators...",
+      });
+    }
     if (modData) {
       setCategoryMods({
         ...categoryMods,
+        title: "Moderators",
         mods: modData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
-  }, [
-    // subCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-  ]);
+  }, [modData]);
 
   // when subcatid changes, update subcat state
   useEffect(() => {
     if (subCatIdData) {
-      // console.log(subCatIdData);
-      // console.log("we got subcatiddata back")
-      // console.log(subcatid)
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
@@ -217,7 +236,7 @@ function PostView(props) {
     if (topCatLoading) {
       setTopCategories({
         ...topCategories,
-        title: "Loading...",
+        title: "Loading Top Categories...",
       });
     }
     if (topCatData) {
@@ -237,8 +256,7 @@ function PostView(props) {
     if (allCatLoading) {
       setAllCategories({
         ...allCategories,
-        title: "Loading...",
-        allCategories: ["Loading categories..."],
+        title: "Loading All Categories...",
       });
     }
     if (allCatData) {
@@ -300,18 +318,21 @@ function PostView(props) {
             parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
           />
+          {subCatIdLoading ? <Loading /> : ""}
           <br></br>
           <TopCat
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
+          {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
             selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
+          {allCatLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -328,6 +349,7 @@ function PostView(props) {
             author={newPosts.postDisplay.author}
             postId={newPosts.postDisplay.id}
           />
+          {postByIdLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
@@ -337,22 +359,25 @@ function PostView(props) {
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
-            category="Top Points Holders"
+            category={topPoints.title}
             list={topPoints.topPoints}
           />
+          {topPointsLoading ? <Loading /> : ""}
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
-            category="Top Posters"
+            category={topPosters.title}
             list={topPosters.topPosters}
           />
+          {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
         <UnorderedList
           selectItem={handleUserClick}
-          category="Mods"
+          category={categoryMods.title}
           list={categoryMods.mods}
         />
+        {modLoading ? <Loading /> : ""}
       </Col>
     </VGrid>
   );
