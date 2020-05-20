@@ -42,7 +42,7 @@ function LoginBox(props) {
           type="button"
           onClick={(e) => {
             e.preventDefault();
-            // handleLoginClick();
+            props.setIsLoggedIn(true);
           }}
         >
           Sign In

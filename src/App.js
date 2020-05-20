@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import CategoryView from "./pages/CategoryView";
 import SubCategoryView from "./pages/SubCategoryView";
@@ -15,7 +15,7 @@ import AuthContext from "./context/auth-context";
 
 const App = () => {
   document.title = "RocketList";
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <Router>

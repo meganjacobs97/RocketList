@@ -402,7 +402,7 @@ function SubCategoryView(props) {
               Make a Post
             </button>
           ) : (
-            <LoginBox />
+            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
           )}
           <br></br>
           <OrderedList

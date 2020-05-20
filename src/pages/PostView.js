@@ -65,6 +65,14 @@ function PostView(props) {
             name
             _id
         }
+        replies{
+          _id
+          body
+          date_created
+          author{
+            username
+          }
+        }
     }
   }
 `;
@@ -342,6 +350,7 @@ function PostView(props) {
         ...comments,
         commentsDisplay: holdingArr,
       });
+      
     }
     console.log(comments);
   }, [commentsData]);
