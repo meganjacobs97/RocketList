@@ -14,6 +14,7 @@ import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
+import Comments from "../components/Comments"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -113,6 +114,22 @@ function PostView(props) {
     }
   }
 `;
+  
+  const GET_ALL_COMMENTS_BY_ID = gql`
+  query {
+    post (id: "${postId}") {
+        replies{
+          _id
+          body
+          author{
+            username
+          }
+        }
+    }
+  }
+  `
+
+
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
     parentCategoryId: "",
@@ -142,6 +159,9 @@ function PostView(props) {
   const [newPosts, setNewPosts] = useState({
     postDisplay: {},
   });
+  const [comments, setComments] = useState({
+    commentsDisplay: []
+  })
 
 
   // Queries database to get all subcategories for a given ID!
@@ -191,6 +211,12 @@ function PostView(props) {
     error: postByIdError,
     data: postByIdData,
   } = useQuery(GET_POST_BY_ID);
+  // Queries database to get comments
+  const {
+    loading: commentsLoading,
+    error: commentsError,
+    data: commentsData,
+  } = useQuery(GET_ALL_COMMENTS_BY_ID)
 
    // on page load, updates state objects
    useEffect(() => {
@@ -306,6 +332,26 @@ function PostView(props) {
       });
     }
   }, [postByIdData]);
+
+  useEffect(() => {
+    console.log(commentsData)
+    if (commentsData) {
+      // console.log(postsData);
+      // console.log(postsData.subcategory.posts);
+      console.log(commentsData.posts.replies)
+      setPosts({
+        ...comments,
+        commentsDisplay: commentsData.posts.replies.map((post) => ({
+          body: post.body,
+          date_created: post.date_created,
+          author: post.author.username,
+          id: post._id,
+        })),
+      });
+    }
+  }, [commentsData]);
+
+
   const handleCategoryClick = (parentId) => {
     console.log(parentId);
     setSubCategories({
@@ -355,6 +401,14 @@ function PostView(props) {
             postId={newPosts.postDisplay.id}
           />
         </div>
+        <div>
+          {/* <Comments
+          author={commentsData.commentsDisplay.author}
+          body={commentsData.commentsDisplay.body}
+          date_created={commentsData.commentsDisplay.date_created}
+          /> */}
+        </div>
+
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
