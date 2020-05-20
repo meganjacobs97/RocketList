@@ -354,19 +354,23 @@ function CategoryView(props) {
               </a>
             </h1>
           )}
-          {posts.postsDisplay.map((post) => (
-            <Card
-              title={post.title}
-              body={post.body}
-              date_created={post.date_created}
-              author={post.author}
-              postId={post.postId}
-              subcategoryId={post.subCatId}
-              subcategory={post.subCategory}
-              categoryId={post.parentId}
-              category={post.parentCategory}
-            />
-          ))}
+          {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
+            <h1>No posts in this category</h1>
+          ) : (
+            posts.postsDisplay.map((post) => (
+              <Card
+                title={post.title}
+                body={post.body}
+                date_created={post.date_created}
+                author={post.author}
+                postId={post.postId}
+                subcategoryId={post.subCatId}
+                subcategory={post.subCategory}
+                categoryId={post.parentId}
+                category={post.parentCategory}
+              />
+            ))
+          )}
           {postsByCatLoading ? <Loading /> : ""}
         </div>
       </Col>
