@@ -349,9 +349,9 @@ function CategoryView(props) {
           ) : (
             <h1>
               Current category:{" "}
-              <a className="text-RocketJessie" href={`/category/${catid}`}>
+              <Link className="text-RocketJessie" to={`/category/${catid}`}>
                 {subCategories.currCategory}
-              </a>
+              </Link>
             </h1>
           )}
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (

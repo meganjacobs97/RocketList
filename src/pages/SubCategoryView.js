@@ -354,16 +354,16 @@ function SubCategoryView(props) {
           ) : (
             <h1>
               Current category:{" "}
-              <a className="text-RocketJessie" href={`/category/${catid}`}>
+              <Link className="text-RocketJessie" topCatError={`/category/${catid}`}>
                 {subCategories.parentCategory}
-              </a>{" "}
+              </Link>{" "}
               >>{" "}
-              <a
+              <Link
                 className="text-RocketJames"
                 href={`/category/${catid}/subcategory/${subcatid}`}
               >
                 {subCategories.currCategory}
-              </a>
+              </Link>
             </h1>
           )}
             {!postsLoading && posts.postsDisplay.length === 0 ? <h1>No posts in this subcategory</h1> : 
