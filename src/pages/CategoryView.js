@@ -39,26 +39,6 @@ const GET_ALLCATS = gql`
   }
 `;
 
-const GET_ALL_POSTS = gql`
-  {
-    posts {
-      _id
-      title
-      body
-      date_created
-      category {
-        name
-      }
-      subcategory {
-        name
-      }
-      author {
-        username
-      }
-    }
-  }
-`;
-
 // import { connect } from 'react-redux'
 
 function CategoryView(props) {

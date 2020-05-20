@@ -337,7 +337,9 @@ function PostView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{newPosts.postDisplay.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{newPosts.postDisplay.subCategory}</a></h1>
+          {postByIdLoading ? <h1>Loading post...</h1> : 
+          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{newPosts.postDisplay.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{newPosts.postDisplay.subCategory}</a></h1> }
+          {postByIdLoading ? <Loading /> : 
           <Posts
             title={newPosts.postDisplay.title}
             body={newPosts.postDisplay.body}
@@ -348,8 +350,7 @@ function PostView(props) {
             categoryId={subCategories.parentCategoryId}
             author={newPosts.postDisplay.author}
             postId={newPosts.postDisplay.id}
-          />
-          {postByIdLoading ? <Loading /> : ""}
+          /> }
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
