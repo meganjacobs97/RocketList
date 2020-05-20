@@ -11,6 +11,7 @@ import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
 import LoginBox from "../components/LoginBox";
 import Card from "../components/Card"
+import Loading from "../components/Loading"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -95,16 +96,20 @@ function Main(props) {
     title: ""
   });
   const [topPoints, setTopPoints] = useState({
-    topPoints: ["Paul", "Paul again", "Paul x 3"],
+    topPoints: [],
+    title: ""
   });
   const [topPosters, setTopPosters] = useState({
-    topPosters: ["Louis", "Louis again", "Louis x 3"],
+    topPosters: [],
+    title: ""
   });
   const [categoryMods, setCategoryMods] = useState({
-    mods: ["Dion", "Dion again", "Dion x 3"],
+    mods: [],
+    title: ""
   });
   const [posts, setPosts] = useState({
     postsDisplay: [],
+    title: ""
   });
 
   // const [tempPostArr, setTempPostArr] = useState({
@@ -201,9 +206,16 @@ function Main(props) {
 
   // if top points data load, update state
   useEffect(()=>{
+    if (topPointsLoading) {
+      setTopPoints({
+        ...topPoints,
+        title: "Loading Top Points Holders..."
+      })
+    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
+        title: "Top Points Holders",
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
@@ -214,9 +226,16 @@ function Main(props) {
 
   // if top posters load, update state
   useEffect(()=>{
+    if (topPostersLoading) {
+      setTopPosters({
+        ...topPosters,
+        title: "Loading Top Posters..."
+      })
+    }
     if (topPostersData) {
       setTopPosters({
         ...topPosters,
+        title: "Top Posters",
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
@@ -227,9 +246,16 @@ function Main(props) {
 
   // if mods load, update state
   useEffect(() => {
+    if (modLoading) {
+      setCategoryMods({
+        ...categoryMods,
+        title: "Loading moderators..."
+      })
+    }
     if (modData) {
       setCategoryMods({
         ...categoryMods,
+        title: "Moderators",
         mods: modData.users.map((user) => ({
           name: user.username,
           id: user._id,
@@ -272,18 +298,21 @@ function Main(props) {
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
-          />
+            />
+            {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
             selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
+          {allCatLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
           {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
+          {postsLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (
             <Card
               title={post.title}
@@ -304,15 +333,18 @@ function Main(props) {
           {props.isLoggedIn ? "" : <LoginBox isLoggedIn={isLoggedIn} />}
           <br></br>
           <OrderedList
-            category="Top Points Holders"
+            category={topPoints.title}
             list={topPoints.topPoints}
           />
+          {topPointsLoading ? <Loading /> : ""}
           {/* <TPoints name={"Paul"} /> */}
           <br></br>
-          <OrderedList category="Top Posters" list={topPosters.topPosters} />
+          <OrderedList category={topPosters.title} list={topPosters.topPosters} />
+          {topPostersLoading ? <Loading /> : ""}
           {/* <TPoster name={"Dion"} /> */}
           <br></br>
-          <UnorderedList category="Mods" list={categoryMods.mods} />
+          <UnorderedList category={categoryMods.title} list={categoryMods.mods} />
+          {modLoading ? <Loading /> : ""}
         </div>
         {/* <Mods name={"Louis"} /> */}
       </Col>

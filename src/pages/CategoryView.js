@@ -14,7 +14,8 @@ import UnorderedList from "../components/UnorderedList";
 // import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
-import Card from "../components/Card"
+import Card from "../components/Card";
+import Loading from "../components/Loading";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -115,12 +116,15 @@ function CategoryView(props) {
   });
   const [topPoints, setTopPoints] = useState({
     topPoints: [],
+    title: "",
   });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
+    title: "",
   });
   const [categoryMods, setCategoryMods] = useState({
     mods: [],
+    title: "",
   });
   const [posts, setPosts] = useState({
     postsDisplay: [],
@@ -172,46 +176,70 @@ function CategoryView(props) {
 
   // on page load, updates state objects
   useEffect(() => {
-    // if(userLoading) console.log("help")
-    // if(userError) console.log("I need somebody")
-    // if(userLoading) return "Loading...";
-    // if(userError) return `Error! $s{error.message}`;
+    if (topPointsLoading) {
+      setTopPoints({
+        ...topPoints,
+        title: "Loading Top Points Holders...",
+      });
+    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
+        title: "Top Points Holders",
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
+  }, [topPointsData]);
+
+  useEffect(() => {
+    if (topPostersLoading) {
+      setTopPosters({
+        ...topPosters,
+        title: "Loading Top Posters...",
+      });
+    }
     if (topPostersData) {
       setTopPosters({
         ...topPosters,
+        title: "Top Posters",
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
+  }, [topPostersData]);
+
+  useEffect(() => {
+    if (modLoading) {
+      setCategoryMods({
+        ...categoryMods,
+        title: "Loading Moderators...",
+      });
+    }
     if (modData) {
       setCategoryMods({
         ...categoryMods,
+        title: "Moderators",
         mods: modData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
-  }, [
-    // subCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-  ]);
+  }, [modData]);
 
   // when subcatid changes, update subcat state
   useEffect(() => {
+    // if (subCatIdLoading) {
+    //   setSubCategories({
+    //     ...subCategories,
+    //     title: "Loading Subcategories"
+    //   })
+    // }
     if (subCatIdData) {
       setSubCategories({
         ...subCategories,
@@ -232,7 +260,7 @@ function CategoryView(props) {
     if (topCatLoading) {
       setTopCategories({
         ...topCategories,
-        title: "Loading...",
+        title: "Loading Top Categories...",
       });
     }
     if (topCatData) {
@@ -275,7 +303,7 @@ function CategoryView(props) {
       subcategoriesQueried.forEach((subcategory) => {
         let subCategId = subcategory._id;
         let subCategName = subcategory.name;
-        subcategory.posts.forEach(post => {
+        subcategory.posts.forEach((post) => {
           let item = {};
           item.title = post.title;
           item.body = post.body;
@@ -289,81 +317,40 @@ function CategoryView(props) {
           // Does this break react?
           // setPosts(postsDisplay.push(item))
           holdingArr.push(item);
-        })
+        });
       });
       setPosts({
         ...posts,
-        postsDisplay: holdingArr
-      })
+        postsDisplay: holdingArr,
+      });
     }
   }, [postsByCatData]);
-
-  // lazy queries
-
-  // Lazy query for videogames
-  // const [vgCatsLoaded, setVgCatsLoaded] = useState(false);
-  // const [
-  //   getVideoGameSubCats,
-  //   { loading: vidGamLazyLoading, data: vidGamLazyData },
-  // ] = useLazyQuery(GET_SUBCATS_BY_VIDEOGAME);
-
-  // updates subcategories state if video game category is clicked
-  // useEffect(() => {
-  //   if (!vgCatsLoaded && vidGamLazyData && vidGamLazyData.category) {
-  //     console.log("I got clicked and have video game data");
-  //     console.log(vidGamLazyData);
-  //     setSubCategories({
-  //       ...subCategories,
-  //       parentCategory: vidGamLazyData.category.name,
-  //       parentCategoryId: vidGamLazyData.category._id,
-  //       currCategory: vidGamLazyData.category.name,
-  //       subCategories: vidGamLazyData.category.subcategories.map(
-  //         (subcategory) => ({
-  //           name: subcategory.name,
-  //           id: subcategory._id,
-  //         })
-  //       ),
-  //     });
-  //     setVgCatsLoaded(true);
-  //   }
-  // }, [vidGamLazyData, subCategories]);
-
-  // useEffect(() => {}, [subCategories]);
-
-  const handleCategoryClick = (parentId) => {
-    console.log(parentId);
-    setSubCategories({
-      ...subCategories,
-      parentCategoryId: parentId,
-    });
-  };
-
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <Subcategory
-            selectCat={handleCategoryClick}
+            // selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
             parentId={catid}
             list={subCategories.subCategories}
           />
+          {subCatIdLoading ? <Loading /> : ""}
           <br></br>
           <TopCat
-            selectItem={handleCategoryClick}
+            // selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
+          {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
-            selectCat={handleCategoryClick}
+            // selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
+          {allCatLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -373,21 +360,30 @@ function CategoryView(props) {
           ""
         )}
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.currCategory}</a></h1>
+          {postsByCatLoading ? (
+            <h1>Loading posts in {subCategories.currCategory}...</h1>
+          ) : (
+            <h1>
+              Current category:{" "}
+              <a className="text-RocketJessie" href={`/category/${catid}`}>
+                {subCategories.currCategory}
+              </a>
+            </h1>
+          )}
           {posts.postsDisplay.map((post) => (
-            // console.log(post)
             <Card
               title={post.title}
               body={post.body}
               date_created={post.date_created}
               author={post.author}
               postId={post.postId}
-              subcategoryId={post.subCatId} 
+              subcategoryId={post.subCatId}
               subcategory={post.subCategory}
               categoryId={post.parentId}
               category={post.parentCategory}
             />
           ))}
+          {postsByCatLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
@@ -411,23 +407,26 @@ function CategoryView(props) {
           )}
           <br></br>
           <OrderedList
-            selectItem={handleUserClick}
-            category="Top Points Holders"
+            // selectItem={handleUserClick}
+            category={topPoints.title}
             list={topPoints.topPoints}
           />
+          {topPointsLoading ? <Loading /> : ""}
           <br></br>
           <OrderedList
-            selectItem={handleUserClick}
-            category="Top Posters"
+            // selectItem={handleUserClick}
+            category={topPosters.title}
             list={topPosters.topPosters}
           />
+          {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
         <UnorderedList
-          selectItem={handleUserClick}
-          category="Mods"
+          // selectItem={handleUserClick}
+          category={categoryMods.title}
           list={categoryMods.mods}
         />
+        {modLoading ? <Loading /> : ""}
       </Col>
     </VGrid>
   );
