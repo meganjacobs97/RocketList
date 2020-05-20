@@ -220,6 +220,7 @@ function PostView(props) {
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
+        parentCategoryId: catid,
         currCategory: subCatIdData.category.name,
         subCategories: subCatIdData.category.subcategories.map(
           (subcategory) => ({
@@ -296,24 +297,24 @@ function PostView(props) {
     }
   }, [postByIdData]);
 
-  const handleCategoryClick = (parentId) => {
-    console.log(parentId);
-    setSubCategories({
-      ...subCategories,
-      parentCategoryId: parentId,
-    });
-  };
+  // const handleCategoryClick = (parentId) => {
+  //   console.log(parentId);
+  //   setSubCategories({
+  //     ...subCategories,
+  //     parentCategoryId: parentId,
+  //   });
+  // };
 
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
+  // const handleUserClick = (userId) => {
+  //   console.log(userId);
+  // };
 
   return (
     <VGrid size="12">
         <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <Subcategory
-            selectCat={handleCategoryClick}
+            // selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
             parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
@@ -321,14 +322,14 @@ function PostView(props) {
           {subCatIdLoading ? <Loading /> : ""}
           <br></br>
           <TopCat
-            selectItem={handleCategoryClick}
+            // selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
           {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
-            selectCat={handleCategoryClick}
+            // selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
@@ -359,14 +360,14 @@ function PostView(props) {
           {/* {props.isLoggedIn ? <InputPost /> : ""} */}
           <br></br>
           <OrderedList
-            selectItem={handleUserClick}
+            // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
           <OrderedList
-            selectItem={handleUserClick}
+            // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
           />
@@ -374,7 +375,7 @@ function PostView(props) {
         </div>
         <br></br>
         <UnorderedList
-          selectItem={handleUserClick}
+          // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}
         />
