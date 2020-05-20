@@ -15,7 +15,7 @@ const ADD_POST = gql`
         body: $body
         subcategoryId: $subcategory
         categoryId: $category
-        authorId: "5ec2b5b1664bd0451c6468d4"
+        authorId: "5ec442336c4c103a6c223157"
       }
     ) {
       title
