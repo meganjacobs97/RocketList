@@ -1,10 +1,6 @@
 import React from "react";
 
 export default function Subcategory(props) {
-  // const Subcategories = props.name
-  // console.log(props)
-  // console.log(window.location.href);
-  // console.log(props.parentId);
   return (
     <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
       {props.category ? (
@@ -12,7 +8,7 @@ export default function Subcategory(props) {
           Subcategories in <a className="text-RocketJessie" href={`/category/${props.parentId}`}>{props.category}</a>
         </h1>
       ) : (
-        <h1 className="ml-4 mr-4 mb-1 text-center">Loading...</h1>
+        <h1 className="ml-4 mr-4 mb-1 text-center font-bold">Loading Subcategories...</h1>
       )}
       <ul className="list-none list-inside ml-4 mr-4 mb-1 text-center">
         {props.list ? (

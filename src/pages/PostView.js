@@ -15,6 +15,7 @@ import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
 import Comments from "../components/Comments"
+import Loading from "../components/Loading"
 
 // Query graphql
 import gql from "graphql-tag";
@@ -37,25 +38,6 @@ const GET_ALLCATS = gql`
     categories {
       name
       _id
-    }
-  }
-`;
-const GET_ALL_POSTS = gql`
-  {
-    posts {
-      _id
-      title
-      body
-      date_created
-      category {
-        name
-      }
-      subcategory {
-        name
-      }
-      author {
-        username
-      }
     }
   }
 `;
@@ -98,22 +80,6 @@ function PostView(props) {
     }
   }
 `;
-  const GET_POSTS_BY_SUBCATID = gql`
-  query {
-    subcategory(id: "${subcatid}") {
-      name
-      posts {
-        _id
-        title
-        body
-        date_created
-        author {
-          username
-        }
-      }
-    }
-  }
-`;
   
   const GET_ALL_COMMENTS_BY_ID = gql`
   query {
@@ -121,14 +87,14 @@ function PostView(props) {
         replies{
           _id
           body
+          date_created
           author{
             username
           }
         }
     }
   }
-  `
-
+  `;
 
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
@@ -146,16 +112,19 @@ function PostView(props) {
   });
   const [topPoints, setTopPoints] = useState({
     topPoints: [],
+    title: "",
   });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
+    title: "",
   });
   const [categoryMods, setCategoryMods] = useState({
     mods: [],
+    title: "",
   });
-  const [posts, setPosts] = useState({
-    postsDisplay: [],
-  });
+  // const [posts, setPosts] = useState({
+  //   postsDisplay: [],
+  // });
   const [newPosts, setNewPosts] = useState({
     postDisplay: {},
   });
@@ -199,12 +168,6 @@ function PostView(props) {
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
-  // Queries database to get posts in subcategory
-  const {
-    loading: postsLoading,
-    error: postsError,
-    data: postsData,
-  } = useQuery(GET_POSTS_BY_SUBCATID);
   // Queries database to get one post
   const {
     loading: postByIdLoading,
@@ -220,49 +183,66 @@ function PostView(props) {
   } = useQuery(GET_ALL_COMMENTS_BY_ID)
 
    // on page load, updates state objects
-   useEffect(() => {
-    // if(userLoading) console.log("help")
-    // if(userError) console.log("I need somebody")
-    // if(userLoading) return "Loading...";
-    // if(userError) return `Error! $s{error.message}`;
+  useEffect(() => {
+    if (topPointsLoading) {
+      setTopPoints({
+        ...topPoints,
+        title: "Loading Top Points Holders...",
+      });
+    }
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
+        title: "Top Points Holders",
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
+  }, [topPointsData]);
+
+  useEffect(() => {
+    if (topPostersLoading) {
+      setTopPosters({
+        ...topPosters,
+        title: "Loading Top Posters...",
+      });
+    }
     if (topPostersData) {
       setTopPosters({
         ...topPosters,
+        title: "Top Posters",
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
+  }, [topPostersData]);
+
+  useEffect(() => {
+    if (modLoading) {
+      setCategoryMods({
+        ...categoryMods,
+        title: "Loading Moderators...",
+      });
+    }
     if (modData) {
       setCategoryMods({
         ...categoryMods,
+        title: "Moderators",
         mods: modData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
       });
     }
-  }, [
-    // subCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-  ]);
+  }, [modData]);
 
   // when subcatid changes, update subcat state
   useEffect(() => {
     if (subCatIdData) {
-      console.log(subCatIdData);
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
@@ -282,7 +262,7 @@ function PostView(props) {
     if (topCatLoading) {
       setTopCategories({
         ...topCategories,
-        title: "Loading...",
+        title: "Loading Top Categories...",
       });
     }
     if (topCatData) {
@@ -302,8 +282,7 @@ function PostView(props) {
     if (allCatLoading) {
       setAllCategories({
         ...allCategories,
-        title: "Loading...",
-        allCategories: ["Loading categories..."],
+        title: "Loading All Categories...",
       });
     }
     if (allCatData) {
@@ -317,6 +296,8 @@ function PostView(props) {
       });
     }
   }, [allCatData]);
+
+  // when the request for a single post returns data, update state
   useEffect(() => {
     if (postByIdData) {
       setSubCategories({
@@ -325,37 +306,44 @@ function PostView(props) {
       });
       setNewPosts({
         ...newPosts,
-        postDisplay: {
+          postDisplay: {
           id: postByIdData.post._id,
-          author: postByIdData.post.author.username,
           title: postByIdData.post.title,
+          author: postByIdData.post.author.username,
           date_created: postByIdData.post.date_created,
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
           subCategory: postByIdData.post.subcategory.name,
+          subCategoryId: subcatid
         },
       });
+      setSubCategories({
+        ...subCategories,
+        parentCategory: postByIdData.post.category.name,
+        parentCategoryId: catid,
+        currCategory: postByIdData.post.subcategory.name
+      })
     }
-    console.log(GET_POST_BY_ID)
-    console.log(GET_ALL_COMMENTS_BY_ID)
   }, [postByIdData]);
 
   useEffect(() => {
-    console.log(commentsData)
     if (commentsData) {
-      // console.log(postsData);
-      // console.log(postsData.subcategory.posts);
-      // console.log(commentsData.posts.replies)
-      // setPosts({
-      //   ...comments,
-      //   commentsDisplay: commentsData.posts.replies.map((post) => ({
-      //     body: post.body,
-      //     date_created: post.date_created,
-      //     author: post.author.username,
-      //     id: post._id,
-      //   })),
-      // });
+      let holdingArr = [...comments.commentsDisplay]
+      const commentsById = commentsData.post.replies
+      commentsById.forEach((post) => {
+        let item = {}
+        item.body = post.body;
+        item.date_created = post.date_created;
+        item.author = post.author.username;
+        item.id = post._id;
+        holdingArr.push(item)
+      })
+      setComments({
+        ...comments,
+        commentsDisplay: holdingArr
+      });
     }
+    console.log(comments)
   }, [commentsData]);
 
 
@@ -381,39 +369,48 @@ function PostView(props) {
             parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
           />
+          {subCatIdLoading ? <Loading /> : ""}
           <br></br>
           <TopCat
             selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
+          {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
             selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
+          {allCatLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: {subCategories.currCategory}</h1>
+          {postByIdLoading ? <h1>Loading post...</h1> : 
+          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{newPosts.postDisplay.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{newPosts.postDisplay.subCategory}</a></h1> }
+          {postByIdLoading ? <Loading /> : 
           <Posts
             title={newPosts.postDisplay.title}
             body={newPosts.postDisplay.body}
             date_created={newPosts.postDisplay.date_created}
             subcategory={newPosts.postDisplay.subCategory}
+            subcategoryId={newPosts.postDisplay.subCategoryId}
             category={newPosts.postDisplay.parentCategory}
+            categoryId={subCategories.parentCategoryId}
             author={newPosts.postDisplay.author}
             postId={newPosts.postDisplay.id}
-          />
+          /> }
         </div>
         <div>
-          {/* <Comments
-          author={commentsData.commentsDisplay.author}
-          body={commentsData.commentsDisplay.body}
-          date_created={commentsData.commentsDisplay.date_created}
-          /> */}
+          {comments.commentsDisplay.map((post) => (
+            <Comments
+            author={post.author}
+            body={post.body}
+            date_created={post.date_created}
+            />
+          ))}
         </div>
 
       </Col>
@@ -424,22 +421,25 @@ function PostView(props) {
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
-            category="Top Points Holders"
+            category={topPoints.title}
             list={topPoints.topPoints}
           />
+          {topPointsLoading ? <Loading /> : ""}
           <br></br>
           <OrderedList
             selectItem={handleUserClick}
-            category="Top Posters"
+            category={topPosters.title}
             list={topPosters.topPosters}
           />
+          {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
         <UnorderedList
           selectItem={handleUserClick}
-          category="Mods"
+          category={categoryMods.title}
           list={categoryMods.mods}
         />
+        {modLoading ? <Loading /> : ""}
       </Col>
     </VGrid>
   );
