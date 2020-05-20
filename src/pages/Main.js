@@ -88,9 +88,11 @@ function Main(props) {
   const isLoggedIn = props.isLoggedIn;
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
+    title: ""
   });
   const [allCategories, setAllCategories] = useState({
-    allCategories: ["Anime/Manga", "World News", "Literature"],
+    allCategories: [],
+    title: ""
   });
   const [topPoints, setTopPoints] = useState({
     topPoints: ["Paul", "Paul again", "Paul x 3"],
@@ -155,25 +157,50 @@ function Main(props) {
   } = useQuery(GET_ALL_POSTS);
 
   // on page load, updates state objects
+  // if top categories load, update state
   useEffect(() => {
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading Top Categories..."
+      })
+    }
     if (topCatData) {
       setTopCategories({
         ...topCategories,
+        title: "Top Categories",
         topCategories: topCatData.categories.map((category) => ({
           name: category.name,
           id: category._id,
         })),
       });
     }
+  }, [
+    topCatData
+  ]);
+
+  // if all categories load, update state
+  useEffect(()=>{
+    if (allCatLoading) {
+      setAllCategories({
+        ...allCategories,
+        title: "Loading All Categories..."
+      })
+    }
     if (allCatData) {
       setAllCategories({
         ...allCategories,
+        title: "All Categories",
         allCategories: allCatData.categories.map((category) => ({
           name: category.name,
           id: category._id,
         })),
       });
     }
+  },[allCatData])
+
+  // if top points data load, update state
+  useEffect(()=>{
     if (topPointsData) {
       setTopPoints({
         ...topPoints,
@@ -183,6 +210,10 @@ function Main(props) {
         })),
       });
     }
+  },[topPointsData])
+
+  // if top posters load, update state
+  useEffect(()=>{
     if (topPostersData) {
       setTopPosters({
         ...topPosters,
@@ -192,6 +223,10 @@ function Main(props) {
         })),
       });
     }
+  },[topPostersData])
+
+  // if mods load, update state
+  useEffect(() => {
     if (modData) {
       setCategoryMods({
         ...categoryMods,
@@ -201,6 +236,10 @@ function Main(props) {
         })),
       });
     }
+  }, [modData])
+
+  // if posts load, update state
+  useEffect(() => {
     if (postsData) {
       setPosts({
         ...posts,
@@ -217,14 +256,7 @@ function Main(props) {
         })),
       });
     }
-  }, [
-    topCatData,
-    allCatData,
-    topPointsData,
-    topPostersData,
-    modData,
-    postsData,
-  ]);
+  }, [postsData])
 
   const handleUserClick = (userId) => {
     console.log(userId);
@@ -238,19 +270,20 @@ function Main(props) {
         <div className="grid invisible lg:visible">
           <TopCat
             selectItem={handleCategoryClick}
-            category="Top Categories"
+            category={topCategories.title}
             list={topCategories.topCategories}
           />
           <br></br>
           <AllCat
             selectCat={handleCategoryClick}
-            category="All Categories"
+            category={allCategories.title}
             list={allCategories.allCategories}
           />
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
+          {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
           {posts.postsDisplay.map((post) => (
             <Card
               title={post.title}

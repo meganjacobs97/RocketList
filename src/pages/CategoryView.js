@@ -213,7 +213,6 @@ function CategoryView(props) {
   // when subcatid changes, update subcat state
   useEffect(() => {
     if (subCatIdData) {
-      console.log(subCatIdData);
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
@@ -253,8 +252,7 @@ function CategoryView(props) {
     if (allCatLoading) {
       setAllCategories({
         ...allCategories,
-        title: "Loading...",
-        allCategories: ["Loading categories..."],
+        title: "Loading All Categories...",
       });
     }
     if (allCatData) {
@@ -377,12 +375,13 @@ function CategoryView(props) {
         <div className="border-2 border-RocketBlack container rounded px-2">
           <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{subCategories.currCategory}</a></h1>
           {posts.postsDisplay.map((post) => (
+            // console.log(post)
             <Card
               title={post.title}
               body={post.body}
               date_created={post.date_created}
               author={post.author}
-              postId={post.id}
+              postId={post.postId}
               subcategoryId={post.subCatId} 
               subcategory={post.subCategory}
               categoryId={post.parentId}

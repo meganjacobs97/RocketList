@@ -15,24 +15,6 @@ import PostView from './pages/PostView'
 const App = () => {
   document.title = "RocketList";
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // const [subCategories, setSubCategories] = useState({
-  //   parentCategory: "",
-  //   parentCategoryId: "",
-  //   currCategory: "",
-  //   subCategories: [],
-  // });
-
-  // const handleCatChange = (id) => {
-  //   if (id === "5ebe3b5dad332d50981177ef") {
-  //     setSubCategories({
-  //       ...subCategories,
-  //       parentCategory: "Video Games",
-  //       parentCategoryId: `${id}`,
-  //       currCategory: "Video Games",
-  //       subCategories: ["WoW", "Minecraft", "Misc"],
-  //     });
-  //   }
-  // };
 
   return (
     <Router>
@@ -57,7 +39,7 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
             ></SubCategoryView>
           </Route>
-          <Route exact path="/post/:postId">
+          <Route exact path="/category/:catid/subcategory/:subcatid/post/:postId">
             {" "}
             <PostView
               isLoggedIn={isLoggedIn}

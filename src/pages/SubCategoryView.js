@@ -296,7 +296,7 @@ function SubCategoryView(props) {
           <Subcategory
             selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
-            parentId={subCategories.parentCategoryId}
+            parentId={catid}
             list={subCategories.subCategories}
           />
           <br></br>

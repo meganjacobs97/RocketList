@@ -39,25 +39,6 @@ const GET_ALLCATS = gql`
     }
   }
 `;
-const GET_ALL_POSTS = gql`
-  {
-    posts {
-      _id
-      title
-      body
-      date_created
-      category {
-        name
-      }
-      subcategory {
-        name
-      }
-      author {
-        username
-      }
-    }
-  }
-`;
 
 function PostView(props) {
   const { catid } = useParams();
@@ -97,22 +78,7 @@ function PostView(props) {
     }
   }
 `;
-  const GET_POSTS_BY_SUBCATID = gql`
-  query {
-    subcategory(id: "${subcatid}") {
-      name
-      posts {
-        _id
-        title
-        body
-        date_created
-        author {
-          username
-        }
-      }
-    }
-  }
-`;
+  
   const [subCategories, setSubCategories] = useState({
     parentCategory: "",
     parentCategoryId: "",
@@ -136,9 +102,9 @@ function PostView(props) {
   const [categoryMods, setCategoryMods] = useState({
     mods: [],
   });
-  const [posts, setPosts] = useState({
-    postsDisplay: [],
-  });
+  // const [posts, setPosts] = useState({
+  //   postsDisplay: [],
+  // });
   const [newPosts, setNewPosts] = useState({
     postDisplay: {},
   });
@@ -179,12 +145,6 @@ function PostView(props) {
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
   );
-  // Queries database to get posts in subcategory
-  const {
-    loading: postsLoading,
-    error: postsError,
-    data: postsData,
-  } = useQuery(GET_POSTS_BY_SUBCATID);
   // Queries database to get one post
   const {
     loading: postByIdLoading,
@@ -193,7 +153,7 @@ function PostView(props) {
   } = useQuery(GET_POST_BY_ID);
 
    // on page load, updates state objects
-   useEffect(() => {
+  useEffect(() => {
     // if(userLoading) console.log("help")
     // if(userError) console.log("I need somebody")
     // if(userLoading) return "Loading...";
@@ -235,7 +195,9 @@ function PostView(props) {
   // when subcatid changes, update subcat state
   useEffect(() => {
     if (subCatIdData) {
-      console.log(subCatIdData);
+      // console.log(subCatIdData);
+      // console.log("we got subcatiddata back")
+      // console.log(subcatid)
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
@@ -290,22 +252,32 @@ function PostView(props) {
       });
     }
   }, [allCatData]);
+
+  // when the request for a single post returns data, update state
   useEffect(() => {
     if (postByIdData) {
       setNewPosts({
         ...newPosts,
-        postDisplay: {
+          postDisplay: {
           id: postByIdData.post._id,
-          author: postByIdData.post.author.username,
           title: postByIdData.post.title,
+          author: postByIdData.post.author.username,
           date_created: postByIdData.post.date_created,
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
           subCategory: postByIdData.post.subcategory.name,
+          subCategoryId: subcatid
         },
       });
+      setSubCategories({
+        ...subCategories,
+        parentCategory: postByIdData.post.category.name,
+        parentCategoryId: catid,
+        currCategory: postByIdData.post.subcategory.name
+      })
     }
   }, [postByIdData]);
+
   const handleCategoryClick = (parentId) => {
     console.log(parentId);
     setSubCategories({
@@ -344,13 +316,15 @@ function PostView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="border-2 border-RocketBlack container rounded px-2">
-          <h1>Current category: {subCategories.currCategory}</h1>
+          <h1>Current category: <a className="text-RocketJessie" href={`/category/${catid}`}>{newPosts.postDisplay.parentCategory}</a> >> <a className="text-RocketJames" href={`/category/${catid}/subcategory/${subcatid}`}>{newPosts.postDisplay.subCategory}</a></h1>
           <Posts
             title={newPosts.postDisplay.title}
             body={newPosts.postDisplay.body}
             date_created={newPosts.postDisplay.date_created}
             subcategory={newPosts.postDisplay.subCategory}
+            subcategoryId={newPosts.postDisplay.subCategoryId}
             category={newPosts.postDisplay.parentCategory}
+            categoryId={subCategories.parentCategoryId}
             author={newPosts.postDisplay.author}
             postId={newPosts.postDisplay.id}
           />
