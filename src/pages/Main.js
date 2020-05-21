@@ -112,9 +112,6 @@ function Main(props) {
     title: "",
   });
 
-  // const [tempPostArr, setTempPostArr] = useState({
-  //   query: testPostArr,
-  // });
 
   // Queries database to get users (placeholder, will get mods)
   // const { loading: userLoading, error: userError, data: userData } = useQuery(

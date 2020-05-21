@@ -52,7 +52,6 @@ export default function Hamburger(props) {
           <Link
             to={`/account/${UserId}`}
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
-            onClick={(e) => e.preventDefault()}
           >
             account settings
           </Link>
@@ -60,6 +59,7 @@ export default function Hamburger(props) {
             to="/"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => {
+              localStorage.clear();
               props.setIsLoggedIn(false);
             }}
           >

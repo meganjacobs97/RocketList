@@ -212,7 +212,6 @@ function SubCategoryView(props) {
   // when subcatid changes, update subcat state
   useEffect(() => {
     if (subCatIdData) {
-      console.log(subCatIdData);
       setSubCategories({
         ...subCategories,
         parentCategory: subCatIdData.category.name,
@@ -297,24 +296,24 @@ function SubCategoryView(props) {
 
   // useEffect(() => {}, [subCategories]);
 
-  const handleCategoryClick = (parentId) => {
-    console.log(parentId);
-    setSubCategories({
-      ...subCategories,
-      parentCategoryId: parentId,
-    });
-  };
+  // const handleCategoryClick = (parentId) => {
+  //   console.log(parentId);
+  //   setSubCategories({
+  //     ...subCategories,
+  //     parentCategoryId: parentId,
+  //   });
+  // };
 
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
+  // const handleUserClick = (userId) => {
+  //   console.log(userId);
+  // };
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <Subcategory
-            selectCat={handleCategoryClick}
+            // selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
             parentId={catid}
             list={subCategories.subCategories}
@@ -322,14 +321,14 @@ function SubCategoryView(props) {
           {subCatIdLoading ? <Loading /> : ""}
           <br></br>
           <TopCat
-            selectItem={handleCategoryClick}
+            // selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
           {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
-            selectCat={handleCategoryClick}
+            // selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
@@ -355,19 +354,20 @@ function SubCategoryView(props) {
           ) : (
             <h1>
               Current category:{" "}
-              <a className="text-RocketJessie" href={`/category/${catid}`}>
+              <Link className="text-RocketJessie" topCatError={`/category/${catid}`}>
                 {subCategories.parentCategory}
-              </a>{" "}
+              </Link>{" "}
               >>{" "}
-              <a
+              <Link
                 className="text-RocketJames"
                 href={`/category/${catid}/subcategory/${subcatid}`}
               >
                 {subCategories.currCategory}
-              </a>
+              </Link>
             </h1>
           )}
-          {posts.postsDisplay.map((post) => (
+            {!postsLoading && posts.postsDisplay.length === 0 ? <h1>No posts in this subcategory</h1> : 
+          posts.postsDisplay.map((post) => (
             <Card
               title={post.title}
               body={post.body}
@@ -406,14 +406,14 @@ function SubCategoryView(props) {
           )}
           <br></br>
           <OrderedList
-            selectItem={handleUserClick}
+            // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
           <OrderedList
-            selectItem={handleUserClick}
+            // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
           />
@@ -421,7 +421,7 @@ function SubCategoryView(props) {
         </div>
         <br></br>
         <UnorderedList
-          selectItem={handleUserClick}
+          // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}
         />
