@@ -1,7 +1,7 @@
 import React from "react";
 
 function Comments(props) {
-  console.log(props)
+  //console.log(props)
 
   return (
     <div className="border-2 border-RocketJessie container rounded my-2" id={props.postId}>
