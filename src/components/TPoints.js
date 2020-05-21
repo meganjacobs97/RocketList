@@ -1,6 +1,7 @@
 import React from "react";
 
 function TPoints(props) {
+  
   const name = props.name;
   return (
     <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">

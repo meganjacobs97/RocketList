@@ -29,6 +29,12 @@ function UnorderedList(props) {
             <li
               className="state-rendered-item"
               id={item.id}
+
+              onClick={() => {
+                //console.log(item.id)
+                //props.selectItem(item.id);
+              }}
+
             >
               {item.name}
             </li>
