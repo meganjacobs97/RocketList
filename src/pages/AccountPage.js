@@ -12,9 +12,14 @@ function Account() {
   const urlPath = window.location.pathname;
   const splitUrl = urlPath.split("/");
   const userId = splitUrl[2];
-  // const [posts, setPosts] = useState({
-  //   postsDisplay: [],
-  // });
+  const [posts, setPosts] = useState({
+    postsDisplay: [],
+  });
+  const [user, setUser] = useState({
+    username: "",
+    id: "",
+    totalPosts: "",
+  });
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -34,9 +39,20 @@ function Account() {
   const GET_POSTS_BY_USER_ID = gql`
   query {
     user(id: "${userId}") {
-      username
+      username 
+      _id
       posts {
+        subcategory {
+          _id
+          name
+          category {
+            _id
+            name
+          }
+        }
         title
+        date_created
+        _id
       }
       postsByCategory {
       category{
@@ -84,8 +100,6 @@ function Account() {
   //   data: postsByUserData,
   // } = useQuery(GET_POSTS_BY_USER);
 
-  // console.log(postsByUserData);
-
   // when top category changes, update top categories state
   useEffect(() => {
     if (topCatLoading) {
@@ -126,33 +140,32 @@ function Account() {
     }
   }, [allCatData]);
 
-  // useEffect(() => {
-  //   if (postsByUserIdData) {
-  //     let holdingArr = [...posts.postsDisplay];
-  //     const subcategoriesQueried = postsByUserIdData.category.subcategories;
-  //     subcategoriesQueried.forEach((subcategory) => {
-  //       let subCategId = subcategory._id;
-  //       let subCategName = subcategory.name;
-  //       subcategory.posts.forEach((post) => {
-  //         let item = {};
-  //         item.title = post.title;
-  //         item.body = post.body;
-  //         item.date_created = post.date_created;
-  //         item.author = post.author.username;
-  //         item.postId = post._id;
-  //         item.subCatId = subCategId;
-  //         item.subCategory = subCategName;
-  //         item.parentId = catid;
-  //         item.parentCategory = subCategories.parentCategory;
-  //         holdingArr.push(item);
-  //       });
-  //     });
-  //     setPosts({
-  //       ...posts,
-  //       postsDisplay: holdingArr,
-  //     });
-  //   }
-  // }, [postsByUserIdData]);
+  useEffect(() => {
+    if (postsByUserIdData) {
+      setUser({
+        ...user,
+        username: postsByUserIdData.user.username,
+        id: postsByUserIdData.user._id,
+        totalPosts: postsByUserIdData.user.posts.length,
+      });
+      let holdingArr = [];
+      postsByUserIdData.user.posts.forEach((post) => {
+        let item = {};
+        item.title = post.title;
+        item.date_created = post.date_created;
+        item.postId = post._id;
+        item.subCatId = post.subcategory._id;
+        item.subCategory = post.subcategory.name;
+        item.parentId = post.subcategory.category._id;
+        item.parentCategory = post.subcategory.category.name;
+        holdingArr.push(item);
+      });
+      setPosts({
+        ...posts,
+        postsDisplay: holdingArr,
+      });
+    }
+  }, [postsByUserIdData]);
 
   return (
     <VGrid size="12">
@@ -181,26 +194,25 @@ function Account() {
             <h1>Your Posts</h1>
           )}
           {postsByUserIdLoading ? <Loading /> : ""}
-          {/* {posts.postsDisplay.map((post) => (
+          {posts.postsDisplay.map((post) => (
             <Card
               title={post.title}
               body={post.body}
               date_created={post.date_created}
-              author={post.author}
-              postId={post.id}
+              author={postsByUserIdData.user.username}
+              postId={post.postId}
               subcategoryId={post.subCatId}
               subcategory={post.subCategory}
-              categoryId={post.parentCatId}
+              categoryId={post.parentId}
               category={post.parentCategory}
             />
-          ))} */}
+          ))}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-          <h1 className="text-center font-bold">Welcome usersusername</h1>
-          <p>Total Number Of Posts: usersnumPosts </p>
-          <p>Posts By Category: userspostsByCatergory </p>
+          <h1 className="text-center font-bold">Welcome {user.username}</h1>
+          <p>Total Number Of Posts: {user.totalPosts} </p>
         </div>
       </Col>
     </VGrid>
