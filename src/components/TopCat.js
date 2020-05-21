@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function TopCat(props) {
+  console.log("top cat",props)
   return (
     <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
       <h1 className="text-center font-bold">{props.category}</h1>

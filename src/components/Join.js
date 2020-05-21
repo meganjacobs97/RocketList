@@ -5,8 +5,9 @@ export default function SignIn() {
   const urlPath = window.location.pathname
   const splitUrl = urlPath.split("/")
   const newRoom = splitUrl[2]
+  const user = JSON.parse(localStorage.getItem("username")); 
 
-  const [name, setName] = useState('user'); // username
+  const [name, setName] = useState(user); // username
   const [room, setRoom] = useState(newRoom); // post unqiue id
 
   return (
