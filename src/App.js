@@ -56,6 +56,10 @@ const App = () => {
             {" "}
             <AccountPage UserId={UserId}></AccountPage>
           </Route>
+          <Route path={`/profile/:userId`}>
+            {" "}
+            <AccountPage></AccountPage>
+          </Route>
           <Route path="/join/:id" exact component={Join} />
           <Route path="/chat" component={Chat} />
           <Route path="*" component={NoMatch} />
