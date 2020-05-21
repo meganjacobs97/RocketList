@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function UnorderedList(props) {
   // const clickTest = (param) => {
@@ -24,16 +25,18 @@ function UnorderedList(props) {
       <ul className="list-none list-inside ml-4 mr-4 mb-1 text-center">
         {props.list ? (
           props.list.map((item) => (
+            <Link to={`/profile/${item.id}`} >
             <li
-              key={item.id}
               className="state-rendered-item"
               id={item.id}
               onClick={() => {
-                props.selectItem(item.id);
+                console.log(item.id)
+                //props.selectItem(item.id);
               }}
             >
               {item.name}
             </li>
+          </Link>
           ))
         ) : (
           <li>Loading...</li>
