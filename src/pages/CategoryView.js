@@ -259,13 +259,13 @@ function CategoryView(props) {
   useEffect(() => {
     if (allCatLoading) {
       setAllCategories({
-        ...allCategories,
+        // ...allCategories,
         title: "Loading All Categories...",
       });
     }
     if (allCatData) {
       setAllCategories({
-        ...allCategories,
+        // ...allCategories,
         title: "All Categories",
         allCategories: allCatData.categories.map((category) => ({
           name: category.name,
