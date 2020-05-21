@@ -27,6 +27,11 @@ const GET_USERS = gql`
       _id
       username
       email
+      isMod
+      posts {
+        title
+      }
+      points
     }
   }
 `;
@@ -169,7 +174,8 @@ function CategoryView(props) {
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
-        })),
+          points: user.points
+        }))
       });
     }
   }, [topPointsData]);
@@ -188,6 +194,7 @@ function CategoryView(props) {
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
+          posts: user.posts.length
         })),
       });
     }
@@ -204,9 +211,10 @@ function CategoryView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.map((user) => ({
+        mods: modData.users.filter(user=> user.isMod).map((user) => ({
           name: user.username,
           id: user._id,
+          isMod: user.isMod
         })),
       });
     }
