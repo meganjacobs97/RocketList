@@ -17,7 +17,7 @@ export default function Hamburger(props) {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
-  const UserId = props.UserId;
+  const UserId = JSON.parse(localStorage.getItem("userId"));
 
   return (
     <div>
