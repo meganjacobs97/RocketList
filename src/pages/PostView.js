@@ -67,7 +67,6 @@ function PostView(props) {
             _id
         }
         replies{
-          _id
           body
           date_created
           author{
@@ -92,7 +91,7 @@ function PostView(props) {
 
   const GET_ALL_COMMENTS_BY_ID = gql`
   query {
-    replies (id: "${postId}") {
+    replies (postId: "${postId}") {
           _id
           body
           date_created
@@ -336,7 +335,8 @@ function PostView(props) {
   useEffect(() => {
     if (commentsData) {
       let holdingArr = [...comments.commentsDisplay];
-      const commentsById = commentsData.post.replies;
+      
+      const commentsById = commentsData.replies;
       commentsById.forEach((post) => {
         console.log(post);
         let item = {};
