@@ -2,14 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Card(props) {
+  console.log(props)
   return (
     <div
       className="border-2 border-RocketJames container rounded my-2"
       id={props.postId}
-      
     >
       <Link
-        
         to={`/category/${props.categoryId}/subcategory/${props.subcategoryId}/post/${props.postId}`}
       >
         <h1>
@@ -23,7 +22,6 @@ function Card(props) {
       <p>
         Posted under:{" "}
         <Link
-          
           className="text-RocketJames"
           to={`/category/${props.categoryId}/subcategory/${props.subcategoryId}`}
         >
@@ -31,7 +29,6 @@ function Card(props) {
         </Link>{" "}
         in{" "}
         <Link
-          
           className="text-RocketJessie"
           to={`/category/${props.categoryId}`}
         >
