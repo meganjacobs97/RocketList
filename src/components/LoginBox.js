@@ -30,6 +30,7 @@ function LoginBox(props) {
         password: $password
       }
     ) {
+      username
       _id
     }
   }`;  
@@ -43,6 +44,8 @@ function LoginBox(props) {
       console.log(data); 
       props.setIsLoggedIn(true)
       localStorage.setItem("userId",JSON.stringify(data.createUser.id)) 
+      console.log(data.createUser); 
+      localStorage.setItem("username",JSON.stringify(data.createUser.username))
       setUsername("")
       setPassword(""); 
     }
@@ -69,6 +72,7 @@ function LoginBox(props) {
         password: $password
     ) {
       _id
+      username
     }
   }`; 
 
@@ -80,6 +84,7 @@ function LoginBox(props) {
       console.log(SignIndata); 
       props.setIsLoggedIn(true)
       localStorage.setItem("userId",JSON.stringify(SignIndata.login._id)) 
+      localStorage.setItem("username",JSON.stringify(SignIndata.login.username))
       setUsername("")
       setPassword(""); 
     }
@@ -98,7 +103,7 @@ function LoginBox(props) {
   
   
   return (
-    <wrapper className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed">
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed">
     <form onSubmit={(e) => {
       e.preventDefault(); 
       
@@ -178,7 +183,7 @@ function LoginBox(props) {
           >
             Forgot Password?
           </a> */}
-      </wrapper>
+      </div>
 
    
   );

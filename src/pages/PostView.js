@@ -67,7 +67,6 @@ function PostView(props) {
             _id
         }
         replies{
-          _id
           body
           date_created
           author{
@@ -92,15 +91,13 @@ function PostView(props) {
 
   const GET_ALL_COMMENTS_BY_ID = gql`
   query {
-    post (id: "${postId}") {
-        replies{
+    replies (postId: "${postId}") {
           _id
           body
           date_created
           author{
             username
           }
-        }
     }
   }
   `;
@@ -338,8 +335,10 @@ function PostView(props) {
   useEffect(() => {
     if (commentsData) {
       let holdingArr = [...comments.commentsDisplay];
-      const commentsById = commentsData.post.replies;
+      
+      const commentsById = commentsData.replies;
       commentsById.forEach((post) => {
+        console.log(post);
         let item = {};
         item.body = post.body;
         item.date_created = post.date_created;

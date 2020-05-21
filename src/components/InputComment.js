@@ -7,14 +7,16 @@ const ADD_REPLY = gql`
   mutation AddReply(
     $body: String, 
     $postId: String, 
-    $categoryId: String) {
+    $categoryId: String
+    $authorId: String
+    ) {
 
     createReply(
       replyInput: {
         body: $body
         postId: $postId
         categoryId: $categoryId
-        authorId: "5ec442336c4c103a6c223157"
+        authorId: $authorId
       }
     ) {
       author {
@@ -37,6 +39,8 @@ function InputComment(props) {
   const [addComment, { data }] = useMutation(ADD_REPLY);
   const ParentCategory = props.categoryId;
   const ParentPost = props.postId;
+  //get userId out of local storage
+  const userId = JSON.parse(localStorage.getItem("userId")); 
 
   return (
     <form
@@ -47,7 +51,7 @@ function InputComment(props) {
             body: e.target.commentBody.value,
             postId: ParentPost,
             categoryID: ParentCategory,
-            // authorId: ,
+            authorId: userId
           },
         });
         e.target.commentBody.value = "";

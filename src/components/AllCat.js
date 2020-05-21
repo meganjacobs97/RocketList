@@ -8,9 +8,8 @@ function AllCat(props) {
       <ul className="list-none list-inside ml-4 mr-4 mb-1 text-center">
         {props.list ? (
           props.list.map((item) => (
-            <Link className="text-RocketJessie" to={`/category/${item.id}`}>
+            <Link key={item.id} className="text-RocketJessie" to={`/category/${item.id}`}>
               <li
-                key={item.id}
                 className="state-rendered-item"
                 data-name={item.name}
                 id={item.id}

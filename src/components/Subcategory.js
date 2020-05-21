@@ -23,6 +23,7 @@ export default function Subcategory(props) {
         {props.list ? (
           props.list.map((item) => (
             <Link
+            key={item.id}
               className="text-RocketJames"
               to={`/category/${props.parentId}/subcategory/${item.id}`}
             >
