@@ -11,7 +11,7 @@ function Account() {
   const splitUrl = urlPath.split("/");
   const userId = splitUrl[2];
   const [posts, setPosts] = useState({
-    postsDisplay: [],
+    postsDisplay: []
   });
   const GET_POSTS_BY_USER_ID = gql`
     query {

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function OrderedList(props) {
   const clickTest = (param) => {
@@ -11,16 +12,17 @@ function OrderedList(props) {
       <h1 className="text-center font-bold">{props.category}</h1>
       <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
         {props.list.map((item) => (
-          <li
-            key={item.id}
-            className="state-rendered-item"
-            id={item.id}
-            onClick={() => {
-              props.selectItem(item.id);
-            }}
-          >
-            {item.name}
-          </li>
+          <Link key={item.id} to={`/profile/${item.id}`} >
+            <li
+              className="state-rendered-item"
+              id={item.id}
+              onClick={() => {
+                console.log(item.id)
+              }}
+            >
+              {item.name}
+            </li>
+          </Link>
         ))}
       </ol>
     </div>
