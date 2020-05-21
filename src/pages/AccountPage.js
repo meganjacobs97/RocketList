@@ -15,7 +15,7 @@ function Account() {
   });
   const GET_POSTS_BY_USER_ID = gql`
     query {
-      user(id: ${userId}) {
+      user(id: "${userId}") {
         username
         posts {
           title
