@@ -19,8 +19,9 @@ import Loading from "../components/Loading";
 
 // Query graphql
 import gql from "graphql-tag";
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
+import InputComment from "../components/InputComment";
 
 // import { connect } from 'react-redux'
 
@@ -180,7 +181,7 @@ function PostView(props) {
     loading: postByIdLoading,
     error: postByIdError,
     data: postByIdData,
-  } = useQuery(GET_POST_BY_ID);
+  } = useQuery(GET_POST_BY_ID) ;
 
   // Queries database to get comments
   const {
@@ -322,8 +323,8 @@ function PostView(props) {
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
           subCategory: postByIdData.post.subcategory.name,
-          subCategoryId: subcatid,
-        },
+          subCategoryId: subcatid
+        }, 
       });
       setSubCategories({
         ...subCategories,
@@ -367,6 +368,7 @@ function PostView(props) {
   //   console.log(userId);
   // };
 
+ 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
@@ -428,6 +430,14 @@ function PostView(props) {
               postId={newPosts.postDisplay.id}
             />
           )}
+        </div>
+        <br/>
+        <div>
+          <InputComment
+          category={ catid }
+          postId={ postId }
+          // author
+          />
         </div>
         <div>
           {comments.commentsDisplay.map((post) => (
