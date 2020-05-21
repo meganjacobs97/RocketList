@@ -8,6 +8,7 @@ const ADD_POST = gql`
     $body: String
     $subcategory: String
     $category: String
+    $author: String
   ) {
     createPost(
       postInput: {
@@ -15,7 +16,7 @@ const ADD_POST = gql`
         body: $body
         subcategoryId: $subcategory
         categoryId: $category
-        authorId: "5ec442336c4c103a6c223157"
+        authorId: $author
       }
     ) {
       title
@@ -23,7 +24,11 @@ const ADD_POST = gql`
   }
 `;
 
+ 
+
 function InputPost(props) {
+  //get user id out of local storage 
+  const userId = JSON.parse(localStorage.getItem("userId"));
   const subCat = props.list;
   console.log(subCat);
   const [dropDownValue, setDropDownValue] = useState("");
@@ -50,6 +55,7 @@ function InputPost(props) {
             body: e.target.postBody.value,
             subcategory: dropDownValue,
             category: ParentCategory,
+            author: userId
           },
         });
         e.target.postTitle.value = "";

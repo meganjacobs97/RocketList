@@ -279,25 +279,17 @@ function Main(props) {
     }
   }, [postsData]);
 
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
-  const handleCategoryClick = (parentId) => {
-    console.log(parentId);
-  };
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <TopCat
-            selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
           {topCatLoading ? <Loading /> : ""}
           <br></br>
           <AllCat
-            selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
@@ -310,6 +302,7 @@ function Main(props) {
           {postsLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (
             <Card
+              key={post.id}
               title={post.title}
               body={post.body}
               date_created={post.date_created}
