@@ -10,63 +10,85 @@ function Account() {
   const urlPath = window.location.pathname;
   const splitUrl = urlPath.split("/");
   const userId = splitUrl[2];
-  const [posts, setPosts] = useState({
-    postsDisplay: [],
-  });
+  // const [posts, setPosts] = useState({
+  //   postsDisplay: [],
+  // });
   const GET_POSTS_BY_USER_ID = gql`
-    query {
-      user(id: ${userId}) {
-        username
-        posts {
-          title
-        }
-        postsByCategory
-        numPosts
+  query {
+    user(id: "${userId}") {
+      username
+      posts {
+        title
       }
+      postsByCategory {
+     category{
+       name
+     }
+     }
     }
-  `;
+    }
+    `;
+  // const GET_POSTS_BY_USER = gql`
+  //   query {
+  //     postsByUser(userId: "${userId}") {
+  //       category {
+  //         name
+  //       }
+  //       posts
+  //     }
+  //   }
+  // `;
   const {
     loading: postsByUserIdLoading,
     error: postsByUserIdError,
     data: postsByUserIdData,
   } = useQuery(GET_POSTS_BY_USER_ID);
 
-  useEffect(() => {
-    if (postsByUserIdData) {
-      console.log(postsByUserIdData);
-      //   let holdingArr = [...posts.postsDisplay];
-      //   const subcategoriesQueried = postsByCatData.category.subcategories;
-      //   subcategoriesQueried.forEach((subcategory) => {
-      //     let subCategId = subcategory._id;
-      //     let subCategName = subcategory.name;
-      //     subcategory.posts.forEach((post) => {
-      //       let item = {};
-      //       item.title = post.title;
-      //       item.body = post.body;
-      //       item.date_created = post.date_created;
-      //       item.author = post.author.username;
-      //       item.postId = post._id;
-      //       item.subCatId = subCategId;
-      //       item.subCategory = subCategName;
-      //       item.parentId = catid;
-      //       item.parentCategory = subCategories.parentCategory;
-      //       holdingArr.push(item);
-      //     });
-      //   });
-      //   setPosts({
-      //     ...posts,
-      //     postsDisplay: holdingArr,
-      //   });
-    }
-  }, [postsByUserIdData]);
+  console.log(postsByUserIdData);
+
+  // const {
+  //   loading: postsByUserLoading,
+  //   error: postsByUserError,
+  //   data: postsByUserData,
+  // } = useQuery(GET_POSTS_BY_USER);
+
+  // console.log(postsByUserData);
+
+  // useEffect(() => {
+  //   if (postsByUserIdData) {
+  //     let holdingArr = [...posts.postsDisplay];
+  //     const subcategoriesQueried = postsByUserIdData.category.subcategories;
+  //     subcategoriesQueried.forEach((subcategory) => {
+  //       let subCategId = subcategory._id;
+  //       let subCategName = subcategory.name;
+  //       subcategory.posts.forEach((post) => {
+  //         let item = {};
+  //         item.title = post.title;
+  //         item.body = post.body;
+  //         item.date_created = post.date_created;
+  //         item.author = post.author.username;
+  //         item.postId = post._id;
+  //         item.subCatId = subCategId;
+  //         item.subCategory = subCategName;
+  //         item.parentId = catid;
+  //         item.parentCategory = subCategories.parentCategory;
+  //         holdingArr.push(item);
+  //       });
+  //     });
+  //     setPosts({
+  //       ...posts,
+  //       postsDisplay: holdingArr,
+  //     });
+  //   }
+  // }, [postsByUserIdData]);
 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
           <h1 className="text-center font-bold">Welcome usersusername</h1>
-          <p>Posts By Category: userspostsByCatergory </p>
           <p>Total Number Of Posts: usersnumPosts </p>
+          <p>Posts By Category: userspostsByCatergory </p>
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -77,7 +99,7 @@ function Account() {
             <h1>Your Posts</h1>
           )}
           {postsByUserIdLoading ? <Loading /> : ""}
-          {posts.postsDisplay.map((post) => (
+          {/* {posts.postsDisplay.map((post) => (
             <Card
               title={post.title}
               body={post.body}
@@ -89,7 +111,7 @@ function Account() {
               categoryId={post.parentCatId}
               category={post.parentCategory}
             />
-          ))}
+          ))} */}
         </div>
       </Col>
     </VGrid>

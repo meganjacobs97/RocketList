@@ -52,9 +52,13 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
             ></PostView>
           </Route>
-          <Route path={`/account/${UserId}`}>
+          <Route path="/account/:userId">
             {" "}
-            <AccountPage UserId={UserId}></AccountPage>
+            <AccountPage
+              UserId={UserId}
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+            ></AccountPage>
           </Route>
           <Route path="/join/:id" exact component={Join} />
           <Route path="/chat" component={Chat} />
