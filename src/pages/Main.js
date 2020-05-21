@@ -333,14 +333,12 @@ function Main(props) {
           <br></br>
           <OrderedList category={topPoints.title} list={topPoints.topPoints} />
           {topPointsLoading ? <Loading /> : ""}
-          {/* <TPoints name={"Paul"} /> */}
           <br></br>
           <OrderedList
             category={topPosters.title}
             list={topPosters.topPosters}
           />
           {topPostersLoading ? <Loading /> : ""}
-          {/* <TPoster name={"Dion"} /> */}
           <br></br>
           <UnorderedList
             category={categoryMods.title}
@@ -348,7 +346,6 @@ function Main(props) {
           />
           {modLoading ? <Loading /> : ""}
         </div>
-        {/* <Mods name={"Louis"} /> */}
       </Col>
     </VGrid>
   );
