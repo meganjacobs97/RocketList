@@ -25,7 +25,7 @@ function UnorderedList(props) {
       <ul className="list-none list-inside ml-4 mr-4 mb-1 text-center">
         {props.list ? (
           props.list.map((item) => (
-            <Link to={`/profile/${item.id}`} >
+            <Link key={item.id} to={`/profile/${item.id}`} >
             <li
               className="state-rendered-item"
               id={item.id}
