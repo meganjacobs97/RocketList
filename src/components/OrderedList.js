@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function OrderedList(props) {
   const clickTest = (param) => {
     // console.log(event.target);
-    console.log(param);
+    //console.log(param);
   };
 
   return (
