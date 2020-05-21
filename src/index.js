@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './assets/main.css'
+import './index.css'; // custom styling if necessary, currently bg color aqua
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ApolloProvider } from '@apollo/react-hooks';
+import client from './apollo-client';
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
+  </ApolloProvider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 

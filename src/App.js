@@ -1,26 +1,68 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import CategoryView from "./pages/CategoryView";
+import SubCategoryView from "./pages/SubCategoryView";
+import Main from "./pages/Main";
+import NoMatch from "./pages/NoMatch";
+import Wrapper from "./components/Wrapper";
+import Chat from "./components/Chat";
+import Join from "./components/Join";
+import PostView from "./pages/PostView";
+import AuthContext from "./context/auth-context";
+// import Footer from "./components/Footer";
 
-function App() {
+const App = () => {
+  document.title = "RocketList";
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Wrapper>
+        <AuthContext.Provider>
+          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          <Switch>
+            <Route exact path="/">
+              {" "}
+              <Main
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+              ></Main>
+            </Route>
+            <Route exact path="/category/:catid">
+              {" "}
+              <CategoryView
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+              ></CategoryView>
+            </Route>
+            <Route exact path="/category/:catid/subcategory/:subcatid">
+              {" "}
+              <SubCategoryView
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+              ></SubCategoryView>
+            </Route>
+            <Route
+              exact
+              path="/category/:catid/subcategory/:subcatid/post/:postId"
+            >
+              {" "}
+              <PostView
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+              ></PostView>
+            </Route>
+            <Route path="/join/:id" exact component={Join} />
+            <Route path="/chat" component={Chat} />
+            <Route path="*" component={NoMatch} />
+          </Switch>
+        </AuthContext.Provider>
+      </Wrapper>
+      {/* <Footer /> */}
+    </Router>
   );
-}
+};
 
 export default App;
