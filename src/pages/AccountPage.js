@@ -5,6 +5,8 @@ import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
+import TopCat from "../components/TopCat";
+import AllCat from "../components/AllCat";
 
 function Account() {
   const urlPath = window.location.pathname;
@@ -13,6 +15,22 @@ function Account() {
   // const [posts, setPosts] = useState({
   //   postsDisplay: [],
   // });
+  const [topCategories, setTopCategories] = useState({
+    topCategories: [],
+    title: "",
+  });
+  const [allCategories, setAllCategories] = useState({
+    allCategories: [],
+    title: "",
+  });
+  const GET_ALLCATS = gql`
+    query {
+      categories {
+        name
+        _id
+      }
+    }
+  `;
   const GET_POSTS_BY_USER_ID = gql`
   query {
     user(id: "${userId}") {
@@ -21,7 +39,7 @@ function Account() {
         title
       }
       postsByCategory {
-     category{
+      category{
        name
      }
      }
@@ -38,6 +56,20 @@ function Account() {
   //     }
   //   }
   // `;
+
+  // Queries database to get all categories
+  const {
+    loading: allCatLoading,
+    error: allCatError,
+    data: allCatData,
+  } = useQuery(GET_ALLCATS);
+  // Queries database to get top categories (placeholder)
+  const {
+    loading: topCatLoading,
+    error: topCatError,
+    data: topCatData,
+  } = useQuery(GET_ALLCATS);
+
   const {
     loading: postsByUserIdLoading,
     error: postsByUserIdError,
@@ -53,6 +85,46 @@ function Account() {
   // } = useQuery(GET_POSTS_BY_USER);
 
   // console.log(postsByUserData);
+
+  // when top category changes, update top categories state
+  useEffect(() => {
+    if (topCatLoading) {
+      setTopCategories({
+        ...topCategories,
+        title: "Loading Top Categories...",
+      });
+    }
+    if (topCatData) {
+      setTopCategories({
+        ...topCategories,
+        title: "Top Categories",
+        topCategories: topCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  }, [topCatData]);
+
+  // when all category changes, update top categories state
+  useEffect(() => {
+    if (allCatLoading) {
+      setAllCategories({
+        // ...allCategories,
+        title: "Loading All Categories...",
+      });
+    }
+    if (allCatData) {
+      setAllCategories({
+        // ...allCategories,
+        title: "All Categories",
+        allCategories: allCatData.categories.map((category) => ({
+          name: category.name,
+          id: category._id,
+        })),
+      });
+    }
+  }, [allCatData]);
 
   // useEffect(() => {
   //   if (postsByUserIdData) {
@@ -85,10 +157,20 @@ function Account() {
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
-        <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-          <h1 className="text-center font-bold">Welcome usersusername</h1>
-          <p>Total Number Of Posts: usersnumPosts </p>
-          <p>Posts By Category: userspostsByCatergory </p>
+        <div className="grid invisible lg:visible">
+          <TopCat
+            // selectItem={handleCategoryClick}
+            category={topCategories.title}
+            list={topCategories.topCategories}
+          />
+          {topCatLoading ? <Loading /> : ""}
+          <br></br>
+          <AllCat
+            // selectCat={handleCategoryClick}
+            category={allCategories.title}
+            list={allCategories.allCategories}
+          />
+          {allCatLoading ? <Loading /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -112,6 +194,13 @@ function Account() {
               category={post.parentCategory}
             />
           ))} */}
+        </div>
+      </Col>
+      <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
+        <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
+          <h1 className="text-center font-bold">Welcome usersusername</h1>
+          <p>Total Number Of Posts: usersnumPosts </p>
+          <p>Posts By Category: userspostsByCatergory </p>
         </div>
       </Col>
     </VGrid>
