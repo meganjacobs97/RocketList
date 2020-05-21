@@ -2,10 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function AllCat(props) {
-  // const clickToLoad = () => {
-  //   console.log("loaded?");
-  // };
-
   return (
     <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
       <h1 className="text-center font-bold">{props.category}</h1>
