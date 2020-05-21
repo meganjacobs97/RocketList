@@ -1,6 +1,7 @@
 import React from "react";
 
 function Mods(props) {
+ 
   const mod = props.name;
   return (
     <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
