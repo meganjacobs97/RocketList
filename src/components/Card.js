@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Card(props) {
-  console.log(props)
   return (
     <div
       className="border-2 border-RocketJames container rounded my-2"

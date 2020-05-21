@@ -43,7 +43,7 @@ function LoginBox(props) {
     if(!loading && data) {
       console.log(data); 
       props.setIsLoggedIn(true)
-      localStorage.setItem("userId",JSON.stringify(data.createUser.id)) 
+      localStorage.setItem("userId",JSON.stringify(data.createUser._id)) 
       console.log(data.createUser); 
       localStorage.setItem("username",JSON.stringify(data.createUser.username))
       setUsername("")
