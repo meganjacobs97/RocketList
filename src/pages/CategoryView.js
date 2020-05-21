@@ -359,6 +359,7 @@ function CategoryView(props) {
           ) : (
             posts.postsDisplay.map((post) => (
               <Card
+                key={post.id}
                 title={post.title}
                 body={post.body}
                 date_created={post.date_created}

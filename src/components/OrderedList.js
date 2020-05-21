@@ -12,6 +12,7 @@ function OrderedList(props) {
       <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
         {props.list.map((item) => (
           <li
+            key={item.id}
             className="state-rendered-item"
             id={item.id}
             onClick={() => {

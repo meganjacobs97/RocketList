@@ -98,7 +98,7 @@ function LoginBox(props) {
   
   
   return (
-    <wrapper className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed">
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed">
     <form onSubmit={(e) => {
       e.preventDefault(); 
       
@@ -178,7 +178,7 @@ function LoginBox(props) {
           >
             Forgot Password?
           </a> */}
-      </wrapper>
+      </div>
 
    
   );
