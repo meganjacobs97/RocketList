@@ -259,13 +259,13 @@ function CategoryView(props) {
   useEffect(() => {
     if (allCatLoading) {
       setAllCategories({
-        ...allCategories,
+        // ...allCategories,
         title: "Loading All Categories...",
       });
     }
     if (allCatData) {
       setAllCategories({
-        ...allCategories,
+        // ...allCategories,
         title: "All Categories",
         allCategories: allCatData.categories.map((category) => ({
           name: category.name,
@@ -359,6 +359,7 @@ function CategoryView(props) {
           ) : (
             posts.postsDisplay.map((post) => (
               <Card
+                key={post.id}
                 title={post.title}
                 body={post.body}
                 date_created={post.date_created}
