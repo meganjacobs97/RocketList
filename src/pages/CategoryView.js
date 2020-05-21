@@ -349,24 +349,28 @@ function CategoryView(props) {
           ) : (
             <h1>
               Current category:{" "}
-              <a className="text-RocketJessie" href={`/category/${catid}`}>
+              <Link className="text-RocketJessie" to={`/category/${catid}`}>
                 {subCategories.currCategory}
-              </a>
+              </Link>
             </h1>
           )}
-          {posts.postsDisplay.map((post) => (
-            <Card
-              title={post.title}
-              body={post.body}
-              date_created={post.date_created}
-              author={post.author}
-              postId={post.postId}
-              subcategoryId={post.subCatId}
-              subcategory={post.subCategory}
-              categoryId={post.parentId}
-              category={post.parentCategory}
-            />
-          ))}
+          {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
+            <h1>No posts in this category</h1>
+          ) : (
+            posts.postsDisplay.map((post) => (
+              <Card
+                title={post.title}
+                body={post.body}
+                date_created={post.date_created}
+                author={post.author}
+                postId={post.postId}
+                subcategoryId={post.subCatId}
+                subcategory={post.subCategory}
+                categoryId={post.parentId}
+                category={post.parentCategory}
+              />
+            ))
+          )}
           {postsByCatLoading ? <Loading /> : ""}
         </div>
       </Col>
@@ -387,7 +391,7 @@ function CategoryView(props) {
               Make a Post
             </button>
           ) : (
-            <LoginBox />
+            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
           )}
           <br></br>
           <OrderedList
