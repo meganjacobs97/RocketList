@@ -335,15 +335,13 @@ function PostView(props) {
   useEffect(() => {
     if (commentsData) {
       let holdingArr = [...comments.commentsDisplay];
-
       const commentsById = commentsData.replies;
-      commentsById.forEach((post) => {
-        console.log(post);
+      commentsById.forEach((comment) => {
         let item = {};
-        item.body = post.body;
-        item.date_created = post.date_created;
-        item.author = post.author.username;
-        item.id = post._id;
+        item.body = comment.body;
+        item.date_created = comment.date_created;
+        item.author = comment.author.username;
+        item.id = comment._id;
         holdingArr.push(item);
       });
       setComments({
@@ -351,7 +349,6 @@ function PostView(props) {
         commentsDisplay: holdingArr,
       });
     }
-    console.log(comments);
   }, [commentsData]);
 
   const handleCategoryClick = (parentId) => {
@@ -441,11 +438,12 @@ function PostView(props) {
           )}
         </div>
         <div>
-          {comments.commentsDisplay.map((post) => (
+          {comments.commentsDisplay.map((comment) => (
             <Comments
-              author={post.author}
-              body={post.body}
-              date_created={post.date_created}
+              key={comment.id}
+              author={comment.author}
+              body={comment.body}
+              date_created={comment.date_created}
             />
           ))}
         </div>
