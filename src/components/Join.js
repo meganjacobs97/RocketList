@@ -6,7 +6,7 @@ export default function SignIn() {
   const splitUrl = urlPath.split("/")
   const newRoom = splitUrl[2]
 
-  const [name, setName] = useState('user'); // username
+  const [name, setName] = useState('Paul'); // username
   const [room, setRoom] = useState(newRoom); // post unqiue id
 
   return (

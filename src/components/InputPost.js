@@ -69,7 +69,7 @@ function InputPost(props) {
           className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
           name="postTitle"
           type="text"
-          placeholder="What is the proble with todays youths"
+          placeholder="Title"
         />
       </div>
       <label className="block text-sm font-bold mb-2">
@@ -78,7 +78,7 @@ function InputPost(props) {
           className="form-textarea mt-1 block w-full shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
           rows="5"
           name="postBody"
-          placeholder="Damn youthes today flicked me off while driving."
+          placeholder="Body"
         ></textarea>
       </label>
       <br></br>
