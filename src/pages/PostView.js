@@ -341,10 +341,7 @@ function PostView(props) {
     console.log(userId);
   };
 
-  const addComment = (newComment) => {
-    console.log(newComment)
-  }
-
+ 
   return (
     <VGrid size="12">
         <Col lgsize="2" visibility="hidden lg:block">
@@ -394,9 +391,6 @@ function PostView(props) {
           <InputComment
           category={ catid }
           postId={ postId }
-          // query= {GET_POST_BY_ID}
-          // comState= {addComment}
-
           // author
           />
         </div>
