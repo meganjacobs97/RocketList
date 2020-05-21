@@ -18,7 +18,7 @@ function UnorderedList(props) {
   //   console.log(param);
   //   console.log(query);
   // };
-
+   
   return (
     <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
       <h1 className="text-center font-bold">{props.category}</h1>
