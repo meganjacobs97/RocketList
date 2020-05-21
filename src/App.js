@@ -10,7 +10,10 @@ import Wrapper from "./components/Wrapper";
 import Chat from "./components/Chat";
 import Join from "./components/Join";
 import PostView from "./pages/PostView";
+import AccountPage from "./pages/AccountPage";
 // import Footer from "./components/Footer";
+
+const UserId = JSON.parse(localStorage.getItem("userid:"));
 
 const App = () => {
   document.title = "RocketList";
@@ -48,6 +51,10 @@ const App = () => {
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
             ></PostView>
+          </Route>
+          <Route path={`/account/${UserId}`}>
+            {" "}
+            <AccountPage userId={UserId}></AccountPage>
           </Route>
           <Route path="/join/:id" exact component={Join} />
           <Route path="/chat" component={Chat} />

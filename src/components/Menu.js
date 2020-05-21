@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import R from "./Photo/R.png";
 import Popper from "popper.js";
 
@@ -16,6 +17,7 @@ export default function Hamburger(props) {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+  const UserId = props.UserId;
 
   return (
     <div>
@@ -47,23 +49,22 @@ export default function Hamburger(props) {
           >
             support
           </a>
-          <a
-            href="#"
+          <Link
+            to={`/account/${UserId}`}
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => e.preventDefault()}
           >
             account settings
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => {
-              e.preventDefault();
               props.setIsLoggedIn(false);
             }}
           >
             logout
-          </a>
+          </Link>
         </div>
       </div>
     </div>
