@@ -13,7 +13,7 @@ import PostView from "./pages/PostView";
 import AccountPage from "./pages/AccountPage";
 // import Footer from "./components/Footer";
 
-const UserId = JSON.parse(localStorage.getItem("userid:"));
+const UserId = JSON.parse(localStorage.getItem("userId"));
 
 const App = () => {
   document.title = "RocketList";
