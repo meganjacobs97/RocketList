@@ -178,7 +178,7 @@ function PostView(props) {
     loading: postByIdLoading,
     error: postByIdError,
     data: postByIdData,
-  } = useQuery(GET_POST_BY_ID) ;
+  } = useQuery(GET_POST_BY_ID);
 
   // Queries database to get comments
   const {
@@ -320,8 +320,8 @@ function PostView(props) {
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
           subCategory: postByIdData.post.subcategory.name,
-          subCategoryId: subcatid
-        }, 
+          subCategoryId: subcatid,
+        },
       });
       setSubCategories({
         ...subCategories,
@@ -335,7 +335,7 @@ function PostView(props) {
   useEffect(() => {
     if (commentsData) {
       let holdingArr = [...comments.commentsDisplay];
-      
+
       const commentsById = commentsData.replies;
       commentsById.forEach((post) => {
         console.log(post);
@@ -350,7 +350,6 @@ function PostView(props) {
         ...comments,
         commentsDisplay: holdingArr,
       });
-      
     }
     console.log(comments);
   }, [commentsData]);
@@ -367,7 +366,6 @@ function PostView(props) {
   //   console.log(userId);
   // };
 
- 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
@@ -430,13 +428,17 @@ function PostView(props) {
             />
           )}
         </div>
-        <br/>
+        <br />
         <div>
-          <InputComment
-          category={ catid }
-          postId={ postId }
-          // author
-          />
+          {props.isLoggedIn ? (
+            <InputComment
+              category={catid}
+              postId={postId}
+              // author
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div>
           {comments.commentsDisplay.map((post) => (
