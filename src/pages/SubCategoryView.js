@@ -369,6 +369,7 @@ function SubCategoryView(props) {
             {!postsLoading && posts.postsDisplay.length === 0 ? <h1>No posts in this subcategory</h1> : 
           posts.postsDisplay.map((post) => (
             <Card
+              key={post.id}
               title={post.title}
               body={post.body}
               date_created={post.date_created}

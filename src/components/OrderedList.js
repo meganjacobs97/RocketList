@@ -12,13 +12,12 @@ function OrderedList(props) {
       <h1 className="text-center font-bold">{props.category}</h1>
       <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
         {props.list.map((item) => (
-          <Link to={`/profile/${item.id}`} >
+          <Link key={item.id} to={`/profile/${item.id}`} >
             <li
               className="state-rendered-item"
               id={item.id}
               onClick={() => {
                 console.log(item.id)
-                //props.selectItem(item.id);
               }}
             >
               {item.name}
