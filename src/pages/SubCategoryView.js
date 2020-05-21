@@ -354,13 +354,13 @@ function SubCategoryView(props) {
           ) : (
             <h1>
               Current category:{" "}
-              <Link className="text-RocketJessie" topCatError={`/category/${catid}`}>
+              <Link className="text-RocketJessie" to={`/category/${catid}`}>
                 {subCategories.parentCategory}
               </Link>{" "}
               >>{" "}
               <Link
                 className="text-RocketJames"
-                href={`/category/${catid}/subcategory/${subcatid}`}
+                to={`/category/${catid}/subcategory/${subcatid}`}
               >
                 {subCategories.currCategory}
               </Link>
