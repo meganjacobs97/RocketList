@@ -4,9 +4,6 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
 import OrderedList from "../components/OrderedList";
 import UnorderedList from "../components/UnorderedList";
 import LoginBox from "../components/LoginBox";
@@ -22,6 +19,11 @@ const GET_USERS = gql`
       _id
       username
       email
+      isMod
+      posts {
+        title
+      }
+      points
     }
   }
 `;
@@ -111,7 +113,6 @@ function Main(props) {
     postsDisplay: [],
     title: "",
   });
-
 
   // Queries database to get users (placeholder, will get mods)
   // const { loading: userLoading, error: userError, data: userData } = useQuery(
@@ -251,7 +252,7 @@ function Main(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.map((user) => ({
+        mods: modData.users.filter(user=> user.isMod).map((user) => ({
           name: user.username,
           id: user._id,
         })),

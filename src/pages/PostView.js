@@ -178,7 +178,7 @@ function PostView(props) {
     loading: postByIdLoading,
     error: postByIdError,
     data: postByIdData,
-  } = useQuery(GET_POST_BY_ID) ;
+  } = useQuery(GET_POST_BY_ID);
 
   // Queries database to get comments
   const {
@@ -320,8 +320,8 @@ function PostView(props) {
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
           subCategory: postByIdData.post.subcategory.name,
-          subCategoryId: subcatid
-        }, 
+          subCategoryId: subcatid,
+        },
       });
       setSubCategories({
         ...subCategories,
@@ -335,24 +335,20 @@ function PostView(props) {
   useEffect(() => {
     if (commentsData) {
       let holdingArr = [...comments.commentsDisplay];
-      
       const commentsById = commentsData.replies;
-      commentsById.forEach((post) => {
-        console.log(post);
+      commentsById.forEach((comment) => {
         let item = {};
-        item.body = post.body;
-        item.date_created = post.date_created;
-        item.author = post.author.username;
-        item.id = post._id;
+        item.body = comment.body;
+        item.date_created = comment.date_created;
+        item.author = comment.author.username;
+        item.id = comment._id;
         holdingArr.push(item);
       });
       setComments({
         ...comments,
         commentsDisplay: holdingArr,
       });
-      
     }
-    console.log(comments);
   }, [commentsData]);
 
   const handleCategoryClick = (parentId) => {
@@ -367,7 +363,6 @@ function PostView(props) {
   //   console.log(userId);
   // };
 
- 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
@@ -430,28 +425,33 @@ function PostView(props) {
             />
           )}
         </div>
-        <br/>
+        <br />
         <div>
-          <InputComment
-          category={ catid }
-          postId={ postId }
-          // author
-          />
+          {props.isLoggedIn ? (
+            <InputComment
+              category={catid}
+              postId={postId}
+              // author
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div>
-          {comments.commentsDisplay.map((post) => (
+          {comments.commentsDisplay.map((comment) => (
             <Comments
-              author={post.author}
-              body={post.body}
-              date_created={post.date_created}
+              key={comment.id}
+              author={comment.author}
+              body={comment.body}
+              date_created={comment.date_created}
             />
           ))}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {/* {props.isLoggedIn ? <InputPost /> : <LoginBox />} */}
-          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
+          {props.isLoggedIn ? <InputPost /> : ""}
           <br></br>
           <OrderedList
             // selectItem={handleUserClick}
