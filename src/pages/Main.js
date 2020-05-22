@@ -212,15 +212,7 @@ function Main(props) {
       setTopPoints({
         ...topPoints,
         title: "Top Points Holders",
-        topPoints: topPointsData.users.sort(function(a,b){
-          if(a.points > b.points) { 
-            return -1; 
-          }
-          else if(a.points < b.poins) {
-              return 1; 
-          }
-          return 0;
-        }).map((user) => ({
+        topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
@@ -240,15 +232,7 @@ function Main(props) {
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-        topPosters: topPostersData.users.sort(function(a,b){
-          if(a.posts.length > b.posts.length) { 
-            return -1; 
-          }
-          else if(a.posts.length < b.posts.length) {
-              return 1; 
-          }
-          return 0;
-        }).map((user) => ({
+        topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
         })),
