@@ -28,6 +28,11 @@ const GET_USERS = gql`
       _id
       username
       email
+      isMod
+      posts {
+        title 
+      }
+      points
     }
   }
 `;
@@ -163,7 +168,15 @@ function SubCategoryView(props) {
       setTopPoints({
         ...topPoints,
         title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
+        topPoints: topPointsData.users.sort(function(a,b){
+          if(a.points > b.points) { 
+            return -1; 
+          }
+          else if(a.points < b.poins) {
+              return 1; 
+          }
+          return 0;
+        }).map((user) => ({
           name: user.username,
           id: user._id,
         })),
@@ -182,7 +195,15 @@ function SubCategoryView(props) {
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-        topPosters: topPostersData.users.map((user) => ({
+        topPosters: topPostersData.users.sort(function(a,b){
+          if(a.posts.length > b.posts.length) { 
+            return -1; 
+          }
+          else if(a.posts.length < b.posts.length) {
+              return 1; 
+          }
+          return 0;
+        }).map((user) => ({
           name: user.username,
           id: user._id,
         })),
@@ -201,7 +222,7 @@ function SubCategoryView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.map((user) => ({
+        mods: modData.users.filter(user=> user.isMod).map((user) => ({
           name: user.username,
           id: user._id,
         })),
