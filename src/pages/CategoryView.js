@@ -171,28 +171,11 @@ function CategoryView(props) {
       setTopPoints({
         ...topPoints,
         title: "Top Points Holders",
-<<<<<<< HEAD
-        topPoints: topPointsData.users
-          .sort(function (a, b) {
-            if (a.points > b.points) {
-              return -1;
-            } else if (a.points < b.poins) {
-              return 1;
-            }
-            return 0;
-          })
-          .map((user) => ({
-            name: user.username,
-            id: user._id,
-            points: user.points,
-          })),
-=======
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
-          points: user.points
-        }))
->>>>>>> 7b17a518a010c231a1a32ead3a796eb724767b3f
+          points: user.points,
+        })),
       });
     }
   }, [topPointsData]);
@@ -208,28 +191,11 @@ function CategoryView(props) {
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-<<<<<<< HEAD
-        topPosters: topPostersData.users
-          .sort(function (a, b) {
-            if (a.posts.length > b.posts.length) {
-              return -1;
-            } else if (a.posts.length < b.posts.length) {
-              return 1;
-            }
-            return 0;
-          })
-          .map((user) => ({
-            name: user.username,
-            id: user._id,
-            posts: user.posts.length,
-          })),
-=======
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
-          posts: user.posts.length
+          posts: user.posts.length,
         })),
->>>>>>> 7b17a518a010c231a1a32ead3a796eb724767b3f
       });
     }
   }, [topPostersData]);
