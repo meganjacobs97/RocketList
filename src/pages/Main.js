@@ -252,10 +252,12 @@ function Main(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.filter(user=> user.isMod).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -298,7 +300,7 @@ function Main(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container rounded px-2">
           {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
           {postsLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (

@@ -30,7 +30,7 @@ const GET_USERS = gql`
       email
       isMod
       posts {
-        title 
+        title
       }
       points
     }
@@ -206,10 +206,12 @@ function SubCategoryView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.filter(user=> user.isMod).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -350,7 +352,7 @@ function SubCategoryView(props) {
         ) : (
           ""
         )}
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container px-2">
           {postsLoading ? (
             <h1>
               Loading posts in {subCategories.parentCategory} >>{" "}

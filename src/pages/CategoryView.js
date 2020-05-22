@@ -174,8 +174,8 @@ function CategoryView(props) {
         topPoints: topPointsData.users.map((user) => ({
           name: user.username,
           id: user._id,
-          points: user.points
-        }))
+          points: user.points,
+        })),
       });
     }
   }, [topPointsData]);
@@ -194,7 +194,7 @@ function CategoryView(props) {
         topPosters: topPostersData.users.map((user) => ({
           name: user.username,
           id: user._id,
-          posts: user.posts.length
+          posts: user.posts.length,
         })),
       });
     }
@@ -211,11 +211,13 @@ function CategoryView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.filter(user=> user.isMod).map((user) => ({
-          name: user.username,
-          id: user._id,
-          isMod: user.isMod
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+            isMod: user.isMod,
+          })),
       });
     }
   }, [modData]);
@@ -351,7 +353,7 @@ function CategoryView(props) {
         ) : (
           ""
         )}
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container rounded px-2">
           {postsByCatLoading ? (
             <h1>Loading posts in {subCategories.currCategory}...</h1>
           ) : (
