@@ -137,6 +137,7 @@ function PostView(props) {
   const [comments, setComments] = useState({
     commentsDisplay: [],
   });
+  const [MakeAPost, setMakeAPost] = useState(false);
 
   // Queries database to get all subcategories for a given ID!
   const {
@@ -391,7 +392,16 @@ function PostView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container px-2">
+          {MakeAPost ? (
+            <InputPost
+              category={catid}
+              list={subCategories.subCategories}
+              onChange={(value) => setMakeAPost(value)}
+            />
+          ) : (
+            ""
+          )}
           {postByIdLoading ? (
             <h1>Loading post...</h1>
           ) : (
@@ -450,8 +460,23 @@ function PostView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? <InputPost /> : <LoginBox />}
-          {props.isLoggedIn ? <InputPost /> : ""}
+          {props.isLoggedIn ? (
+            <button
+              className={
+                (MakeAPost ? "hidden " : "block ") +
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              }
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setMakeAPost(true);
+              }}
+            >
+              Make a Post
+            </button>
+          ) : (
+            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
+          )}
           <br></br>
           <OrderedList
             // selectItem={handleUserClick}
