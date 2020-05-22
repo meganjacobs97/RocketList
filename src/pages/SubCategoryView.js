@@ -30,7 +30,7 @@ const GET_USERS = gql`
       email
       isMod
       posts {
-        title 
+        title
       }
       points
     }
@@ -168,18 +168,19 @@ function SubCategoryView(props) {
       setTopPoints({
         ...topPoints,
         title: "Top Points Holders",
-        topPoints: topPointsData.users.sort(function(a,b){
-          if(a.points > b.points) { 
-            return -1; 
-          }
-          else if(a.points < b.poins) {
-              return 1; 
-          }
-          return 0;
-        }).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        topPoints: topPointsData.users
+          .sort(function (a, b) {
+            if (a.points > b.points) {
+              return -1;
+            } else if (a.points < b.poins) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [topPointsData]);
@@ -195,18 +196,19 @@ function SubCategoryView(props) {
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-        topPosters: topPostersData.users.sort(function(a,b){
-          if(a.posts.length > b.posts.length) { 
-            return -1; 
-          }
-          else if(a.posts.length < b.posts.length) {
-              return 1; 
-          }
-          return 0;
-        }).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        topPosters: topPostersData.users
+          .sort(function (a, b) {
+            if (a.posts.length > b.posts.length) {
+              return -1;
+            } else if (a.posts.length < b.posts.length) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [topPostersData]);
@@ -222,10 +224,12 @@ function SubCategoryView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.filter(user=> user.isMod).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -366,7 +370,7 @@ function SubCategoryView(props) {
         ) : (
           ""
         )}
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container px-2">
           {postsLoading ? (
             <h1>
               Loading posts in {subCategories.parentCategory} >>{" "}

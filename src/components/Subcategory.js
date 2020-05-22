@@ -23,7 +23,7 @@ export default function Subcategory(props) {
         {props.list ? (
           props.list.map((item) => (
             <Link
-            key={item.id}
+              key={item.id}
               className="text-RocketJames"
               to={`/category/${props.parentId}/subcategory/${item.id}`}
             >
@@ -43,14 +43,4 @@ export default function Subcategory(props) {
       </ul>
     </div>
   );
-  // return (
-  //   <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-  //     <h1 className="text-center">
-  //       Subcategories in {props.parent_category}
-  //     </h1>
-  //     <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
-  //       <li>{Subcategories}</li>
-  //     </ol>
-  //   </div>
-  // )
 }

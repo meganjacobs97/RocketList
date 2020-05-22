@@ -187,7 +187,7 @@ function Account() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container rounded px-2">
           {postsByUserIdLoading ? (
             <h1>Loading your posts...</h1>
           ) : (
@@ -212,7 +212,9 @@ function Account() {
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
           <h1 className="text-center font-bold">Welcome {user.username}</h1>
-          <p>Total Number Of Posts: {user.totalPosts} </p>
+          <p className="ml-4 mr-4 mb-1 text-center">
+            Total Number Of Posts: {user.totalPosts}{" "}
+          </p>
         </div>
       </Col>
     </VGrid>

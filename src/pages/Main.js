@@ -212,18 +212,19 @@ function Main(props) {
       setTopPoints({
         ...topPoints,
         title: "Top Points Holders",
-        topPoints: topPointsData.users.sort(function(a,b){
-          if(a.points > b.points) { 
-            return -1; 
-          }
-          else if(a.points < b.poins) {
-              return 1; 
-          }
-          return 0;
-        }).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        topPoints: topPointsData.users
+          .sort(function (a, b) {
+            if (a.points > b.points) {
+              return -1;
+            } else if (a.points < b.poins) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [topPointsData]);
@@ -240,18 +241,19 @@ function Main(props) {
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-        topPosters: topPostersData.users.sort(function(a,b){
-          if(a.posts.length > b.posts.length) { 
-            return -1; 
-          }
-          else if(a.posts.length < b.posts.length) {
-              return 1; 
-          }
-          return 0;
-        }).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        topPosters: topPostersData.users
+          .sort(function (a, b) {
+            if (a.posts.length > b.posts.length) {
+              return -1;
+            } else if (a.posts.length < b.posts.length) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [topPostersData]);
@@ -268,10 +270,12 @@ function Main(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.filter(user=> user.isMod).map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -314,7 +318,7 @@ function Main(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container rounded px-2">
           {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
           {postsLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (
