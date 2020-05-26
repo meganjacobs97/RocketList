@@ -30,6 +30,7 @@ const GET_USERS = gql`
     users {
       _id
       username
+      isMod
       email
     }
   }
@@ -238,7 +239,9 @@ function PostView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.map((user) => ({
+        mods: modData.users
+        .filter((user) => user.isMod)
+        .map((user) => ({
           name: user.username,
           id: user._id,
         })),
