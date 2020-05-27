@@ -6,11 +6,11 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
+// import OrderedList from "../components/OrderedList";
+// import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
@@ -58,6 +58,7 @@ function PostView(props) {
         date_created
         author {
           username
+          _id
         }
         category {
             name
@@ -240,11 +241,11 @@ function PostView(props) {
         ...categoryMods,
         title: "Moderators",
         mods: modData.users
-        .filter((user) => user.isMod)
-        .map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -320,6 +321,7 @@ function PostView(props) {
           id: postByIdData.post._id,
           title: postByIdData.post.title,
           author: postByIdData.post.author.username,
+          authorId: postByIdData.post.author._id,
           date_created: postByIdData.post.date_created,
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
@@ -434,12 +436,11 @@ function PostView(props) {
               category={newPosts.postDisplay.parentCategory}
               categoryId={subCategories.parentCategoryId}
               author={newPosts.postDisplay.author}
+              authorId={newPosts.postDisplay.authorId}
               postId={newPosts.postDisplay.id}
             />
           )}
-        </div>
-        <br />
-        <div>
+          <br />
           {props.isLoggedIn ? (
             <InputComment
               category={catid}
@@ -449,8 +450,6 @@ function PostView(props) {
           ) : (
             ""
           )}
-        </div>
-        <div>
           {comments.commentsDisplay.map((comment) => (
             <Comments
               key={comment.id}
@@ -481,14 +480,14 @@ function PostView(props) {
             <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
           )}
           <br></br>
-          <OrderedList
+          <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
+          <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
@@ -496,7 +495,7 @@ function PostView(props) {
           {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
-        <UnorderedList
+        <Mods
           // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}

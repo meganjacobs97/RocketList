@@ -54,14 +54,16 @@ function Account() {
         date_created
         _id
       }
-      postsByCategory {
-      category{
-       name
-     }
-     }
     }
-    }
-    `;
+  }
+  `;
+
+  // postsByCategory {
+  //   category {
+  //     name
+  //   }
+  // }
+  
   // const GET_POSTS_BY_USER = gql`
   //   query {
   //     postsByUser(userId: "${userId}") {
@@ -92,6 +94,7 @@ function Account() {
     data: postsByUserIdData,
   } = useQuery(GET_POSTS_BY_USER_ID);
 
+  console.log(useQuery(GET_POSTS_BY_USER_ID));
   console.log(postsByUserIdData);
 
   // const {
@@ -200,6 +203,7 @@ function Account() {
               body={post.body}
               date_created={post.date_created}
               author={postsByUserIdData.user.username}
+              authorId={userId}
               postId={post.postId}
               subcategoryId={post.subCatId}
               subcategory={post.subCategory}

@@ -24,7 +24,7 @@ function TopCat(props) {
             <Link key={item.id} className="text-RocketJessie" to={`/category/${item.id}`}>
 
               <li
-                className="state-rendered-item"
+                className="state-rendered-item hover:underline"
                 data-name={item.name}
                 id={item.id}
               >

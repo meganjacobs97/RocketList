@@ -5,12 +5,11 @@ import { useQuery } from "@apollo/react-hooks";
 
 const ADD_REPLY = gql`
   mutation AddReply(
-    $body: String, 
-    $postId: String, 
+    $body: String
+    $postId: String
     $categoryId: String
     $authorId: String
-    ) {
-
+  ) {
     createReply(
       replyInput: {
         body: $body
@@ -25,10 +24,10 @@ const ADD_REPLY = gql`
       body
       date_created
       _id
-      category{
+      category {
         _id
       }
-      post{
+      post {
         _id
       }
     }
@@ -40,7 +39,7 @@ function InputComment(props) {
   const ParentCategory = props.categoryId;
   const ParentPost = props.postId;
   //get userId out of local storage
-  const userId = JSON.parse(localStorage.getItem("userId")); 
+  const userId = JSON.parse(localStorage.getItem("userId"));
 
   return (
     <form
@@ -51,7 +50,7 @@ function InputComment(props) {
             body: e.target.commentBody.value,
             postId: ParentPost,
             categoryID: ParentCategory,
-            authorId: userId
+            authorId: userId,
           },
         });
         e.target.commentBody.value = "";
@@ -61,12 +60,9 @@ function InputComment(props) {
         name="commentBody"
         type="text"
         placeholder="Comment"
-        className="w-11/12 border border-black rounded"
+        className="border border-black rounded"
       />
-      <button
-        type="submit"
-        className="w-1/12 bg-RocketRed hover:bg-red-900 rounded"
-      >
+      <button type="submit" className="bg-RocketRed hover:bg-red-900 rounded px-1">
         Submit
       </button>
     </form>
