@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
 const ADD_REPLY = gql`
   mutation AddReply(
@@ -38,8 +37,23 @@ function InputComment(props) {
   const [addComment, { data }] = useMutation(ADD_REPLY);
   const ParentCategory = props.categoryId;
   const ParentPost = props.postId;
-  //get userId out of local storage
-  const userId = JSON.parse(localStorage.getItem("userId"));
+  ///get user id by checking token and comparing it to db
+  const userToken = JSON.parse(localStorage.getItem("token"));
+  const GET_CURRENT_USER = gql`
+  query {
+    currentUser(token: "${userToken}") {
+        _id
+        username
+      }
+  }
+`;
+
+// Queries database to get user info based on logged in user (token)
+const {
+  loading: currUserLoading,
+  error: currUserError,
+  data: currUserData,
+} = useQuery(GET_CURRENT_USER);
 
   return (
     <form
@@ -50,7 +64,7 @@ function InputComment(props) {
             body: e.target.commentBody.value,
             postId: ParentPost,
             categoryID: ParentCategory,
-            authorId: userId,
+            authorId: currUserData.currentUser._id,
           },
         });
         e.target.commentBody.value = "";
