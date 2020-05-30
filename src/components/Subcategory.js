@@ -7,8 +7,9 @@ export default function Subcategory(props) {
       {props.category ? (
         <h1 className="text-center font-bold">
           Subcategories in{" "}
+          <br/>
           <Link
-            className="text-RocketJessie"
+            className="text-RocketJessie hover:underline"
             to={`/category/${props.parentId}`}
           >
             {props.category}
@@ -29,7 +30,7 @@ export default function Subcategory(props) {
             >
               <li
                 key={item.id}
-                className="state-rendered-item"
+                className="state-rendered-item hover:underline"
                 data-name={item.name}
                 id={item.id}
               >

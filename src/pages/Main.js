@@ -4,8 +4,9 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods"
 import LoginBox from "../components/LoginBox";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
@@ -82,6 +83,7 @@ const GET_ALL_POSTS = gql`
       }
       author {
         username
+        _id
       }
     }
   }
@@ -270,6 +272,7 @@ function Main(props) {
         postsDisplay: postsData.posts.map((post) => ({
           id: post._id,
           author: post.author.username,
+          authorId: post.author._id,
           title: post.title,
           date_created: post.date_created,
           body: post.body,
@@ -310,6 +313,7 @@ function Main(props) {
               body={post.body}
               date_created={post.date_created}
               author={post.author}
+              authorId={post.authorId}
               postId={post.id}
               subcategoryId={post.subCatId}
               subcategory={post.subCategory}
@@ -327,16 +331,13 @@ function Main(props) {
             <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
           )}
           <br></br>
-          <OrderedList category={topPoints.title} list={topPoints.topPoints} />
+          <TPoints category={topPoints.title} list={topPoints.topPoints} />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
-            category={topPosters.title}
-            list={topPosters.topPosters}
-          />
+          <TPoster category={topPosters.title} list={topPosters.topPosters} />
           {topPostersLoading ? <Loading /> : ""}
           <br></br>
-          <UnorderedList
+          <Mods
             category={categoryMods.title}
             list={categoryMods.mods}
           />
