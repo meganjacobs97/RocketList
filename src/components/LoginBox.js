@@ -7,6 +7,7 @@ function LoginBox(props) {
   //username and password states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginMessage, setLoginMessage] = useState("Enter a username and password"); 
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -17,28 +18,39 @@ function LoginBox(props) {
 
   //handles creating account
   const CREATE_ACCOUNT = gql`
-    mutation createUser($username: String, $password: String) {
-      createUser(userInput: { username: $username, password: $password }) {
-        username
-        _id
-      }
-    }
+  mutation createAcc($username: String!, $password: String!) {
+    createAcc(credentials: {
+      username: $username, 
+      password: $password
+    }) {
+      username
+      userId
+      token		
+    }    
+  }
   `;
 
   const [createUser, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
 
   useEffect(() => {
-    if (error) console.log(error);
-
+    if (error) {
+      console.log(error)
+      setLoginMessage("Username taken"); 
+    };
     if (!loading && data) {
-      props.setIsLoggedIn(true);
-      localStorage.setItem("userId", JSON.stringify(data.createUser._id));
-      localStorage.setItem(
-        "username",
-        JSON.stringify(data.createUser.username)
-      );
-      setUsername("");
-      setPassword("");
+      if(data.createAcc) {
+        props.setIsLoggedIn(true);
+        //store username, id, and token in local storage 
+        localStorage.setItem("userId", JSON.stringify(data.createAcc.userId));
+        localStorage.setItem("username",JSON.stringify(data.createAcc.username));
+        localStorage.setItem("token",JSON.stringify(data.createAcc.token)); 
+        //reset username and password fields 
+        setUsername("");
+        setPassword("");
+      }
+      else {
+        setLoginMessage("Incorrect username or password");
+      }
     }
   }, [data, loading, error]);
 
@@ -51,15 +63,20 @@ function LoginBox(props) {
     });
   };
 
-  //handles login
+  //authentication 
+  //returns token to be stored in local storage
   const LOGIN = gql`
-    mutation signin($username: String!, $password: String!) {
-      login(username: $username, password: $password) {
-        _id
+    mutation login($username: String!, $password: String!) {
+      authenticate(credentials: {
+        username: $username, 
+        password: $password
+      }) {
         username
-      }
+        userId
+        token		
+      }    
     }
-  `;
+  `
 
   const [
     signin,
@@ -67,16 +84,24 @@ function LoginBox(props) {
   ] = useMutation(LOGIN);
 
   useEffect(() => {
-    if (SignInerror) console.log(SignInerror);
+    if (SignInerror) {
+      console.log(SignInerror)
+      setLoginMessage("Incorrect username or password"); 
+    };
     if (!SignInloading && SignIndata) {
-      props.setIsLoggedIn(true);
-      localStorage.setItem("userId", JSON.stringify(SignIndata.login._id));
-      localStorage.setItem(
-        "username",
-        JSON.stringify(SignIndata.login.username)
-      );
-      setUsername("");
-      setPassword("");
+      if(SignIndata.authenticate) {
+        props.setIsLoggedIn(true);
+        //store username, id, and token in local storage 
+        localStorage.setItem("userId", JSON.stringify(SignIndata.authenticate.userId));
+        localStorage.setItem("username",JSON.stringify(SignIndata.authenticate.username));
+        localStorage.setItem("token",JSON.stringify(SignIndata.authenticate.token)); 
+        //reset username and password fields 
+        setUsername("");
+        setPassword("");
+      }
+      else {
+        setLoginMessage("Incorrect username or password");
+      }
     }
   }, [SignIndata, SignInloading, SignInerror]);
 
@@ -135,7 +160,7 @@ function LoginBox(props) {
             onChange={handlePasswordChange}
           />
           <p className="text-red-500 text-xs italic">
-            Please choose a password.
+            {loginMessage}
           </p>
         </div>
         <div className="flex items-center justify-between">
