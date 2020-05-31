@@ -17,6 +17,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: createHttpLink({
+    // uri: "http://localhost:3001/graphql"
     uri: "https://rocketlistbackend.herokuapp.com/graphql",
   }),
   cache: new InMemoryCache(),
