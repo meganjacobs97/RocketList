@@ -19,7 +19,7 @@ export default function Navbar(props) {
       </div>
       <div id="navbar" className="flex flex-col">
         <div>
-          <h1 className="flex justify-center font-bold">
+          <h1 className="flex justify-center text-xl">
             Welcome to RocketList!
           </h1>
         </div>
