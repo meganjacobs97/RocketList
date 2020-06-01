@@ -36,6 +36,16 @@ function Account() {
       }
     }
   `;
+  const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: {
+      sortByPosts: true
+    }) {
+      name
+      _id
+    }
+  }
+`; 
   const GET_POSTS_BY_USER_ID = gql`
   query {
     user(id: "${userId}") {
@@ -86,7 +96,7 @@ function Account() {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
 
   const {
     loading: postsByUserIdLoading,

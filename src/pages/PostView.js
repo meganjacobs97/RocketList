@@ -43,6 +43,16 @@ const GET_ALLCATS = gql`
     }
   }
 `;
+const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: {
+      sortByPosts: true
+    }) {
+      name
+      _id
+    }
+  }
+`; 
 
 function PostView(props) {
   const { catid } = useParams();
@@ -159,7 +169,7 @@ function PostView(props) {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
   const {
     loading: topPointsLoading,
