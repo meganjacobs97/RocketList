@@ -5,7 +5,7 @@ function Mods(props) {
  
   const mod = props.name;
   return (
-    <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">
+    <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel shadow-lg">
       <h1 className="text-center font-bold">Mods</h1>
       <ul className="ml-4 mr-4 mb-1 text-center">
       {props.list ? (

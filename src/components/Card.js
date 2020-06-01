@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Card(props) {
   return (
     <div
-      className="border-2 border-RocketJames container rounded my-2"
+      className="border-2 border-RocketJames container rounded my-2 shadow-md px-2 py-1"
       id={props.postId}
     >
       <Link
