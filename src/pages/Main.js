@@ -28,6 +28,20 @@ const GET_USERS = gql`
     }
   }
 `;
+const GET_TOPPOSTERS = gql`
+  query {
+    users(sortByPosts: true) {
+      _id
+      username
+      email
+      isMod
+      posts {
+        title
+      }
+      points
+    }
+  }
+`;
 const GET_SUBCATS = gql`
   query {
     subcategories {
@@ -160,7 +174,7 @@ function Main(props) {
     loading: topPostersLoading,
     error: topPostersError,
     data: topPostersData,
-  } = useQuery(GET_USERS);
+  } = useQuery(GET_TOPPOSTERS);
   // Queries database to get mods (placeholder)
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
