@@ -4,6 +4,7 @@ import R from "./Photo/R.png";
 import Popper from "popper.js";
 import { useDispatch } from "react-redux";
 import { SIGN_IN } from "../actions";
+import client from "../apollo-client";
 
 export default function Hamburger() {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ export default function Hamburger() {
             to="/"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => {
+              client.clearStore();
               localStorage.clear();
               dispatch(SIGN_IN());
             }}

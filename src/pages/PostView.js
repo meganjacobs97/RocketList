@@ -6,11 +6,11 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
+// import OrderedList from "../components/OrderedList";
+// import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
@@ -31,6 +31,7 @@ const GET_USERS = gql`
     users {
       _id
       username
+      isMod
       email
     }
   }
@@ -38,6 +39,14 @@ const GET_USERS = gql`
 const GET_ALLCATS = gql`
   query {
     categories {
+      name
+      _id
+    }
+  }
+`;
+const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
@@ -61,6 +70,7 @@ function PostView() {
         date_created
         author {
           username
+          _id
         }
         category {
             name
@@ -160,7 +170,7 @@ function PostView() {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
   const {
     loading: topPointsLoading,
@@ -241,10 +251,12 @@ function PostView() {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -320,6 +332,7 @@ function PostView() {
           id: postByIdData.post._id,
           title: postByIdData.post.title,
           author: postByIdData.post.author.username,
+          authorId: postByIdData.post.author._id,
           date_created: postByIdData.post.date_created,
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
@@ -430,12 +443,11 @@ function PostView() {
               category={newPosts.postDisplay.parentCategory}
               categoryId={subCategories.parentCategoryId}
               author={newPosts.postDisplay.author}
+              authorId={newPosts.postDisplay.authorId}
               postId={newPosts.postDisplay.id}
             />
           )}
-        </div>
-        <br />
-        <div>
+          <br />
           {isLoggedIn ? (
             <InputComment
               category={catid}
@@ -445,8 +457,6 @@ function PostView() {
           ) : (
             ""
           )}
-        </div>
-        <div>
           {comments.commentsDisplay.map((comment) => (
             <Comments
               key={comment.id}
@@ -477,14 +487,14 @@ function PostView() {
             <LoginBox />
           )}
           <br></br>
-          <OrderedList
+          <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
+          <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
@@ -492,7 +502,7 @@ function PostView() {
           {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
-        <UnorderedList
+        <Mods
           // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}

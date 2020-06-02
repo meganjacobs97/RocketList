@@ -5,13 +5,13 @@ import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
-import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
-import queryForSubCatsByParentId from "../utils/API";
+// import Posts from "../components/Posts";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
+// import OrderedList from "../components/OrderedList";
+// import UnorderedList from "../components/UnorderedList";
+// import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
 import Card from "../components/Card";
@@ -48,6 +48,17 @@ const GET_ALLCATS = gql`
   }
 `;
 
+const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: {
+      sortByPosts: true
+    }) {
+      name
+      _id
+    }
+  }
+`; 
+
 // import { connect } from 'react-redux'
 
 function SubCategoryView() {
@@ -79,6 +90,7 @@ function SubCategoryView() {
         date_created
         author {
           username
+          _id
         }
       }
     }
@@ -136,7 +148,7 @@ function SubCategoryView() {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
   const {
     loading: topPointsLoading,
@@ -293,6 +305,7 @@ function SubCategoryView() {
           body: post.body,
           date_created: post.date_created,
           author: post.author.username,
+          authorId: post.author._id,
           id: post._id,
           subCategoryId: subcatid,
           // subCategory: "Lorem ipsum and yada, subcategory", // works
@@ -383,6 +396,7 @@ function SubCategoryView() {
                 body={post.body}
                 date_created={post.date_created}
                 author={post.author}
+                authorId={post.authorId}
                 postId={post.id}
                 subcategoryId={post.subCategoryId}
                 // subcategory={post.subCategory} // doesn't work
@@ -416,14 +430,14 @@ function SubCategoryView() {
             <LoginBox />
           )}
           <br></br>
-          <OrderedList
+          <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
+          <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
@@ -431,7 +445,7 @@ function SubCategoryView() {
           {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
-        <UnorderedList
+        <Mods
           // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}

@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { Make_Post } from "../actions";
 import { useDispatch } from "react-redux";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
 const ADD_POST = gql`
   mutation AddPost(
@@ -30,8 +31,26 @@ function InputPost(props) {
   const dispatch = useDispatch();
   //get user id out of local storage
   const userId = JSON.parse(localStorage.getItem("userId"));
+  //get user id by checking token and comparing it to db
+  const userToken = JSON.parse(localStorage.getItem("token"));
+  const GET_CURRENT_USER = gql`
+  query {
+    currentUser(token: "${userToken}") {
+        _id
+        username
+      }
+  }
+`;
+
+  // Queries database to get user info based on logged in user (token)
+  const {
+    loading: currUserLoading,
+    error: currUserError,
+    data: currUserData,
+  } = useQuery(GET_CURRENT_USER);
+
   const subCat = props.list;
-  console.log(subCat);
+  // console.log(subCat);
   const [dropDownValue, setDropDownValue] = useState("");
   useEffect(() => {
     if (props.list.length > 0) {
@@ -46,6 +65,7 @@ function InputPost(props) {
   const [addPost, { data }] = useMutation(ADD_POST);
   // console.log(subCat);
   const ParentCategory = props.category;
+
   return (
     <form
       onSubmit={(e) => {
@@ -56,7 +76,7 @@ function InputPost(props) {
             body: e.target.postBody.value,
             subcategory: dropDownValue,
             category: ParentCategory,
-            author: userId,
+            author: currUserData.currentUser._id,
           },
         });
         e.target.postTitle.value = "";

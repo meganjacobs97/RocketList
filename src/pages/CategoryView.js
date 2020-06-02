@@ -6,11 +6,9 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
 // import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
@@ -47,6 +45,17 @@ const GET_ALLCATS = gql`
   }
 `;
 
+const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: {
+      sortByPosts: true
+    }) {
+      name
+      _id
+    }
+  }
+`; 
+
 // import { connect } from 'react-redux'
 
 function CategoryView() {
@@ -81,6 +90,7 @@ function CategoryView() {
           date_created
           author {
             username
+            _id
           }
         }
       }
@@ -141,7 +151,7 @@ function CategoryView() {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
   const {
     loading: topPointsLoading,
@@ -305,6 +315,7 @@ function CategoryView() {
           item.body = post.body;
           item.date_created = post.date_created;
           item.author = post.author.username;
+          item.authorId = post.author._id
           item.postId = post._id;
           item.subCatId = subCategId;
           item.subCategory = subCategName;
@@ -375,6 +386,7 @@ function CategoryView() {
                 body={post.body}
                 date_created={post.date_created}
                 author={post.author}
+                authorId={post.authorId}
                 postId={post.postId}
                 subcategoryId={post.subCatId}
                 subcategory={post.subCategory}
@@ -406,14 +418,14 @@ function CategoryView() {
             <LoginBox />
           )}
           <br></br>
-          <OrderedList
+          <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
+          <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
@@ -421,7 +433,7 @@ function CategoryView() {
           {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
-        <UnorderedList
+        <Mods
           // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}

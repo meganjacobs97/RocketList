@@ -9,6 +9,9 @@ function LoginBox() {
   //username and password states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginMessage, setLoginMessage] = useState(
+    "Enter a username and password"
+  );
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -21,10 +24,11 @@ function LoginBox() {
 
   //handles creating account
   const CREATE_ACCOUNT = gql`
-    mutation createUser($username: String, $password: String) {
-      createUser(userInput: { username: $username, password: $password }) {
+    mutation createAcc($username: String!, $password: String!) {
+      createAcc(credentials: { username: $username, password: $password }) {
         username
-        _id
+        userId
+        token
       }
     }
   `;
@@ -32,17 +36,26 @@ function LoginBox() {
   const [createUser, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
 
   useEffect(() => {
-    if (error) console.log(error);
-
+    if (error) {
+      console.log(error);
+      setLoginMessage("Username taken");
+    }
     if (!loading && data) {
-      dispatch(SIGN_IN());
-      localStorage.setItem("userId", JSON.stringify(data.createUser._id));
-      localStorage.setItem(
-        "username",
-        JSON.stringify(data.createUser.username)
-      );
-      setUsername("");
-      setPassword("");
+      if (data.createAcc) {
+        dispatch(SIGN_IN());
+        //store username, id, and token in local storage
+        localStorage.setItem("userId", JSON.stringify(data.createAcc.userId));
+        localStorage.setItem(
+          "username",
+          JSON.stringify(data.createAcc.username)
+        );
+        localStorage.setItem("token", JSON.stringify(data.createAcc.token));
+        //reset username and password fields
+        setUsername("");
+        setPassword("");
+      } else {
+        setLoginMessage("Incorrect username or password");
+      }
     }
   }, [data, loading, error]);
 
@@ -55,12 +68,14 @@ function LoginBox() {
     });
   };
 
-  //handles login
+  //authentication
+  //returns token to be stored in local storage
   const LOGIN = gql`
-    mutation signin($username: String!, $password: String!) {
-      login(username: $username, password: $password) {
-        _id
+    mutation login($username: String!, $password: String!) {
+      authenticate(credentials: { username: $username, password: $password }) {
         username
+        userId
+        token
       }
     }
   `;
@@ -71,16 +86,32 @@ function LoginBox() {
   ] = useMutation(LOGIN);
 
   useEffect(() => {
-    if (SignInerror) console.log(SignInerror);
+    if (SignInerror) {
+      console.log(SignInerror);
+      setLoginMessage("Incorrect username or password");
+    }
     if (!SignInloading && SignIndata) {
-      dispatch(SIGN_IN());
-      localStorage.setItem("userId", JSON.stringify(SignIndata.login._id));
-      localStorage.setItem(
-        "username",
-        JSON.stringify(SignIndata.login.username)
-      );
-      setUsername("");
-      setPassword("");
+      if (SignIndata.authenticate) {
+        dispatch(SIGN_IN());
+        //store username, id, and token in local storage
+        localStorage.setItem(
+          "userId",
+          JSON.stringify(SignIndata.authenticate.userId)
+        );
+        localStorage.setItem(
+          "username",
+          JSON.stringify(SignIndata.authenticate.username)
+        );
+        localStorage.setItem(
+          "token",
+          JSON.stringify(SignIndata.authenticate.token)
+        );
+        //reset username and password fields
+        setUsername("");
+        setPassword("");
+      } else {
+        setLoginMessage("Incorrect username or password");
+      }
     }
   }, [SignIndata, SignInloading, SignInerror]);
 
@@ -138,9 +169,7 @@ function LoginBox() {
             value={password}
             onChange={handlePasswordChange}
           />
-          <p className="text-red-500 text-xs italic">
-            Please choose a password.
-          </p>
+          <p className="text-red-500 text-xs italic">{loginMessage}</p>
         </div>
         <div className="flex items-center justify-between">
           <button
