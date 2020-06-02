@@ -6,10 +6,8 @@ function Card(props) {
     <div
       className="border-2 border-RocketJames container rounded my-2"
       id={props.postId}
-      
     >
       <Link
-        
         to={`/category/${props.categoryId}/subcategory/${props.subcategoryId}/post/${props.postId}`}
       >
         <h1>
@@ -23,21 +21,19 @@ function Card(props) {
       <p>
         Posted under:{" "}
         <Link
-          
-          className="text-RocketJames"
+          className="text-RocketJames hover:underline"
           to={`/category/${props.categoryId}/subcategory/${props.subcategoryId}`}
         >
           {props.subcategory}
         </Link>{" "}
         in{" "}
         <Link
-          
-          className="text-RocketJessie"
+          className="text-RocketJessie hover:underline"
           to={`/category/${props.categoryId}`}
         >
           {props.category}
         </Link>{" "}
-        by {props.author}
+        by{" "} <Link className="hover:underline" to={`/profile/${props.authorId}`}>{props.author}</Link>
       </p>
     </div>
   );

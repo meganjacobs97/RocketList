@@ -19,14 +19,12 @@ function TopCat(props) {
     <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
       <h1 className="text-center font-bold">{sorted.category}</h1>
       <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
-
         {sorted.list ? (
           sorted.list.map((item) => (
-            <Link className="text-RocketJessie" to={`/category/${item.id}`}>
+            <Link key={item.id} className="text-RocketJessie" to={`/category/${item.id}`}>
 
               <li
-                key={item.id}
-                className="state-rendered-item"
+                className="state-rendered-item hover:underline"
                 data-name={item.name}
                 id={item.id}
               >

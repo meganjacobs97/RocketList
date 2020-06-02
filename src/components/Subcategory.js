@@ -7,8 +7,9 @@ export default function Subcategory(props) {
       {props.category ? (
         <h1 className="text-center font-bold">
           Subcategories in{" "}
+          <br/>
           <Link
-            className="text-RocketJessie"
+            className="text-RocketJessie hover:underline"
             to={`/category/${props.parentId}`}
           >
             {props.category}
@@ -23,13 +24,13 @@ export default function Subcategory(props) {
         {props.list ? (
           props.list.map((item) => (
             <Link
-            key={item.id}
+              key={item.id}
               className="text-RocketJames"
               to={`/category/${props.parentId}/subcategory/${item.id}`}
             >
               <li
                 key={item.id}
-                className="state-rendered-item"
+                className="state-rendered-item hover:underline"
                 data-name={item.name}
                 id={item.id}
               >
@@ -43,14 +44,4 @@ export default function Subcategory(props) {
       </ul>
     </div>
   );
-  // return (
-  //   <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-  //     <h1 className="text-center">
-  //       Subcategories in {props.parent_category}
-  //     </h1>
-  //     <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
-  //       <li>{Subcategories}</li>
-  //     </ol>
-  //   </div>
-  // )
 }

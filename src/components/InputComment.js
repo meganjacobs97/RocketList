@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
 const ADD_REPLY = gql`
   mutation AddReply(
-    $body: String, 
-    $postId: String, 
+    $body: String
+    $postId: String
     $categoryId: String
     $authorId: String
-    ) {
-
+  ) {
     createReply(
       replyInput: {
         body: $body
@@ -25,10 +23,10 @@ const ADD_REPLY = gql`
       body
       date_created
       _id
-      category{
+      category {
         _id
       }
-      post{
+      post {
         _id
       }
     }
@@ -39,8 +37,23 @@ function InputComment(props) {
   const [addComment, { data }] = useMutation(ADD_REPLY);
   const ParentCategory = props.categoryId;
   const ParentPost = props.postId;
-  //get userId out of local storage
-  const userId = JSON.parse(localStorage.getItem("userId")); 
+  ///get user id by checking token and comparing it to db
+  const userToken = JSON.parse(localStorage.getItem("token"));
+  const GET_CURRENT_USER = gql`
+  query {
+    currentUser(token: "${userToken}") {
+        _id
+        username
+      }
+  }
+`;
+
+// Queries database to get user info based on logged in user (token)
+const {
+  loading: currUserLoading,
+  error: currUserError,
+  data: currUserData,
+} = useQuery(GET_CURRENT_USER);
 
   return (
     <form
@@ -51,7 +64,7 @@ function InputComment(props) {
             body: e.target.commentBody.value,
             postId: ParentPost,
             categoryID: ParentCategory,
-            authorId: userId
+            authorId: currUserData.currentUser._id,
           },
         });
         e.target.commentBody.value = "";
@@ -61,12 +74,9 @@ function InputComment(props) {
         name="commentBody"
         type="text"
         placeholder="Comment"
-        className="w-11/12 border border-black rounded"
+        className="border border-black rounded"
       />
-      <button
-        type="submit"
-        className="w-1/12 bg-RocketRed hover:bg-red-900 rounded"
-      >
+      <button type="submit" className="bg-RocketRed hover:bg-red-900 rounded px-1">
         Submit
       </button>
     </form>

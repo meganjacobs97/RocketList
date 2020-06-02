@@ -2,22 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function UnorderedList(props) {
-  // const clickTest = (param) => {
-  //   // console.log(event.target);
-  //   const query = `{
-  //     category(id: "${param}") {
-  //       name
-  //       _id
-  //       subcategories {
-  //         name
-  //         _id
-  //       }
-  //     }
-  //   }
-  // `
-  //   console.log(param);
-  //   console.log(query);
-  // };
 
   return (
     <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel">

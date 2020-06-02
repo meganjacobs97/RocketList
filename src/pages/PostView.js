@@ -6,11 +6,11 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
+// import OrderedList from "../components/OrderedList";
+// import UnorderedList from "../components/UnorderedList";
 import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
@@ -23,13 +23,15 @@ import { useQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import InputComment from "../components/InputComment";
 
-// import { connect } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
+import { Make_Post } from "../actions";
 
 const GET_USERS = gql`
   query {
     users {
       _id
       username
+      isMod
       email
     }
   }
@@ -42,11 +44,22 @@ const GET_ALLCATS = gql`
     }
   }
 `;
+const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: { sortByPosts: true }) {
+      name
+      _id
+    }
+  }
+`;
 
-function PostView(props) {
+function PostView() {
   const { catid } = useParams();
   const { subcatid } = useParams();
   const { postId } = useParams();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const MakeAPost = useSelector((state) => state.MakeAPost);
+  const dispatch = useDispatch();
 
   const GET_POST_BY_ID = gql`
   query {
@@ -57,6 +70,7 @@ function PostView(props) {
         date_created
         author {
           username
+          _id
         }
         category {
             name
@@ -156,7 +170,7 @@ function PostView(props) {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
   const {
     loading: topPointsLoading,
@@ -178,7 +192,7 @@ function PostView(props) {
     loading: postByIdLoading,
     error: postByIdError,
     data: postByIdData,
-  } = useQuery(GET_POST_BY_ID) ;
+  } = useQuery(GET_POST_BY_ID);
 
   // Queries database to get comments
   const {
@@ -237,10 +251,12 @@ function PostView(props) {
       setCategoryMods({
         ...categoryMods,
         title: "Moderators",
-        mods: modData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
+        mods: modData.users
+          .filter((user) => user.isMod)
+          .map((user) => ({
+            name: user.username,
+            id: user._id,
+          })),
       });
     }
   }, [modData]);
@@ -316,12 +332,13 @@ function PostView(props) {
           id: postByIdData.post._id,
           title: postByIdData.post.title,
           author: postByIdData.post.author.username,
+          authorId: postByIdData.post.author._id,
           date_created: postByIdData.post.date_created,
           body: postByIdData.post.body,
           parentCategory: postByIdData.post.category.name,
           subCategory: postByIdData.post.subcategory.name,
-          subCategoryId: subcatid
-        }, 
+          subCategoryId: subcatid,
+        },
       });
       setSubCategories({
         ...subCategories,
@@ -335,24 +352,20 @@ function PostView(props) {
   useEffect(() => {
     if (commentsData) {
       let holdingArr = [...comments.commentsDisplay];
-      
       const commentsById = commentsData.replies;
-      commentsById.forEach((post) => {
-        console.log(post);
+      commentsById.forEach((comment) => {
         let item = {};
-        item.body = post.body;
-        item.date_created = post.date_created;
-        item.author = post.author.username;
-        item.id = post._id;
+        item.body = comment.body;
+        item.date_created = comment.date_created;
+        item.author = comment.author.username;
+        item.id = comment._id;
         holdingArr.push(item);
       });
       setComments({
         ...comments,
         commentsDisplay: holdingArr,
       });
-      
     }
-    console.log(comments);
   }, [commentsData]);
 
   const handleCategoryClick = (parentId) => {
@@ -367,7 +380,6 @@ function PostView(props) {
   //   console.log(userId);
   // };
 
- 
   return (
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
@@ -396,7 +408,12 @@ function PostView(props) {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        <div className="border-2 border-RocketBlack container rounded px-2">
+        <div className="container px-2">
+          {MakeAPost ? (
+            <InputPost category={catid} list={subCategories.subCategories} />
+          ) : (
+            ""
+          )}
           {postByIdLoading ? (
             <h1>Loading post...</h1>
           ) : (
@@ -426,41 +443,58 @@ function PostView(props) {
               category={newPosts.postDisplay.parentCategory}
               categoryId={subCategories.parentCategoryId}
               author={newPosts.postDisplay.author}
+              authorId={newPosts.postDisplay.authorId}
               postId={newPosts.postDisplay.id}
             />
           )}
-        </div>
-        <br/>
-        <div>
-          <InputComment
-          category={ catid }
-          postId={ postId }
-          // author
-          />
-        </div>
-        <div>
-          {comments.commentsDisplay.map((post) => (
+          <br />
+          {isLoggedIn ? (
+            <InputComment
+              category={catid}
+              postId={postId}
+              // author
+            />
+          ) : (
+            ""
+          )}
+          {comments.commentsDisplay.map((comment) => (
             <Comments
-              author={post.author}
-              body={post.body}
-              date_created={post.date_created}
+              key={comment.id}
+              author={comment.author}
+              body={comment.body}
+              date_created={comment.date_created}
             />
           ))}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {/* {props.isLoggedIn ? <InputPost /> : <LoginBox />} */}
-          {/* {props.isLoggedIn ? <InputPost /> : ""} */}
+          {isLoggedIn ? (
+            <button
+              className={
+                (MakeAPost ? "hidden " : "block ") +
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              }
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Make_Post());
+              }}
+            >
+              Make a Post
+            </button>
+          ) : (
+            <LoginBox />
+          )}
           <br></br>
-          <OrderedList
+          <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
+          <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
@@ -468,7 +502,7 @@ function PostView(props) {
           {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
-        <UnorderedList
+        <Mods
           // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}
