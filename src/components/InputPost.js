@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
 import { Make_Post } from "../actions";
 import { useDispatch } from "react-redux";
 import { useQuery, useMutation } from "@apollo/react-hooks";

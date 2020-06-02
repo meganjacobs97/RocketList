@@ -9,3 +9,9 @@ export const Make_Post = () => {
     type: "Make_Post",
   };
 };
+
+export const Token = () => {
+  return {
+    type: "SIGN_IN",
+  };
+};

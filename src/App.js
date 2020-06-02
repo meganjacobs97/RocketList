@@ -11,12 +11,20 @@ import Chat from "./components/Chat";
 import Join from "./components/Join";
 import PostView from "./pages/PostView";
 import AccountPage from "./pages/AccountPage";
+import { useDispatch } from "react-redux";
+import { Token } from "./actions";
+const token = JSON.parse(localStorage.getItem("token"));
+
 // import Footer from "./components/Footer";
 
 const UserId = JSON.parse(localStorage.getItem("userId"));
 
 const App = () => {
   document.title = "RocketList";
+  const dispatch = useDispatch();
+  if (token) {
+    dispatch(Token());
+  }
 
   return (
     <Router>
