@@ -36,6 +36,16 @@ function Account() {
       }
     }
   `;
+  const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: {
+      sortByPosts: true
+    }) {
+      name
+      _id
+    }
+  }
+`; 
   const GET_POSTS_BY_USER_ID = gql`
   query {
     user(id: "${userId}") {
@@ -54,14 +64,16 @@ function Account() {
         date_created
         _id
       }
-      postsByCategory {
-      category{
-       name
-     }
-     }
     }
-    }
-    `;
+  }
+  `;
+
+  // postsByCategory {
+  //   category {
+  //     name
+  //   }
+  // }
+  
   // const GET_POSTS_BY_USER = gql`
   //   query {
   //     postsByUser(userId: "${userId}") {
@@ -84,7 +96,7 @@ function Account() {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
 
   const {
     loading: postsByUserIdLoading,
@@ -92,6 +104,7 @@ function Account() {
     data: postsByUserIdData,
   } = useQuery(GET_POSTS_BY_USER_ID);
 
+  console.log(useQuery(GET_POSTS_BY_USER_ID));
   console.log(postsByUserIdData);
 
   // const {
@@ -200,6 +213,7 @@ function Account() {
               body={post.body}
               date_created={post.date_created}
               author={postsByUserIdData.user.username}
+              authorId={userId}
               postId={post.postId}
               subcategoryId={post.subCatId}
               subcategory={post.subCategory}

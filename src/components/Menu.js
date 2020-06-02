@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import R from "./Photo/R.png";
 import Popper from "popper.js";
+import { useDispatch } from "react-redux";
+import { SIGN_IN } from "../actions";
+import client from "../apollo-client";
 
-export default function Hamburger(props) {
+export default function Hamburger() {
+  const dispatch = useDispatch();
   const [dropdownPopoverShow, setDropdownPopoverShow] = useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -59,8 +63,9 @@ export default function Hamburger(props) {
             to="/"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => {
+              client.clearStore();
               localStorage.clear();
-              props.setIsLoggedIn(false);
+              dispatch(SIGN_IN());
             }}
           >
             logout

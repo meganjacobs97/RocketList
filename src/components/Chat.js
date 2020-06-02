@@ -7,6 +7,10 @@ import Messages from './Messages';
 import InfoBar from './InfoBar';
 import Input from './Input';
 
+//for gql
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+
 let socket;
 
 const Chat = ({ location }) => {
@@ -17,13 +21,34 @@ const Chat = ({ location }) => {
   const [messages, setMessages] = useState([]);
   const ENDPOINT = 'https://rocket-list-server.herokuapp.com/'
 
+  //get user id by checking token and comparing it to db
+  const userToken = JSON.parse(localStorage.getItem("token"));
+  const GET_CURRENT_USER = gql`
+  query {
+    currentUser(token: "${userToken}") {
+        _id
+        username
+      }
+  }
+`;
+
+  const {
+      loading: currUserLoading,
+      error: currUserError,
+      data: currUserData,
+  } = useQuery(GET_CURRENT_USER);
+
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
+
+    //query for username 
+    // Queries database to get user info based on logged in user (token)
+     
 
     socket = io(ENDPOINT);
 
     setRoom(room);
-    setName(name)
+    setName(currUserData.currentUser.name)
 
     socket.emit('join', { name, room }, (error) => {
       if(error) {

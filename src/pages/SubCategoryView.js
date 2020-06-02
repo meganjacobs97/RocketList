@@ -5,13 +5,13 @@ import Col from "../components/Col";
 import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
-import Posts from "../components/Posts";
-// import TPoints from "../components/TPoints";
-// import TPoster from "../components/TPoster";
-// import Mods from "../components/Mods";
-import OrderedList from "../components/OrderedList";
-import UnorderedList from "../components/UnorderedList";
-import queryForSubCatsByParentId from "../utils/API";
+// import Posts from "../components/Posts";
+import TPoints from "../components/TPoints";
+import TPoster from "../components/TPoster";
+import Mods from "../components/Mods";
+// import OrderedList from "../components/OrderedList";
+// import UnorderedList from "../components/UnorderedList";
+// import queryForSubCatsByParentId from "../utils/API";
 import LoginBox from "../components/LoginBox";
 import InputPost from "../components/InputPost";
 import Card from "../components/Card";
@@ -21,6 +21,8 @@ import Loading from "../components/Loading";
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
+import { useSelector, useDispatch } from "react-redux";
+import { Make_Post } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -46,11 +48,25 @@ const GET_ALLCATS = gql`
   }
 `;
 
+const GET_TOPCATS = gql`
+  query {
+    categories(categoryInput: {
+      sortByPosts: true
+    }) {
+      name
+      _id
+    }
+  }
+`; 
+
 // import { connect } from 'react-redux'
 
-function SubCategoryView(props) {
+function SubCategoryView() {
   const { catid } = useParams();
   const { subcatid } = useParams();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const MakeAPost = useSelector((state) => state.MakeAPost);
+  const dispatch = useDispatch();
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -74,11 +90,26 @@ function SubCategoryView(props) {
         date_created
         author {
           username
+          _id
         }
       }
     }
   }
 `;
+
+const GET_TOPPOSTERS = gql`
+    query {
+      postsByCategory (categoryId: "${catid}") {
+        user {
+          username
+          _id
+          posts {
+            _id
+          }
+        }
+      }
+    }
+  `
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -112,7 +143,6 @@ function SubCategoryView(props) {
   const [posts, setPosts] = useState({
     postsDisplay: [],
   });
-  const [MakeAPost, setMakeAPost] = useState(false);
 
   // Queries database to get all subcategories for a given ID!
   const {
@@ -132,7 +162,7 @@ function SubCategoryView(props) {
     loading: topCatLoading,
     error: topCatError,
     data: topCatData,
-  } = useQuery(GET_ALLCATS);
+  } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
   const {
     loading: topPointsLoading,
@@ -144,7 +174,7 @@ function SubCategoryView(props) {
     loading: topPostersLoading,
     error: topPostersError,
     data: topPostersData,
-  } = useQuery(GET_USERS);
+  } = useQuery(GET_TOPPOSTERS);
   // Queries database to get mods (placeholder)
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
@@ -187,9 +217,10 @@ function SubCategoryView(props) {
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-        topPosters: topPostersData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
+        topPosters: topPostersData.postsByCategory.map((postsByCategory) => ({
+          name: postsByCategory.user.username,
+          id: postsByCategory.user._id,
+          posts: postsByCategory.posts
         })),
       });
     }
@@ -289,6 +320,7 @@ function SubCategoryView(props) {
           body: post.body,
           date_created: post.date_created,
           author: post.author.username,
+          authorId: post.author._id,
           id: post._id,
           subCategoryId: subcatid,
           // subCategory: "Lorem ipsum and yada, subcategory", // works
@@ -344,11 +376,7 @@ function SubCategoryView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         {MakeAPost ? (
-          <InputPost
-            category={catid}
-            list={subCategories.subCategories}
-            onChange={(value) => setMakeAPost(value)}
-          />
+          <InputPost category={catid} list={subCategories.subCategories} />
         ) : (
           ""
         )}
@@ -383,6 +411,7 @@ function SubCategoryView(props) {
                 body={post.body}
                 date_created={post.date_created}
                 author={post.author}
+                authorId={post.authorId}
                 postId={post.id}
                 subcategoryId={post.subCategoryId}
                 // subcategory={post.subCategory} // doesn't work
@@ -398,7 +427,7 @@ function SubCategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? (
+          {isLoggedIn ? (
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
@@ -407,23 +436,23 @@ function SubCategoryView(props) {
               type="button"
               onClick={(e) => {
                 e.preventDefault();
-                setMakeAPost(true);
+                dispatch(Make_Post());
               }}
             >
               Make a Post
             </button>
           ) : (
-            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
+            <LoginBox />
           )}
           <br></br>
-          <OrderedList
+          <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
           <br></br>
-          <OrderedList
+          <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
@@ -431,7 +460,7 @@ function SubCategoryView(props) {
           {topPostersLoading ? <Loading /> : ""}
         </div>
         <br></br>
-        <UnorderedList
+        <Mods
           // selectItem={handleUserClick}
           category={categoryMods.title}
           list={categoryMods.mods}
