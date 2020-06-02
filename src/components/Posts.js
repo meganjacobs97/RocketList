@@ -27,9 +27,11 @@ function PostCard(props) {
         </Link>{" "}
         by {props.author}
       </p>
+
       <Link to={`/join/${props.postId}`}>
         <button className="underline text-blue-700">Chat</button>
       </Link>
+      {/* <button onClick={() => window.open(`https://rocketlist.herokuapp.com/join/${props.postId}`, "Join Chat")}>Chat</button> */}
     </div>
   );
 }

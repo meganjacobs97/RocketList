@@ -16,14 +16,16 @@ const Chat = ({ location }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const ENDPOINT = 'https://rocket-list-server.herokuapp.com/'
-
+  
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
+    const { room } = queryString.parse(location.search);
+    
+    const userId = JSON.parse(localStorage.getItem("userId"));
 
     socket = io(ENDPOINT);
 
     setRoom(room);
-    setName(name)
+    setName(userId)
 
     socket.emit('join', { name, room }, (error) => {
       if(error) {
