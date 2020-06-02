@@ -93,6 +93,20 @@ function CategoryView(props) {
   }
   `;
 
+  const GET_TOPPOSTERS = gql`
+    query {
+      postsByCategory (categoryId: "${catid}") {
+        user {
+          username
+          _id
+          posts {
+            _id
+          }
+        }
+      }
+    }
+  `
+
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // Creates and sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
   const [subCategories, setSubCategories] = useState({
@@ -157,7 +171,7 @@ function CategoryView(props) {
     loading: topPostersLoading,
     error: topPostersError,
     data: topPostersData,
-  } = useQuery(GET_USERS);
+  } = useQuery(GET_TOPPOSTERS);
   // Queries database to get mods (placeholder)
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
@@ -198,13 +212,14 @@ function CategoryView(props) {
       });
     }
     if (topPostersData) {
+      console.log(topPostersData)
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
-        topPosters: topPostersData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-          posts: user.posts.length,
+        topPosters: topPostersData.postsByCategory.map((postsByCategory) => ({
+          name: postsByCategory.user.username,
+          id: postsByCategory.user._id,
+          posts: postsByCategory.posts
         })),
       });
     }
