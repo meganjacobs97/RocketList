@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
+import { Make_Post } from "../actions";
+import { useDispatch } from "react-redux";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
 const ADD_POST = gql`
@@ -25,6 +27,9 @@ const ADD_POST = gql`
 `;
 
 function InputPost(props) {
+  const dispatch = useDispatch();
+  //get user id out of local storage
+  const userId = JSON.parse(localStorage.getItem("userId"));
   //get user id by checking token and comparing it to db
   const userToken = JSON.parse(localStorage.getItem("token"));
   const GET_CURRENT_USER = gql`
@@ -76,7 +81,7 @@ function InputPost(props) {
         e.target.postTitle.value = "";
         e.target.postBody.value = "";
         {
-          props.onChange(false);
+          dispatch(Make_Post());
           alert("Post Submitted Successfully");
         }
       }}
@@ -168,7 +173,7 @@ function InputPost(props) {
         <button
           className="bg-RocketJessie text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="button"
-          onClick={() => props.onChange(false)}
+          onClick={() => dispatch(Make_Post())}
         >
           Cancel
         </button>

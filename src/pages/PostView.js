@@ -23,7 +23,8 @@ import { useQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import InputComment from "../components/InputComment";
 
-// import { connect } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
+import { Make_Post } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -45,19 +46,20 @@ const GET_ALLCATS = gql`
 `;
 const GET_TOPCATS = gql`
   query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
   }
-`; 
+`;
 
-function PostView(props) {
+function PostView() {
   const { catid } = useParams();
   const { subcatid } = useParams();
   const { postId } = useParams();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const MakeAPost = useSelector((state) => state.MakeAPost);
+  const dispatch = useDispatch();
 
   const GET_POST_BY_ID = gql`
   query {
@@ -149,7 +151,6 @@ function PostView(props) {
   const [comments, setComments] = useState({
     commentsDisplay: [],
   });
-  const [MakeAPost, setMakeAPost] = useState(false);
 
   // Queries database to get all subcategories for a given ID!
   const {
@@ -409,11 +410,7 @@ function PostView(props) {
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="container px-2">
           {MakeAPost ? (
-            <InputPost
-              category={catid}
-              list={subCategories.subCategories}
-              onChange={(value) => setMakeAPost(value)}
-            />
+            <InputPost category={catid} list={subCategories.subCategories} />
           ) : (
             ""
           )}
@@ -451,7 +448,7 @@ function PostView(props) {
             />
           )}
           <br />
-          {props.isLoggedIn ? (
+          {isLoggedIn ? (
             <InputComment
               category={catid}
               postId={postId}
@@ -472,7 +469,7 @@ function PostView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? (
+          {isLoggedIn ? (
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
@@ -481,13 +478,13 @@ function PostView(props) {
               type="button"
               onClick={(e) => {
                 e.preventDefault();
-                setMakeAPost(true);
+                dispatch(Make_Post());
               }}
             >
               Make a Post
             </button>
           ) : (
-            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
+            <LoginBox />
           )}
           <br></br>
           <TPoints

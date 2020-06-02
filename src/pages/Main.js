@@ -10,6 +10,7 @@ import Mods from "../components/Mods"
 import LoginBox from "../components/LoginBox";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -114,8 +115,8 @@ const GET_ALL_POSTS = gql`
   }
 `;
 
-function Main(props) {
-  const isLoggedIn = props.isLoggedIn;
+function Main() {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -350,11 +351,7 @@ function Main(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? (
-            ""
-          ) : (
-            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
-          )}
+          {isLoggedIn ? "" : <LoginBox />}
           <br></br>
           <TPoints category={topPoints.title} list={topPoints.topPoints} />
           {topPointsLoading ? <Loading /> : ""}
