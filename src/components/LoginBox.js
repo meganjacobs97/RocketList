@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 //import context
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import { useDispatch } from "react-redux";
+import { SIGN_IN } from "../actions";
 
-function LoginBox(props) {
+function LoginBox() {
   //username and password states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginMessage, setLoginMessage] = useState("Enter a username and password"); 
+  const [loginMessage, setLoginMessage] = useState(
+    "Enter a username and password"
+  );
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -16,39 +20,40 @@ function LoginBox(props) {
     setPassword(event.target.value);
   };
 
+  const dispatch = useDispatch();
+
   //handles creating account
   const CREATE_ACCOUNT = gql`
-  mutation createAcc($username: String!, $password: String!) {
-    createAcc(credentials: {
-      username: $username, 
-      password: $password
-    }) {
-      username
-      userId
-      token		
-    }    
-  }
+    mutation createAcc($username: String!, $password: String!) {
+      createAcc(credentials: { username: $username, password: $password }) {
+        username
+        userId
+        token
+      }
+    }
   `;
 
   const [createUser, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
 
   useEffect(() => {
     if (error) {
-      console.log(error)
-      setLoginMessage("Username taken"); 
-    };
+      console.log(error);
+      setLoginMessage("Username taken");
+    }
     if (!loading && data) {
-      if(data.createAcc) {
-        props.setIsLoggedIn(true);
-        //store username, id, and token in local storage 
+      if (data.createAcc) {
+        dispatch(SIGN_IN());
+        //store username, id, and token in local storage
         localStorage.setItem("userId", JSON.stringify(data.createAcc.userId));
-        localStorage.setItem("username",JSON.stringify(data.createAcc.username));
-        localStorage.setItem("token",JSON.stringify(data.createAcc.token)); 
-        //reset username and password fields 
+        localStorage.setItem(
+          "username",
+          JSON.stringify(data.createAcc.username)
+        );
+        localStorage.setItem("token", JSON.stringify(data.createAcc.token));
+        //reset username and password fields
         setUsername("");
         setPassword("");
-      }
-      else {
+      } else {
         setLoginMessage("Incorrect username or password");
       }
     }
@@ -63,20 +68,17 @@ function LoginBox(props) {
     });
   };
 
-  //authentication 
+  //authentication
   //returns token to be stored in local storage
   const LOGIN = gql`
     mutation login($username: String!, $password: String!) {
-      authenticate(credentials: {
-        username: $username, 
-        password: $password
-      }) {
+      authenticate(credentials: { username: $username, password: $password }) {
         username
         userId
-        token		
-      }    
+        token
+      }
     }
-  `
+  `;
 
   const [
     signin,
@@ -85,21 +87,29 @@ function LoginBox(props) {
 
   useEffect(() => {
     if (SignInerror) {
-      console.log(SignInerror)
-      setLoginMessage("Incorrect username or password"); 
-    };
+      console.log(SignInerror);
+      setLoginMessage("Incorrect username or password");
+    }
     if (!SignInloading && SignIndata) {
-      if(SignIndata.authenticate) {
-        props.setIsLoggedIn(true);
-        //store username, id, and token in local storage 
-        localStorage.setItem("userId", JSON.stringify(SignIndata.authenticate.userId));
-        localStorage.setItem("username",JSON.stringify(SignIndata.authenticate.username));
-        localStorage.setItem("token",JSON.stringify(SignIndata.authenticate.token)); 
-        //reset username and password fields 
+      if (SignIndata.authenticate) {
+        dispatch(SIGN_IN());
+        //store username, id, and token in local storage
+        localStorage.setItem(
+          "userId",
+          JSON.stringify(SignIndata.authenticate.userId)
+        );
+        localStorage.setItem(
+          "username",
+          JSON.stringify(SignIndata.authenticate.username)
+        );
+        localStorage.setItem(
+          "token",
+          JSON.stringify(SignIndata.authenticate.token)
+        );
+        //reset username and password fields
         setUsername("");
         setPassword("");
-      }
-      else {
+      } else {
         setLoginMessage("Incorrect username or password");
       }
     }
@@ -159,9 +169,7 @@ function LoginBox(props) {
             value={password}
             onChange={handlePasswordChange}
           />
-          <p className="text-red-500 text-xs italic">
-            {loginMessage}
-          </p>
+          <p className="text-red-500 text-xs italic">{loginMessage}</p>
         </div>
         <div className="flex items-center justify-between">
           <button

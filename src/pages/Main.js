@@ -10,6 +10,7 @@ import Mods from "../components/Mods"
 import LoginBox from "../components/LoginBox";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -17,6 +18,20 @@ import { useQuery } from "@apollo/react-hooks";
 const GET_USERS = gql`
   query {
     users {
+      _id
+      username
+      email
+      isMod
+      posts {
+        title
+      }
+      points
+    }
+  }
+`;
+const GET_TOPPOSTERS = gql`
+  query {
+    users(sortByPosts: true) {
       _id
       username
       email
@@ -100,8 +115,8 @@ const GET_ALL_POSTS = gql`
   }
 `;
 
-function Main(props) {
-  const isLoggedIn = props.isLoggedIn;
+function Main() {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -160,7 +175,7 @@ function Main(props) {
     loading: topPostersLoading,
     error: topPostersError,
     data: topPostersData,
-  } = useQuery(GET_USERS);
+  } = useQuery(GET_TOPPOSTERS);
   // Queries database to get mods (placeholder)
   const { loading: modLoading, error: modError, data: modData } = useQuery(
     GET_USERS
@@ -336,11 +351,7 @@ function Main(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? (
-            ""
-          ) : (
-            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
-          )}
+          {isLoggedIn ? "" : <LoginBox />}
           <br></br>
           <TPoints category={topPoints.title} list={topPoints.topPoints} />
           {topPointsLoading ? <Loading /> : ""}
