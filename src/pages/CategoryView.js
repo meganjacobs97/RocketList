@@ -21,6 +21,9 @@ import Loading from "../components/Loading";
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
+import { useSelector, useDispatch } from "react-redux";
+import { Make_Post } from "../actions";
+
 const GET_USERS = gql`
   query {
     users {
@@ -46,8 +49,10 @@ const GET_ALLCATS = gql`
 
 // import { connect } from 'react-redux'
 
-function CategoryView(props) {
+function CategoryView() {
   const { catid } = useParams();
+  const MakeAPost = useSelector((state) => state.MakeAPost);
+  const dispatch = useDispatch();
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -91,6 +96,9 @@ function CategoryView(props) {
     currCategory: "",
     subCategories: [],
   });
+
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -114,8 +122,6 @@ function CategoryView(props) {
   const [posts, setPosts] = useState({
     postsDisplay: [],
   });
-
-  const [MakeAPost, setMakeAPost] = useState(false);
 
   // Queries database to get all subcategories for a given ID!
   const {
@@ -345,11 +351,7 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         {MakeAPost ? (
-          <InputPost
-            category={catid}
-            list={subCategories.subCategories}
-            onChange={(value) => setMakeAPost(value)}
-          />
+          <InputPost category={catid} list={subCategories.subCategories} />
         ) : (
           ""
         )}
@@ -386,7 +388,7 @@ function CategoryView(props) {
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
-          {props.isLoggedIn ? (
+          {isLoggedIn ? (
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
@@ -395,13 +397,13 @@ function CategoryView(props) {
               type="button"
               onClick={(e) => {
                 e.preventDefault();
-                setMakeAPost(true);
+                dispatch(Make_Post());
               }}
             >
               Make a Post
             </button>
           ) : (
-            <LoginBox setIsLoggedIn={props.setIsLoggedIn} />
+            <LoginBox />
           )}
           <br></br>
           <OrderedList

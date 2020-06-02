@@ -17,52 +17,38 @@ const UserId = JSON.parse(localStorage.getItem("userId"));
 
 const App = () => {
   document.title = "RocketList";
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <Router>
       <Wrapper>
-        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Navbar />
         <Switch>
           <Route exact path="/">
             {" "}
-            <Main isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></Main>
+            <Main />
           </Route>
           <Route exact path="/category/:catid">
             {" "}
-            <CategoryView
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            ></CategoryView>
+            <CategoryView />
           </Route>
           <Route exact path="/category/:catid/subcategory/:subcatid">
             {" "}
-            <SubCategoryView
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            ></SubCategoryView>
+            <SubCategoryView />
           </Route>
           <Route
             exact
             path="/category/:catid/subcategory/:subcatid/post/:postId"
           >
             {" "}
-            <PostView
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            ></PostView>
+            <PostView />
           </Route>
           <Route path="/account/:userId">
             {" "}
-            <AccountPage
-              UserId={UserId}
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-            ></AccountPage>
+            <AccountPage UserId={UserId}></AccountPage>
           </Route>
           <Route path={`/profile/:userId`}>
             {" "}
-            <AccountPage></AccountPage>
+            <AccountPage />
           </Route>
           <Route path="/join/:id" exact component={Join} />
           <Route path="/chat" component={Chat} />

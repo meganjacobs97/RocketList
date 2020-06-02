@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 //import context
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import { useDispatch } from "react-redux";
+import { SIGN_IN } from "../actions";
 
-function LoginBox(props) {
+function LoginBox() {
   //username and password states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +16,8 @@ function LoginBox(props) {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
+  const dispatch = useDispatch();
 
   //handles creating account
   const CREATE_ACCOUNT = gql`
@@ -31,7 +35,7 @@ function LoginBox(props) {
     if (error) console.log(error);
 
     if (!loading && data) {
-      props.setIsLoggedIn(true);
+      dispatch(SIGN_IN());
       localStorage.setItem("userId", JSON.stringify(data.createUser._id));
       localStorage.setItem(
         "username",
@@ -69,7 +73,7 @@ function LoginBox(props) {
   useEffect(() => {
     if (SignInerror) console.log(SignInerror);
     if (!SignInloading && SignIndata) {
-      props.setIsLoggedIn(true);
+      dispatch(SIGN_IN());
       localStorage.setItem("userId", JSON.stringify(SignIndata.login._id));
       localStorage.setItem(
         "username",
