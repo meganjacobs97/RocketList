@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Col from "../components/Col";
+import Navbar from "../components/Navbar";
 import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
@@ -312,6 +313,8 @@ function Main() {
   }, [postsData]);
 
   return (
+    <div>
+    <Navbar cookieTrail="I am from Main.js"/>
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
@@ -367,6 +370,7 @@ function Main() {
         </div>
       </Col>
     </VGrid>
+    </div>
   );
 }
 

@@ -29,7 +29,7 @@ const App = () => {
   return (
     <Router>
       <Wrapper>
-        <Navbar />
+        <Navbar cookieTrail="I am text from App.js"/>
         <Switch>
           <Route exact path="/">
             {" "}
