@@ -4,7 +4,7 @@ import Logo from "./Photo/log.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function Navbar() {
+export default function Navbar(props) {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   return (
     <div id="top-of-page" className="grid grid-rows-2">
@@ -18,8 +18,10 @@ export default function Navbar() {
       </div>
       <div id="navbar" className="flex flex-col">
         <div>
-          <h1 className="flex justify-center font-bold">
+          <h1 className="flex justify-center text-xl">
             Welcome to RocketList!
+            <br />
+            {props.cookieTrail}
           </h1>
         </div>
         <div className="flex flex-row justify-around visible lg:invisible">
