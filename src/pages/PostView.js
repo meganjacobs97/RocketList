@@ -6,7 +6,7 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
 // import OrderedList from "../components/OrderedList";
@@ -130,10 +130,10 @@ function PostView() {
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -172,11 +172,11 @@ function PostView() {
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -202,24 +202,24 @@ function PostView() {
   } = useQuery(GET_ALL_COMMENTS_BY_ID);
 
   // on page load, updates state objects
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   useEffect(() => {
     if (topPostersLoading) {
@@ -486,13 +486,13 @@ function PostView() {
           ) : (
             <LoginBox />
           )}
-          <br></br>
+          {/* <br></br>
           <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
-          {topPointsLoading ? <Loading /> : ""}
+          {topPointsLoading ? <Loading /> : ""} */}
           <br></br>
           <TPoster
             // selectItem={handleUserClick}
