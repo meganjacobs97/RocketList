@@ -5,9 +5,9 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
-import Mods from "../components/Mods"
+import Mods from "../components/Mods";
 import LoginBox from "../components/LoginBox";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
@@ -69,14 +69,12 @@ const GET_ALLCATS = gql`
 
 const GET_TOPCATS = gql`
   query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
   }
-`; 
+`;
 
 const GET_SUBCATS_BY_CATID = (parentId) => {
   return gql`
@@ -126,10 +124,10 @@ function Main() {
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -166,11 +164,11 @@ function Main() {
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -230,24 +228,24 @@ function Main() {
   }, [allCatData]);
 
   // if top points data load, update state
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   // if top posters load, update state
   useEffect(() => {
@@ -353,17 +351,14 @@ function Main() {
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
         <div className="grid invisible lg:visible">
           {isLoggedIn ? "" : <LoginBox />}
-          <br></br>
+          {/* <br></br>
           <TPoints category={topPoints.title} list={topPoints.topPoints} />
-          {topPointsLoading ? <Loading /> : ""}
+          {topPointsLoading ? <Loading /> : ""} */}
           <br></br>
           <TPoster category={topPosters.title} list={topPosters.topPosters} />
           {topPostersLoading ? <Loading /> : ""}
           <br></br>
-          <Mods
-            category={categoryMods.title}
-            list={categoryMods.mods}
-          />
+          <Mods category={categoryMods.title} list={categoryMods.mods} />
           {modLoading ? <Loading /> : ""}
         </div>
       </Col>

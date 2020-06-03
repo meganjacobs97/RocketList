@@ -6,7 +6,7 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 // import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
 // import OrderedList from "../components/OrderedList";
@@ -50,14 +50,12 @@ const GET_ALLCATS = gql`
 
 const GET_TOPCATS = gql`
   query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
   }
-`; 
+`;
 
 // import { connect } from 'react-redux'
 
@@ -97,7 +95,7 @@ function SubCategoryView() {
   }
 `;
 
-const GET_TOPPOSTERS = gql`
+  const GET_TOPPOSTERS = gql`
     query {
       postsByCategory (categoryId: "${catid}") {
         user {
@@ -109,7 +107,7 @@ const GET_TOPPOSTERS = gql`
         }
       }
     }
-  `
+  `;
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -128,10 +126,10 @@ const GET_TOPPOSTERS = gql`
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -164,11 +162,11 @@ const GET_TOPPOSTERS = gql`
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -187,24 +185,24 @@ const GET_TOPPOSTERS = gql`
   } = useQuery(GET_POSTS_BY_SUBCATID);
 
   // on page load, updates state objects
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   useEffect(() => {
     if (topPostersLoading) {
@@ -220,7 +218,7 @@ const GET_TOPPOSTERS = gql`
         topPosters: topPostersData.postsByCategory.map((postsByCategory) => ({
           name: postsByCategory.user.username,
           id: postsByCategory.user._id,
-          posts: postsByCategory.posts
+          posts: postsByCategory.posts,
         })),
       });
     }
@@ -445,13 +443,13 @@ const GET_TOPPOSTERS = gql`
             <LoginBox />
           )}
           <br></br>
-          <TPoints
+          {/* <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
-          <br></br>
+          <br></br> */}
           <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}

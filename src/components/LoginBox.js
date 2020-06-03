@@ -125,7 +125,7 @@ function LoginBox() {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded px-4 pt-6 pb-8 mb-4 border-2 border-RocketRed">
+    <div className="bg-white shadow-2xl rounded px-8 pt-6 pb-8 mb-4">
       <form
         onSubmit={(e) => {
           e.preventDefault();

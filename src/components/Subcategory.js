@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 
 export default function Subcategory(props) {
   return (
-    <div className="container rounded border-2 border-RocketJames divide-y-2 divide-RocketSteel shadow-lg">
+    <div className="container rounded bg-white shadow-2xl divide-y-2 divide-RocketSteel">
       {props.category ? (
         <h1 className="text-center font-bold">
-          Subcategories in{" "}
-          <br/>
+          Subcategories in <br />
           <Link
             className="text-RocketJessie hover:underline"
             to={`/category/${props.parentId}`}
