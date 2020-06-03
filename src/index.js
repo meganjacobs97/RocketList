@@ -6,11 +6,8 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "@apollo/react-hooks";
 import client from "./apollo-client";
-import { createStore } from "redux";
-import allReducer from "./reducers";
 import { Provider } from "react-redux";
-
-const store = createStore(allReducer);
+import store from "./store";
 
 ReactDOM.render(
   // <React.StrictMode>
