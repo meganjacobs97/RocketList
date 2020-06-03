@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Col from "../components/Col";
+import Navbar from "../components/Navbar";
 import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";

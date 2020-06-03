@@ -4,7 +4,7 @@ import Logo from "./Photo/Logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export default function Navbar() {
+export default function Navbar(props) {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   return (
     <div id="top-of-page" className="grid grid-rows-1">
@@ -17,6 +17,13 @@ export default function Navbar() {
         <div className="flex align-center">{isLoggedIn ? <Menu /> : ""}</div>
       </div>
       <div id="navbar" className="flex flex-col">
+        <div>
+          <h1 className="flex justify-center text-xl">
+            Welcome to RocketList!
+            <br />
+            {props.cookieTrail}
+          </h1>
+        </div>
         <div className="flex flex-row justify-around visible lg:invisible">
           <div>Explore</div>
           <div>Answer</div>
