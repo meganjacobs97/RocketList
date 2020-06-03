@@ -328,7 +328,9 @@ function Main() {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="container rounded px-2">
-          {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
+          <div className="container rounded bg-white text-center shadow">
+            {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
+          </div>
           {postsLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (
             <Card
