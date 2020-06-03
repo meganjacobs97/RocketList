@@ -6,7 +6,7 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
 // import queryForSubCatsByParentId from "../utils/API";
@@ -47,14 +47,12 @@ const GET_ALLCATS = gql`
 
 const GET_TOPCATS = gql`
   query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
   }
-`; 
+`;
 
 // import { connect } from 'react-redux'
 
@@ -110,7 +108,7 @@ function CategoryView() {
         }
       }
     }
-  `
+  `;
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // Creates and sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
@@ -131,10 +129,10 @@ function CategoryView() {
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -167,11 +165,11 @@ function CategoryView() {
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -190,25 +188,25 @@ function CategoryView() {
   } = useQuery(GET_POSTS_BY_CATID);
 
   // on page load, updates state objects
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-          points: user.points,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //         points: user.points,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   useEffect(() => {
     if (topPostersLoading) {
@@ -218,14 +216,14 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      console.log(topPostersData)
+      console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
         topPosters: topPostersData.postsByCategory.map((postsByCategory) => ({
           name: postsByCategory.user.username,
           id: postsByCategory.user._id,
-          posts: postsByCategory.posts
+          posts: postsByCategory.posts,
         })),
       });
     }
@@ -330,7 +328,7 @@ function CategoryView() {
           item.body = post.body;
           item.date_created = post.date_created;
           item.author = post.author.username;
-          item.authorId = post.author._id
+          item.authorId = post.author._id;
           item.postId = post._id;
           item.subCatId = subCategId;
           item.subCategory = subCategName;
@@ -432,13 +430,13 @@ function CategoryView() {
           ) : (
             <LoginBox />
           )}
-          <br></br>
+          {/* <br></br>
           <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
-          {topPointsLoading ? <Loading /> : ""}
+          {topPointsLoading ? <Loading /> : ""} */}
           <br></br>
           <TPoster
             // selectItem={handleUserClick}

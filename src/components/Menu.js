@@ -5,6 +5,7 @@ import Popper from "popper.js";
 import { useDispatch } from "react-redux";
 import { SIGN_IN } from "../actions";
 import client from "../apollo-client";
+import OutsideClickCapture from "./OutsideClickCapture";
 
 export default function Hamburger() {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ export default function Hamburger() {
   const UserId = JSON.parse(localStorage.getItem("userId"));
 
   return (
-    <div>
+    <OutsideClickCapture handler={closeDropdownPopover}>
       <div className="relative">
         <button
           type="button"
@@ -46,7 +47,7 @@ export default function Hamburger() {
             "text-base z-50 float-left list-none text-left right-0 mt-2 w-48 py-2 bg-white rounded-lg shadow-md"
           }
         >
-          <a
+          {/* <a
             href="#"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
             onClick={(e) => e.preventDefault()}
@@ -58,7 +59,7 @@ export default function Hamburger() {
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
           >
             account settings
-          </Link>
+          </Link> */}
           <Link
             to="/"
             className="block px-4 py-2 text-RocketBlack hover:bg-RocketMeowth"
@@ -72,6 +73,6 @@ export default function Hamburger() {
           </Link>
         </div>
       </div>
-    </div>
+    </OutsideClickCapture>
   );
 }
