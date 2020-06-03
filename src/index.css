@@ -10,3 +10,10 @@ code {
 body {
   font-family: 'Manrope', sans-serif;
 }
+
+#rocketlist-logo:hover {
+  border-top: black 1px solid;
+  transition: 0.7s;
+  transform: rotate(90deg);
+  transform: rotate(-90deg);
+}

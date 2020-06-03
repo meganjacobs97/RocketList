@@ -11,7 +11,7 @@ export default function Navbar(props) {
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
           <Link to="/">
-            <img src={Logo} className="object-center ml-2 h-20" alt="logo" />
+            <img src={Logo} className="object-center ml-2 h-20" id="rocketlist-logo" alt="logo" />
           </Link>
         </div>
         <div className="flex align-center">{isLoggedIn ? <Menu /> : ""}</div>
