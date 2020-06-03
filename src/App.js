@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -26,10 +26,20 @@ const App = () => {
     dispatch(Token());
   }
 
+  // const [cookieTrail, setCookieTrail] = useState({
+  //   currLocation: "Main page"
+  // })
+
+  // useEffect(() => {
+  //   setCookieTrail({
+  //     currLocation: ""
+  //   })
+  // }, [])
+
   return (
     <Router>
       <Wrapper>
-        <Navbar cookieTrail="I am text from App.js"/>
+        <Navbar />
         <Switch>
           <Route exact path="/">
             {" "}

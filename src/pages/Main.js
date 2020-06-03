@@ -313,8 +313,6 @@ function Main() {
   }, [postsData]);
 
   return (
-    <div>
-    <Navbar cookieTrail="I am from Main.js"/>
     <VGrid size="12">
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
@@ -370,7 +368,6 @@ function Main() {
         </div>
       </Col>
     </VGrid>
-    </div>
   );
 }
 
