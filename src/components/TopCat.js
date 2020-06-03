@@ -14,11 +14,7 @@ function TopCat(props) {
   });
 
   return (
-<<<<<<< HEAD
-    <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel shadow-lg">
-=======
     <div className="container rounded bg-white shadow-2xl divide-y-2 divide-RocketSteel">
->>>>>>> development
       <h1 className="text-center font-bold">{sorted.category}</h1>
       <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
         {sorted.list ? (

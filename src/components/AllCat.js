@@ -14,7 +14,7 @@ function AllCat(props) {
               to={`/category/${item.id}`}
             >
               <li
-                className="state-rendered-item hover:underline hover:shadow-outline"
+                className="state-rendered-item hover:underline"
                 data-name={item.name}
                 id={item.id}
               >
