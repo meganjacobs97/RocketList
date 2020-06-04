@@ -18,49 +18,49 @@ body {
 
 @keyframes flyingrocket {
   0% {
-    top: 43px;
-    right: 90px;
+    top: 86px;
+    right: 180px;
     transform: rotate(120deg);
   }
   25% {
-    top: 49px;
-    right: 81px;
+    top: 98px;
+    right: 162px;
     transform: rotate(130deg);
   }
   50% {
-    top: 47px;
-    right: 65px;
+    top: 94px;
+    right: 130px;
     transform: rotate(100deg);
   }
   75% {
-    top: 38px;
-    right: 44px;
+    top: 76px;
+    right: 88px;
     transform: rotate(45deg);
   }
   90% {
-    top: 22px;
-    right: 38px;
+    top: 44px;
+    right: 76px;
     transform: rotate(0deg);
   }
   100% {
-    top: 22px;
-    right: 38px;
+    top: 44px;
+    right: 76px;
     transform: rotate(0deg);
   }
 }
 
 #rocketlist-rocket {
   position: absolute;
-  height: 29px;
-  width: 18px;
-  top: 22px;
-  right: 38px;
+  height: 58px;
+  width: 36px;
+  top: 44px;
+  right: 76px;
 }
 
 #rocketlist-logo:hover + #rocketlist-rocket {
   animation-name: flyingrocket;
   animation-duration: 1.5s;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: linear;
   /* animation-delay: 0.2s; */
   animation-iteration-count: infinite;
   /* animation-direction: alternate; */
