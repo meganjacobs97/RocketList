@@ -35,8 +35,8 @@ function Card(props) {
         <Link className="hover:underline" to={`/profile/${props.authorId}`}>
           {props.author}
         </Link>
-        </p>
-        <p className="text-xs">{props.date_created}</p>
+      </p>
+      <p className="text-xs">{props.date_created}</p>
     </div>
   );
 }
