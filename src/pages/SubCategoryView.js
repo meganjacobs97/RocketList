@@ -22,7 +22,13 @@ import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
+import {
+  Make_Post,
+  Login_Box,
+  SHOW_CATS,
+  SHOW_SUB_CATS,
+  RESET,
+} from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -68,6 +74,31 @@ function SubCategoryView() {
   const ShowSubCats = useSelector((state) => state.ShowSubCats);
   const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
+
+  const DoResetExplore = () => {
+    if (MakeAPost || ShowSubCats || ShowLoginBox === true) {
+      dispatch(RESET());
+    }
+  };
+
+  const DoResetSubCats = () => {
+    if (MakeAPost || ShowCats || ShowLoginBox === true) {
+      dispatch(RESET());
+    }
+  };
+
+  const DoResetAsk = () => {
+    if (ShowCats || ShowSubCats || ShowLoginBox === true) {
+      dispatch(RESET());
+    }
+  };
+
+  const DoResetLogin = () => {
+    if (MakeAPost || ShowCats || ShowSubCats === true) {
+      dispatch(RESET());
+    }
+  };
+
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -380,6 +411,7 @@ function SubCategoryView() {
           <div
             onClick={(e) => {
               e.preventDefault();
+              DoResetExplore();
               dispatch(SHOW_CATS());
             }}
           >
@@ -388,6 +420,7 @@ function SubCategoryView() {
           <div
             onClick={(e) => {
               e.preventDefault();
+              DoResetSubCats();
               dispatch(SHOW_SUB_CATS());
             }}
           >
@@ -397,6 +430,7 @@ function SubCategoryView() {
             <div
               onClick={(e) => {
                 e.preventDefault();
+                DoResetAsk();
                 dispatch(Make_Post());
               }}
             >
@@ -406,6 +440,7 @@ function SubCategoryView() {
             <div
               onClick={(e) => {
                 e.preventDefault();
+                DoResetLogin();
                 dispatch(Login_Box());
               }}
             >

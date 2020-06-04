@@ -20,7 +20,13 @@ import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
+import {
+  Make_Post,
+  Login_Box,
+  SHOW_CATS,
+  SHOW_SUB_CATS,
+  RESET,
+} from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -63,15 +69,27 @@ function CategoryView() {
   const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
 
-  const Resetter = () => {
-    if (ShowCats === true) {
-      dispatch(SHOW_CATS());
+  const DoResetExplore = () => {
+    if (MakeAPost || ShowSubCats || ShowLoginBox === true) {
+      dispatch(RESET());
     }
-    if (ShowSubCats === true) {
-      dispatch(SHOW_SUB_CATS());
+  };
+
+  const DoResetSubCats = () => {
+    if (MakeAPost || ShowCats || ShowLoginBox === true) {
+      dispatch(RESET());
     }
-    if (ShowLoginBox === true) {
-      dispatch(Login_Box());
+  };
+
+  const DoResetAsk = () => {
+    if (ShowCats || ShowSubCats || ShowLoginBox === true) {
+      dispatch(RESET());
+    }
+  };
+
+  const DoResetLogin = () => {
+    if (MakeAPost || ShowCats || ShowSubCats === true) {
+      dispatch(RESET());
     }
   };
 
@@ -229,7 +247,6 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
@@ -391,6 +408,7 @@ function CategoryView() {
           <div
             onClick={(e) => {
               e.preventDefault();
+              DoResetExplore();
               dispatch(SHOW_CATS());
             }}
           >
@@ -399,6 +417,7 @@ function CategoryView() {
           <div
             onClick={(e) => {
               e.preventDefault();
+              DoResetSubCats();
               dispatch(SHOW_SUB_CATS());
             }}
           >
@@ -408,6 +427,7 @@ function CategoryView() {
             <div
               onClick={(e) => {
                 e.preventDefault();
+                DoResetAsk();
                 dispatch(Make_Post());
               }}
             >
@@ -417,6 +437,7 @@ function CategoryView() {
             <div
               onClick={(e) => {
                 e.preventDefault();
+                DoResetLogin();
                 dispatch(Login_Box());
               }}
             >
