@@ -418,21 +418,21 @@ function PostView() {
             parentId={subCategories.parentCategoryId}
             list={subCategories.subCategories}
           />
-          {subCatIdLoading ? <Loading /> : ""}
+          {subCatIdLoading ? <Loading color="#A36AD1" /> : ""}
           <br></br>
           <TopCat
             // selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
-          {topCatLoading ? <Loading /> : ""}
+          {topCatLoading ? <Loading color="#BC3287" /> : ""}
           <br></br>
           <AllCat
             // selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
-          {allCatLoading ? <Loading /> : ""}
+          {allCatLoading ? <Loading color="#BC3287" /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -534,7 +534,7 @@ function PostView() {
             )}
           </div>
           {postByIdLoading ? (
-            <Loading />
+            <Loading color="#D9D9D9" />
           ) : (
             <Posts
               title={newPosts.postDisplay.title}
@@ -601,7 +601,7 @@ function PostView() {
             category={topPosters.title}
             list={topPosters.topPosters}
           />
-          {topPostersLoading ? <Loading /> : ""}
+          {topPostersLoading ? <Loading color="#220000" /> : ""}
         </div>
         <br></br>
         <Mods
@@ -609,7 +609,7 @@ function PostView() {
           category={categoryMods.title}
           list={categoryMods.mods}
         />
-        {modLoading ? <Loading /> : ""}
+        {modLoading ? <Loading color="#220000" /> : ""}
       </Col>
     </VGrid>
   );
