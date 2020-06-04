@@ -380,16 +380,18 @@ function CategoryView() {
           ""
         )}
         <div className="container rounded px-2">
-          {postsByCatLoading ? (
-            <h1>Loading posts in {subCategories.currCategory}...</h1>
-          ) : (
-            <h1>
-              Current category:{" "}
-              <Link className="text-RocketJessie" to={`/category/${catid}`}>
-                {subCategories.currCategory}
-              </Link>
-            </h1>
-          )}
+          <div className="container rounded bg-white text-center shadow">
+            {postsByCatLoading ? (
+              <h1>Loading posts in {subCategories.currCategory}...</h1>
+            ) : (
+              <h1>
+                Current category:{" "}
+                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                  {subCategories.currCategory}
+                </Link>
+              </h1>
+            )}
+          </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
             <h1>No posts in this category</h1>
           ) : (

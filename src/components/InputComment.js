@@ -48,15 +48,16 @@ function InputComment(props) {
   }
 `;
 
-// Queries database to get user info based on logged in user (token)
-const {
-  loading: currUserLoading,
-  error: currUserError,
-  data: currUserData,
-} = useQuery(GET_CURRENT_USER);
+  // Queries database to get user info based on logged in user (token)
+  const {
+    loading: currUserLoading,
+    error: currUserError,
+    data: currUserData,
+  } = useQuery(GET_CURRENT_USER);
 
   return (
     <form
+      className="w-full"
       onSubmit={(e) => {
         e.preventDefault();
         addComment({
@@ -76,7 +77,10 @@ const {
         placeholder="Comment"
         className="border border-black rounded"
       />
-      <button type="submit" className="bg-RocketRed hover:bg-red-900 rounded px-1">
+      <button
+        type="submit"
+        className="bg-RocketRed hover:bg-red-900 rounded px-1"
+      >
         Submit
       </button>
     </form>

@@ -414,23 +414,25 @@ function PostView() {
           ) : (
             ""
           )}
-          {postByIdLoading ? (
-            <h1>Loading post...</h1>
-          ) : (
-            <h1>
-              Current category:{" "}
-              <Link className="text-RocketJessie" to={`/category/${catid}`}>
-                {newPosts.postDisplay.parentCategory}
-              </Link>{" "}
-              >>{" "}
-              <Link
-                className="text-RocketJames"
-                to={`/category/${catid}/subcategory/${subcatid}`}
-              >
-                {newPosts.postDisplay.subCategory}
-              </Link>
-            </h1>
-          )}
+          <div className="container rounded bg-white text-center shadow">
+            {postByIdLoading ? (
+              <h1>Loading post...</h1>
+            ) : (
+              <h1>
+                Current category:{" "}
+                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                  {newPosts.postDisplay.parentCategory}
+                </Link>{" "}
+                >>{" "}
+                <Link
+                  className="text-RocketJames"
+                  to={`/category/${catid}/subcategory/${subcatid}`}
+                >
+                  {newPosts.postDisplay.subCategory}
+                </Link>
+              </h1>
+            )}
+          </div>
           {postByIdLoading ? (
             <Loading />
           ) : (

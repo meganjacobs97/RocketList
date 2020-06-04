@@ -5,7 +5,7 @@ function TPoints(props) {
   
   // const name = props.name;
   return (
-    <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
+    <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel shadow-lg">
       <h1 className="text-center font-bold">Top Point Holders</h1>
       <ol className="list-decimal list-inside ml-4 mr-4 mb-1 text-center">
       {props.list ? (

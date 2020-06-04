@@ -379,26 +379,28 @@ function SubCategoryView() {
           ""
         )}
         <div className="container px-2">
-          {postsLoading ? (
-            <h1>
-              Loading posts in {subCategories.parentCategory} >>{" "}
-              {subCategories.currCategory}
-            </h1>
-          ) : (
-            <h1>
-              Current category:{" "}
-              <Link className="text-RocketJessie" to={`/category/${catid}`}>
-                {subCategories.parentCategory}
-              </Link>{" "}
-              >>{" "}
-              <Link
-                className="text-RocketJames"
-                to={`/category/${catid}/subcategory/${subcatid}`}
-              >
+          <div className="container rounded bg-white text-center shadow">
+            {postsLoading ? (
+              <h1>
+                Loading posts in {subCategories.parentCategory} >>{" "}
                 {subCategories.currCategory}
-              </Link>
-            </h1>
-          )}
+              </h1>
+            ) : (
+              <h1>
+                Current category:{" "}
+                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                  {subCategories.parentCategory}
+                </Link>{" "}
+                >>{" "}
+                <Link
+                  className="text-RocketJames"
+                  to={`/category/${catid}/subcategory/${subcatid}`}
+                >
+                  {subCategories.currCategory}
+                </Link>
+              </h1>
+            )}
+          </div>
           {!postsLoading && posts.postsDisplay.length === 0 ? (
             <h1>No posts in this subcategory</h1>
           ) : (
