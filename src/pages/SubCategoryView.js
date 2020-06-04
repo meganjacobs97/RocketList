@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import FontAwesome from "react-fontawesome";
 // import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
@@ -492,12 +493,12 @@ function SubCategoryView() {
             ) : (
               <h1>
                 Current category:{" "}
-                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                <Link className="text-RocketJessie hover:underline" to={`/category/${catid}`}>
                   {subCategories.parentCategory}
                 </Link>{" "}
                 >>{" "}
                 <Link
-                  className="text-RocketJames"
+                  className="text-RocketJames hover:underline"
                   to={`/category/${catid}/subcategory/${subcatid}`}
                 >
                   {subCategories.currCategory}
@@ -506,7 +507,14 @@ function SubCategoryView() {
             )}
           </div>
           {!postsLoading && posts.postsDisplay.length === 0 ? (
-            <h1>No posts in this subcategory</h1>
+            <h1 className="shadow-2xl bg-white container rounded my-2 p-3">No posts in this subcategory yet {" "}<FontAwesome
+            className="super-crazy-colors"
+            name="rocket"
+            size="1"
+            spin
+            style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+          />
+          {" "} Be the first to create a post!</h1>
           ) : (
             posts.postsDisplay.map((post) => (
               <Card

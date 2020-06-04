@@ -522,12 +522,12 @@ function PostView() {
             ) : (
               <h1>
                 Current category:{" "}
-                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                <Link className="text-RocketJessie hover:underline" to={`/category/${catid}`}>
                   {newPosts.postDisplay.parentCategory}
                 </Link>{" "}
                 >>{" "}
                 <Link
-                  className="text-RocketJames"
+                  className="text-RocketJames hover:underline"
                   to={`/category/${catid}/subcategory/${subcatid}`}
                 >
                   {newPosts.postDisplay.subCategory}

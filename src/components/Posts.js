@@ -7,21 +7,21 @@ function PostCard(props) {
       className="shadow-2xl bg-white container rounded my-2 p-3"
       id={props.postId}
     >
-      <h1>{props.title}</h1>
+      <h1 className="text-lg font-bold">{props.title}</h1>
       <br />
       <p>{props.body}</p>
       <br />
       <p>
         Posted under:{" "}
         <Link
-          className="text-RocketJames"
+          className="text-RocketJames hover:underline"
           to={`/category/${props.categoryId}/subcategory/${props.subcategoryId}`}
         >
           {props.subcategory}
         </Link>{" "}
         in{" "}
         <Link
-          className="text-RocketJessie"
+          className="text-RocketJessie hover:underline"
           to={`/category/${props.categoryId}`}
         >
           {props.category}
@@ -33,7 +33,7 @@ function PostCard(props) {
       </p>
       <p>{props.date_created}</p>
       <button
-        className="underline text-blue-700"
+        className="hover:underline text-blue-700"
         onClick={() =>
           window.open(
             `https://rocketlist.herokuapp.com/join/${props.postId}`,
