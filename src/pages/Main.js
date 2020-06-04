@@ -370,8 +370,12 @@ function Main() {
           {ShowLoginBox ? <LoginBox /> : ""}
         </div>
         <div className="container rounded px-2">
-          <div className="container rounded bg-white text-center shadow">
-            {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
+          <div className="container rounded bg-white text-center shadow-xl">
+            {postsLoading ? (
+              <h1 className="font-bold text-xl">Loading all posts...</h1>
+            ) : (
+              <h1 className="font-bold text-xl">All posts</h1>
+            )}
           </div>
           {postsLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (

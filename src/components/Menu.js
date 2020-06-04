@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import R from "./Photo/R.png";
 import Popper from "popper.js";
 import { useDispatch } from "react-redux";
-import { SIGN_IN } from "../actions";
+import { SIGN_IN, RESET } from "../actions";
 import client from "../apollo-client";
 import OutsideClickCapture from "./OutsideClickCapture";
 
@@ -66,6 +66,7 @@ export default function Hamburger() {
             onClick={(e) => {
               client.clearStore();
               localStorage.clear();
+              dispatch(RESET());
               dispatch(SIGN_IN());
             }}
           >

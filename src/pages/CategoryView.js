@@ -479,11 +479,13 @@ function CategoryView() {
           ""
         )}
         <div className="container rounded px-2">
-          <div className="container rounded bg-white text-center shadow font-bold text-xl">
+          <div className="container rounded bg-white shadow-xl">
             {postsByCatLoading ? (
-              <h1>Loading posts in {subCategories.currCategory}...</h1>
+              <h1 className="font-bold text-xl text-center">
+                Loading posts in {subCategories.currCategory}...
+              </h1>
             ) : (
-              <h1>
+              <h1 className="font-bold text-xl text-center">
                 Current category:{" "}
                 <Link className="text-RocketJessie" to={`/category/${catid}`}>
                   {subCategories.currCategory}
@@ -492,7 +494,9 @@ function CategoryView() {
             )}
           </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
-            <h1>No posts in this category</h1>
+            <h1 className="font-bold text-xl container rounded bg-white">
+              No posts in this category
+            </h1>
           ) : (
             posts.postsDisplay.map((post) => (
               <Card
