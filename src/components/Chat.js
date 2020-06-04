@@ -39,7 +39,8 @@ const Chat = ({ location }) => {
   } = useQuery(GET_CURRENT_USER);
 
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
+    const { room } = queryString.parse(location.search);
+    
 
     //query for username 
     // Queries database to get user info based on logged in user (token)
