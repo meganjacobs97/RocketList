@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { RESET } from "../actions";
+import { useDispatch } from "react-redux";
 
 export default function Subcategory(props) {
+  const dispatch = useDispatch();
   return (
     <div className="container rounded bg-white shadow-2xl divide-y-2 divide-RocketSteel">
       {props.category ? (
@@ -26,6 +29,9 @@ export default function Subcategory(props) {
               key={item.id}
               className="text-RocketJames"
               to={`/category/${props.parentId}/subcategory/${item.id}`}
+              onClick={() => {
+                dispatch(RESET());
+              }}
             >
               <li
                 key={item.id}

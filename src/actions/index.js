@@ -33,3 +33,9 @@ export const SHOW_SUB_CATS = () => {
     type: "SHOW_SUB_CATS",
   };
 };
+
+export const RESET = () => {
+  return {
+    type: "RESET",
+  };
+};
