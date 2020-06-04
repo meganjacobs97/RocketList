@@ -12,7 +12,7 @@ export default function Navbar(props) {
       <div id="header" className="flex justify-between">
         <div className="flex align-center">
           <Link to="/">
-            <div>
+            <div className="logo-container" id="logo-container">
               <img
                 src={Logo}
                 className="object-center ml-2 h-20"
