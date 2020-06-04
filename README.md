@@ -20,7 +20,6 @@ Also note that this application has separate servers that handle the application
 Like all websites nowadays we allow for people to create accounts and login.
 
 ![login example](/public/ex-images/login.PNG)
-![loggedin example](/public/ex-images/loggedin.PNG)
 
 
 ## Make A Post

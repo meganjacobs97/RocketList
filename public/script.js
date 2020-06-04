@@ -1,8 +1,11 @@
 // console.log("connected yeet");
 
-// const categories = document.getElementsByClassName("state-rendered-item");
-// // console.log(categories)
+// var logoContainer = document.getElementById("rocketlist-logo");
 
-// categories.addEventListener("click", function(){
-//   console.log("clicked on a category")
+// logoContainer.addEventListener("mouseenter", function(){
+//   console.log("moused over")
+// })
+
+// logoContainer.addEventListener("click", function(){
+//   console.log("clicked bitch")
 // })
