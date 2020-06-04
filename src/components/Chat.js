@@ -39,7 +39,7 @@ const Chat = ({ location }) => {
   } = useQuery(GET_CURRENT_USER);
 
   useEffect(() => {
-    const { room, name } = queryString.parse(location.search);
+    const { room } = queryString.parse(location.search);
     
 
     //query for username 
