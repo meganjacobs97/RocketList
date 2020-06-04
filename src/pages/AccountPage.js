@@ -37,15 +37,13 @@ function Account() {
     }
   `;
   const GET_TOPCATS = gql`
-  query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
-      name
-      _id
+    query {
+      categories(categoryInput: { sortByPosts: true }) {
+        name
+        _id
+      }
     }
-  }
-`; 
+  `;
   const GET_POSTS_BY_USER_ID = gql`
   query {
     user(id: "${userId}") {
@@ -73,7 +71,7 @@ function Account() {
   //     name
   //   }
   // }
-  
+
   // const GET_POSTS_BY_USER = gql`
   //   query {
   //     postsByUser(userId: "${userId}") {
@@ -201,11 +199,13 @@ function Account() {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="container rounded px-2">
-          {postsByUserIdLoading ? (
-            <h1>Loading your posts...</h1>
-          ) : (
-            <h1>Your Posts</h1>
-          )}
+          <div className="container rounded bg-white text-center shadow">
+            {postsByUserIdLoading ? (
+              <h1>Loading your posts...</h1>
+            ) : (
+              <h1>Your Posts</h1>
+            )}
+          </div>
           {postsByUserIdLoading ? <Loading /> : ""}
           {posts.postsDisplay.map((post) => (
             <Card
