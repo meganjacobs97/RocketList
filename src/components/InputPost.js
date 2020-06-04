@@ -117,7 +117,7 @@ function InputPost(props) {
             className="form-select block w-full mt-1 border-2 rounded border-RocketSteel"
           >
             {subCat.map((subcategory) => {
-              console.log(subcategory);
+              // console.log(subcategory);
               return (
                 <option value={subcategory.id} key={subcategory.id} name="subcategory">
                   {subcategory.name}
