@@ -24,7 +24,7 @@ import Subcategory from "../components/Subcategory";
 import InputComment from "../components/InputComment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post } from "../actions";
+import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -59,6 +59,9 @@ function PostView() {
   const { postId } = useParams();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const MakeAPost = useSelector((state) => state.MakeAPost);
+  const ShowCats = useSelector((state) => state.ShowCats);
+  const ShowSubCats = useSelector((state) => state.ShowSubCats);
+  const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
 
   const GET_POST_BY_ID = gql`
@@ -408,6 +411,74 @@ function PostView() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        <div className="flex flex-row justify-around rounded bg-white shadow visible lg:hidden">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_CATS());
+            }}
+          >
+            Explore
+          </div>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_SUB_CATS());
+            }}
+          >
+            Subcategories
+          </div>
+          {isLoggedIn ? (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Make_Post());
+              }}
+            >
+              Ask
+            </div>
+          ) : (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Login_Box());
+              }}
+            >
+              Login
+            </div>
+          )}
+        </div>
+        <br className="lg:hidden"></br>
+        {ShowCats ? (
+          <div>
+            <AllCat
+              category={allCategories.title}
+              list={allCategories.allCategories}
+            />
+            <br className="lg:hidden"></br>
+          </div>
+        ) : (
+          ""
+        )}
+        {ShowSubCats ? (
+          <div>
+            <Subcategory
+              // selectCat={handleCategoryClick}
+              category={subCategories.parentCategory}
+              parentId={catid}
+              list={subCategories.subCategories}
+            />
+            <br className="lg:hidden"></br>
+          </div>
+        ) : (
+          ""
+        )}
+        {ShowLoginBox ? <LoginBox /> : ""}
+        {MakeAPost ? (
+          <InputPost category={catid} list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="container px-2">
           {MakeAPost ? (
             <InputPost category={catid} list={subCategories.subCategories} />

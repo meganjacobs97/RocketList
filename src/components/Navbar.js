@@ -3,7 +3,7 @@ import Menu from "./Menu";
 import Logo from "./Photo/Logo.png";
 import rocket from "./Photo/logo-rocket.png";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Navbar(props) {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -15,13 +15,13 @@ export default function Navbar(props) {
             <div className="logo-container" id="logo-container">
               <img
                 src={Logo}
-                className="object-center ml-2 h-20"
+                className="object-center ml-2 h-40"
                 id="rocketlist-logo"
                 alt="logo"
               />
               <img
                 src={rocket}
-                className="object-center ml-2 h-20"
+                className="object-center ml-2 h-40"
                 id="rocketlist-rocket"
                 alt="logo"
               />
@@ -29,20 +29,6 @@ export default function Navbar(props) {
           </Link>
         </div>
         <div className="flex align-center">{isLoggedIn ? <Menu /> : ""}</div>
-      </div>
-      <div id="navbar" className="flex flex-col">
-        <div>
-          <h1 className="flex justify-center text-xl">
-            Welcome to RocketList!
-            <br />
-            {props.cookieTrail}
-          </h1>
-        </div>
-        <div className="flex flex-row justify-around visible lg:invisible">
-          <div>Explore</div>
-          <div>Answer</div>
-          <div>Ask</div>
-        </div>
       </div>
     </div>
   );

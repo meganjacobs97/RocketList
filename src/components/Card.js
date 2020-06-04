@@ -11,13 +11,12 @@ function Card(props) {
         to={`/category/${props.categoryId}/subcategory/${props.subcategoryId}/post/${props.postId}`}
       >
         <h1>
-          <span className="underline hover:text-blue-700 hover:bg-RocketMeowth">
+          <span className="underline hover:text-blue-700 hover:bg-RocketMeowth text-lg font-bold">
             {props.title}
           </span>
         </h1>
       </Link>
-      <p>Date: {props.date_created}</p>
-      <p>
+      <p className="text-sm">
         Posted under:{" "}
         <Link
           className="text-RocketJames hover:underline"
@@ -36,6 +35,7 @@ function Card(props) {
         <Link className="hover:underline" to={`/profile/${props.authorId}`}>
           {props.author}
         </Link>
+        <p className="text-xs">{props.date_created}</p>
       </p>
     </div>
   );

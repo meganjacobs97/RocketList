@@ -11,7 +11,8 @@ import Mods from "../components/Mods";
 import LoginBox from "../components/LoginBox";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Login_Box, SHOW_CATS } from "../actions";
 
 // Query graphql
 import gql from "graphql-tag";
@@ -115,7 +116,10 @@ const GET_ALL_POSTS = gql`
 `;
 
 function Main() {
+  const dispatch = useDispatch();
+  const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const ShowCats = useSelector((state) => state.ShowCats);
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -328,6 +332,41 @@ function Main() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        <div className="flex flex-row justify-around rounded bg-white shadow visible lg:hidden">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_CATS());
+            }}
+          >
+            Explore
+          </div>
+          {isLoggedIn ? (
+            ""
+          ) : (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Login_Box());
+              }}
+            >
+              Login
+            </div>
+          )}
+        </div>
+        <br className="lg:hidden"></br>
+        {ShowCats ? (
+          <div>
+            <AllCat
+              category={allCategories.title}
+              list={allCategories.allCategories}
+            />
+            <br className="lg:hidden"></br>
+          </div>
+        ) : (
+          ""
+        )}
+        {ShowLoginBox ? <LoginBox /> : ""}
         <div className="container rounded px-2">
           <div className="container rounded bg-white text-center shadow">
             {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}

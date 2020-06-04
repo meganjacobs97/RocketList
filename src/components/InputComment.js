@@ -57,7 +57,6 @@ function InputComment(props) {
 
   return (
     <form
-      className="w-full"
       onSubmit={(e) => {
         e.preventDefault();
         addComment({
@@ -71,18 +70,20 @@ function InputComment(props) {
         e.target.commentBody.value = "";
       }}
     >
-      <input
-        name="commentBody"
-        type="text"
-        placeholder="Comment"
-        className="border border-black rounded"
-      />
-      <button
-        type="submit"
-        className="bg-RocketRed hover:bg-red-900 rounded px-1"
-      >
-        Submit
-      </button>
+      <div className="flex">
+        <input
+          name="commentBody"
+          type="text"
+          placeholder="Comment"
+          className="border border-black rounded w-full mr-2 pl-1"
+        />
+        <button
+          type="submit"
+          className="bg-RocketRed hover:bg-red-900 rounded px-3 float-right"
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 }

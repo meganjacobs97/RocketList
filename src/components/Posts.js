@@ -11,7 +11,6 @@ function PostCard(props) {
       <br />
       <p>{props.body}</p>
       <br />
-      <p>Date: {props.date_created}</p>
       <p>
         Posted under:{" "}
         <Link
@@ -32,6 +31,7 @@ function PostCard(props) {
           {props.author}
         </Link>
       </p>
+      <p>{props.date_created}</p>
       <button
         className="underline text-blue-700"
         onClick={() =>
