@@ -1,12 +1,62 @@
-/* body {
-  background-color: RocketSteel;
-} */
-
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 body {
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
+}
+
+.logo-container {
+  position: relative;
+}
+
+@keyframes flyingrocket {
+  0% {
+    top: 43px;
+    right: 90px;
+    transform: rotate(120deg)
+  }
+  25% {
+    top: 49px;
+    right: 81px;
+    transform: rotate(130deg)
+  }
+  50% {
+    top: 47px;
+    right: 65px;
+    transform: rotate(100deg)
+  }
+  75% {
+    top: 38px;
+    right: 44px;
+    transform: rotate(45deg)
+  }
+  90% {
+    top: 22px;
+    right:38px;
+    transform: rotate(0deg)
+  }
+  100% {
+    top: 22px;
+    right:38px;
+    transform: rotate(0deg)
+  }
+}
+
+#rocketlist-rocket {
+  position: absolute;
+  height: 29px;
+  width: 18px;
+  top: 22px;
+  right: 38px;
+}
+
+#rocketlist-logo:hover + #rocketlist-rocket {
+  animation-name: flyingrocket;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  /* animation-delay: 0.2s; */
+  animation-iteration-count: infinite;
+  /* animation-direction: alternate; */
 }
