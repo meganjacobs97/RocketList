@@ -49,7 +49,6 @@ function InputPost(props) {
   } = useQuery(GET_CURRENT_USER);
 
   const subCat = props.list;
-  // console.log(subCat);
   const [dropDownValue, setDropDownValue] = useState("");
   useEffect(() => {
     if (props.list.length > 0) {
@@ -62,7 +61,6 @@ function InputPost(props) {
 
   let input;
   const [addPost, { data }] = useMutation(ADD_POST);
-  // console.log(subCat);
   const ParentCategory = props.category;
 
   return (
@@ -117,9 +115,12 @@ function InputPost(props) {
             className="form-select block w-full mt-1 border-2 rounded border-RocketSteel"
           >
             {subCat.map((subcategory) => {
-              console.log(subcategory);
               return (
-                <option value={subcategory.id} name="subcategory">
+                <option
+                  value={subcategory.id}
+                  key={subcategory.id}
+                  name="subcategory"
+                >
                   {subcategory.name}
                 </option>
               );

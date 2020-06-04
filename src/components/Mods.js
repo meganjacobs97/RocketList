@@ -14,7 +14,6 @@ function Mods(props) {
                 className="state-rendered-item hover:underline"
                 id={item.id}
                 onClick={() => {
-                  //console.log(item.id)
                   //props.selectItem(item.id);
                 }}
               >

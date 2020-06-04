@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { RESET } from "../actions";
 
 function AllCat(props) {
+  const dispatch = useDispatch();
   return (
     <div className="bg-white container rounded shadow-2xl divide-y-2 divide-RocketSteel">
       <h1 className="text-center font-bold">{props.category}</h1>
@@ -12,6 +15,9 @@ function AllCat(props) {
               key={item.id}
               className="text-RocketJessie"
               to={`/category/${item.id}`}
+              onClick={() => {
+                dispatch(RESET());
+              }}
             >
               <li
                 className="state-rendered-item hover:underline"

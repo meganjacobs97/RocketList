@@ -37,7 +37,6 @@ function LoginBox() {
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       setLoginMessage("Username taken");
     }
     if (!loading && data) {
@@ -87,7 +86,6 @@ function LoginBox() {
 
   useEffect(() => {
     if (SignInerror) {
-      console.log(SignInerror);
       setLoginMessage("Incorrect username or password");
     }
     if (!SignInloading && SignIndata) {

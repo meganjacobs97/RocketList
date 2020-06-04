@@ -102,9 +102,6 @@ function Account() {
     data: postsByUserIdData,
   } = useQuery(GET_POSTS_BY_USER_ID);
 
-  console.log(useQuery(GET_POSTS_BY_USER_ID));
-  console.log(postsByUserIdData);
-
   // const {
   //   loading: postsByUserLoading,
   //   error: postsByUserError,
@@ -199,11 +196,15 @@ function Account() {
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
         <div className="container rounded px-2">
-          <div className="container rounded bg-white text-center shadow">
+          <div className="container rounded bg-white shadow-xl">
             {postsByUserIdLoading ? (
-              <h1>Loading your posts...</h1>
+              <h1 className="font-bold text-xl text-center">
+                Loading {user.username}'s posts...
+              </h1>
             ) : (
-              <h1>Your Posts</h1>
+              <h1 className="font-bold text-xl text-center">
+                {user.username}'s Posts
+              </h1>
             )}
           </div>
           {postsByUserIdLoading ? <Loading /> : ""}
@@ -219,13 +220,16 @@ function Account() {
               subcategory={post.subCategory}
               categoryId={post.parentId}
               category={post.parentCategory}
+              key={post.postId}
             />
           ))}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
-        <div className="container rounded border-2 border-RocketRed divide-y-2 divide-RocketSteel">
-          <h1 className="text-center font-bold">Welcome {user.username}</h1>
+        <div className="container rounded bg-white shadow-2xl divide-y-2 divide-RocketSteel">
+          <h1 className="text-center font-bold">
+            {user.username}'s Post Profile
+          </h1>
           <p className="ml-4 mr-4 mb-1 text-center">
             Total Number Of Posts: {user.totalPosts}{" "}
           </p>

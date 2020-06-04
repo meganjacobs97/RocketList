@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import FontAwesome from "react-fontawesome";
 // import Subcategory from "../components/Subcategory";
 import Col from "../components/Col";
 import VGrid from "../components/VGrid";
@@ -20,7 +21,13 @@ import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
+import {
+  Make_Post,
+  Login_Box,
+  SHOW_CATS,
+  SHOW_SUB_CATS,
+  RESET,
+} from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -63,15 +70,27 @@ function CategoryView() {
   const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
 
-  const Resetter = () => {
-    if (ShowCats === true) {
-      dispatch(SHOW_CATS());
+  const DoResetExplore = () => {
+    if (MakeAPost || ShowSubCats || ShowLoginBox === true) {
+      dispatch(RESET());
     }
-    if (ShowSubCats === true) {
-      dispatch(SHOW_SUB_CATS());
+  };
+
+  const DoResetSubCats = () => {
+    if (MakeAPost || ShowCats || ShowLoginBox === true) {
+      dispatch(RESET());
     }
-    if (ShowLoginBox === true) {
-      dispatch(Login_Box());
+  };
+
+  const DoResetAsk = () => {
+    if (ShowCats || ShowSubCats || ShowLoginBox === true) {
+      dispatch(RESET());
+    }
+  };
+
+  const DoResetLogin = () => {
+    if (MakeAPost || ShowCats || ShowSubCats === true) {
+      dispatch(RESET());
     }
   };
 
@@ -229,7 +248,6 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
@@ -391,6 +409,7 @@ function CategoryView() {
           <div
             onClick={(e) => {
               e.preventDefault();
+              DoResetExplore();
               dispatch(SHOW_CATS());
             }}
           >
@@ -399,6 +418,7 @@ function CategoryView() {
           <div
             onClick={(e) => {
               e.preventDefault();
+              DoResetSubCats();
               dispatch(SHOW_SUB_CATS());
             }}
           >
@@ -408,6 +428,7 @@ function CategoryView() {
             <div
               onClick={(e) => {
                 e.preventDefault();
+                DoResetAsk();
                 dispatch(Make_Post());
               }}
             >
@@ -417,6 +438,7 @@ function CategoryView() {
             <div
               onClick={(e) => {
                 e.preventDefault();
+                DoResetLogin();
                 dispatch(Login_Box());
               }}
             >
@@ -458,23 +480,39 @@ function CategoryView() {
           ""
         )}
         <div className="container rounded px-2">
-          <div className="container rounded bg-white text-center shadow font-bold text-xl">
+          <div className="container rounded bg-white shadow-xl">
             {postsByCatLoading ? (
-              <h1>Loading posts in {subCategories.currCategory}...</h1>
+              <h1 className="font-bold text-xl text-center">
+                Loading posts in {subCategories.currCategory}...
+              </h1>
             ) : (
-              <h1>
+              <h1 className="font-bold text-xl text-center">
                 Current category:{" "}
-                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                <Link
+                  className="text-RocketJessie hover:underline"
+                  to={`/category/${catid}`}
+                >
                   {subCategories.currCategory}
                 </Link>
               </h1>
             )}
           </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
-            <h1>No posts in this category</h1>
+            <h1 className="shadow-2xl bg-white container rounded text-center my-2 p-3">
+              No posts in this category yet{" "}
+              <FontAwesome
+                className="super-crazy-colors"
+                name="rocket"
+                size="1"
+                spin
+                style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+              />{" "}
+              Be the first to make a post in a subcategory!
+            </h1>
           ) : (
             posts.postsDisplay.map((post) => (
               <Card
+                key={post.postId}
                 title={post.title}
                 body={post.body}
                 date_created={post.date_created}
@@ -497,7 +535,7 @@ function CategoryView() {
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none shadow-2xl"
               }
               type="button"
               onClick={(e) => {
