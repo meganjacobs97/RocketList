@@ -340,8 +340,6 @@ function SubCategoryView() {
   // when posts, update posts state
   useEffect(() => {
     if (postsData) {
-      // console.log(postsData);
-      // console.log(postsData.subcategory.posts);
       setSubCategories({
         ...subCategories,
         currCategory: postsData.subcategory.name,
@@ -369,15 +367,10 @@ function SubCategoryView() {
   // useEffect(() => {}, [subCategories]);
 
   // const handleCategoryClick = (parentId) => {
-  //   console.log(parentId);
   //   setSubCategories({
   //     ...subCategories,
   //     parentCategoryId: parentId,
   //   });
-  // };
-
-  // const handleUserClick = (userId) => {
-  //   console.log(userId);
   // };
 
   return (
@@ -484,16 +477,19 @@ function SubCategoryView() {
         )}
         <br className="lg:hidden"></br>
         <div className="container px-2">
-          <div className="container rounded bg-white text-center shadow">
+          <div className="container rounded bg-white shadow-xl">
             {postsLoading ? (
-              <h1>
+              <h1 className="font-bold text-xl text-center">
                 Loading posts in {subCategories.parentCategory} >>{" "}
                 {subCategories.currCategory}
               </h1>
             ) : (
-              <h1>
+              <h1 className="font-bold text-xl text-center">
                 Current category:{" "}
-                <Link className="text-RocketJessie hover:underline" to={`/category/${catid}`}>
+                <Link
+                  className="text-RocketJessie hover:underline"
+                  to={`/category/${catid}`}
+                >
                   {subCategories.parentCategory}
                 </Link>{" "}
                 >>{" "}
@@ -507,14 +503,17 @@ function SubCategoryView() {
             )}
           </div>
           {!postsLoading && posts.postsDisplay.length === 0 ? (
-            <h1 className="shadow-2xl bg-white container rounded my-2 p-3">No posts in this subcategory yet {" "}<FontAwesome
-            className="super-crazy-colors"
-            name="rocket"
-            size="1"
-            spin
-            style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-          />
-          {" "} Be the first to create a post!</h1>
+            <h1 className="shadow-2xl bg-white container rounded my-2 p-3 text-center">
+              No posts in this subcategory yet{" "}
+              <FontAwesome
+                className="super-crazy-colors"
+                name="rocket"
+                size="1"
+                spin
+                style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+              />{" "}
+              Be the first to create a post!
+            </h1>
           ) : (
             posts.postsDisplay.map((post) => (
               <Card
@@ -543,7 +542,7 @@ function SubCategoryView() {
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none shadow-2xl"
               }
               type="button"
               onClick={(e) => {

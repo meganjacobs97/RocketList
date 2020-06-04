@@ -402,16 +402,11 @@ function PostView() {
   }, [commentsData]);
 
   const handleCategoryClick = (parentId) => {
-    console.log(parentId);
     setSubCategories({
       ...subCategories,
       parentCategoryId: parentId,
     });
   };
-
-  // const handleUserClick = (userId) => {
-  //   console.log(userId);
-  // };
 
   return (
     <VGrid size="12">
@@ -516,13 +511,16 @@ function PostView() {
           ""
         )}
         <div className="container px-2">
-          <div className="container rounded bg-white text-center shadow">
+          <div className="container rounded bg-white shadow-xl">
             {postByIdLoading ? (
-              <h1>Loading post...</h1>
+              <h1 className="font-bold text-xl text-center">Loading post...</h1>
             ) : (
-              <h1>
+              <h1 className="font-bold text-xl text-center">
                 Current category:{" "}
-                <Link className="text-RocketJessie hover:underline" to={`/category/${catid}`}>
+                <Link
+                  className="text-RocketJessie hover:underline"
+                  to={`/category/${catid}`}
+                >
                   {newPosts.postDisplay.parentCategory}
                 </Link>{" "}
                 >>{" "}
@@ -577,7 +575,7 @@ function PostView() {
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none shadow-2xl"
               }
               type="button"
               onClick={(e) => {

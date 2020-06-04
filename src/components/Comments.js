@@ -1,8 +1,6 @@
 import React from "react";
 
 function Comments(props) {
-  //console.log(props)
-
   return (
     <div
       className="shadow-2xl p-3 bg-white container rounded my-2"

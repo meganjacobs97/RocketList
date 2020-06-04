@@ -248,7 +248,6 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      // console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
@@ -481,20 +480,25 @@ function CategoryView() {
           ""
         )}
         <div className="container rounded px-2">
-          <div className="container rounded bg-white text-center shadow font-bold text-xl">
+          <div className="container rounded bg-white shadow-xl">
             {postsByCatLoading ? (
-              <h1>Loading posts in {subCategories.currCategory}...</h1>
+              <h1 className="font-bold text-xl text-center">
+                Loading posts in {subCategories.currCategory}...
+              </h1>
             ) : (
-              <h1>
+              <h1 className="font-bold text-xl text-center">
                 Current category:{" "}
-                <Link className="text-RocketJessie hover:underline" to={`/category/${catid}`}>
+                <Link
+                  className="text-RocketJessie hover:underline"
+                  to={`/category/${catid}`}
+                >
                   {subCategories.currCategory}
                 </Link>
               </h1>
             )}
           </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
-            <h1 className="shadow-2xl bg-white container rounded my-2 p-3">
+            <h1 className="shadow-2xl bg-white container rounded text-center my-2 p-3">
               No posts in this category yet{" "}
               <FontAwesome
                 className="super-crazy-colors"
@@ -502,9 +506,8 @@ function CategoryView() {
                 size="1"
                 spin
                 style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-              />
-              {" "}Be the first to make a post in a
-              subcategory!
+              />{" "}
+              Be the first to make a post in a subcategory!
             </h1>
           ) : (
             posts.postsDisplay.map((post) => (
@@ -532,7 +535,7 @@ function CategoryView() {
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none shadow-2xl"
               }
               type="button"
               onClick={(e) => {
