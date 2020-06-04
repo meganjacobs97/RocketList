@@ -15,13 +15,13 @@ export default function Navbar(props) {
             <div className="logo-container" id="logo-container">
               <img
                 src={Logo}
-                className="object-center ml-2 h-20"
+                className="object-center ml-2 h-40"
                 id="rocketlist-logo"
                 alt="logo"
               />
               <img
                 src={rocket}
-                className="object-center ml-2 h-20"
+                className="object-center ml-2 h-40"
                 id="rocketlist-rocket"
                 alt="logo"
               />

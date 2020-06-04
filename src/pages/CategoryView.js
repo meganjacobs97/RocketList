@@ -54,8 +54,6 @@ const GET_TOPCATS = gql`
   }
 `;
 
-// import { connect } from 'react-redux'
-
 function CategoryView() {
   const { catid } = useParams();
   const MakeAPost = useSelector((state) => state.MakeAPost);
@@ -64,6 +62,19 @@ function CategoryView() {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
+
+  const Resetter = () => {
+    if (ShowCats === true) {
+      dispatch(SHOW_CATS());
+    }
+    if (ShowSubCats === true) {
+      dispatch(SHOW_SUB_CATS());
+    }
+    if (ShowLoginBox === true) {
+      dispatch(Login_Box());
+    }
+  };
+
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
