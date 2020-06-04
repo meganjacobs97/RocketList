@@ -451,12 +451,12 @@ function CategoryView() {
             ""
           )}
           {ShowLoginBox ? <LoginBox /> : ""}
-          {MakeAPost ? (
-            <InputPost category={catid} list={subCategories.subCategories} />
-          ) : (
-            ""
-          )}
         </div>
+        {MakeAPost ? (
+          <InputPost category={catid} list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <div className="container rounded px-2">
           <div className="container rounded bg-white text-center shadow font-bold text-xl">
             {postsByCatLoading ? (
