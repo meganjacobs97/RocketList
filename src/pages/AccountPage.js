@@ -102,9 +102,6 @@ function Account() {
     data: postsByUserIdData,
   } = useQuery(GET_POSTS_BY_USER_ID);
 
-  console.log(useQuery(GET_POSTS_BY_USER_ID));
-  console.log(postsByUserIdData);
-
   // const {
   //   loading: postsByUserLoading,
   //   error: postsByUserError,
@@ -223,6 +220,7 @@ function Account() {
               subcategory={post.subCategory}
               categoryId={post.parentId}
               category={post.parentCategory}
+              key={post.postId}
             />
           ))}
         </div>

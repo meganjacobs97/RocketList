@@ -248,7 +248,6 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      // console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
@@ -499,7 +498,7 @@ function CategoryView() {
             )}
           </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
-            <h1 className="shadow-2xl bg-white container rounded my-2 p-3">
+            <h1 className="shadow-2xl bg-white container rounded text-center my-2 p-3">
               No posts in this category yet{" "}
               <FontAwesome
                 className="super-crazy-colors"
@@ -536,7 +535,7 @@ function CategoryView() {
             <button
               className={
                 (MakeAPost ? "hidden " : "block ") +
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none shadow-2xl"
               }
               type="button"
               onClick={(e) => {
