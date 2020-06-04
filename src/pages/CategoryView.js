@@ -229,7 +229,7 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      console.log(topPostersData);
+      // console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
