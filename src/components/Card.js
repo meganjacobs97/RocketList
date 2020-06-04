@@ -16,7 +16,7 @@ function Card(props) {
           </span>
         </h1>
       </Link>
-      <p className="text-sm">
+      <div className="text-sm">
         Posted under:{" "}
         <Link
           className="text-RocketJames hover:underline"
@@ -36,7 +36,7 @@ function Card(props) {
           {props.author}
         </Link>
         <p className="text-xs">{props.date_created}</p>
-      </p>
+      </div>
     </div>
   );
 }
