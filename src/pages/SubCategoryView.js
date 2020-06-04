@@ -414,36 +414,38 @@ function SubCategoryView() {
           )}
         </div>
         <br className="lg:hidden"></br>
-        {ShowCats ? (
-          <div>
-            <AllCat
-              category={allCategories.title}
-              list={allCategories.allCategories}
-            />
-            <br className="lg:hidden"></br>
-          </div>
-        ) : (
-          ""
-        )}
-        {ShowSubCats ? (
-          <div>
-            <Subcategory
-              // selectCat={handleCategoryClick}
-              category={subCategories.parentCategory}
-              parentId={catid}
-              list={subCategories.subCategories}
-            />
-            <br className="lg:hidden"></br>
-          </div>
-        ) : (
-          ""
-        )}
-        {ShowLoginBox ? <LoginBox /> : ""}
-        {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
-        ) : (
-          ""
-        )}
+        <div className="lg:hidden">
+          {ShowCats ? (
+            <div>
+              <AllCat
+                category={allCategories.title}
+                list={allCategories.allCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowSubCats ? (
+            <div>
+              <Subcategory
+                // selectCat={handleCategoryClick}
+                category={subCategories.parentCategory}
+                parentId={catid}
+                list={subCategories.subCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowLoginBox ? <LoginBox /> : ""}
+          {MakeAPost ? (
+            <InputPost category={catid} list={subCategories.subCategories} />
+          ) : (
+            ""
+          )}
+        </div>
         <br className="lg:hidden"></br>
         <div className="container px-2">
           <div className="container rounded bg-white text-center shadow">

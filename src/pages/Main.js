@@ -355,18 +355,20 @@ function Main() {
           )}
         </div>
         <br className="lg:hidden"></br>
-        {ShowCats ? (
-          <div>
-            <AllCat
-              category={allCategories.title}
-              list={allCategories.allCategories}
-            />
-            <br className="lg:hidden"></br>
-          </div>
-        ) : (
-          ""
-        )}
-        {ShowLoginBox ? <LoginBox /> : ""}
+        <div className="lg:hidden">
+          {ShowCats ? (
+            <div>
+              <AllCat
+                category={allCategories.title}
+                list={allCategories.allCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowLoginBox ? <LoginBox /> : ""}
+        </div>
         <div className="container rounded px-2">
           <div className="container rounded bg-white text-center shadow">
             {postsLoading ? <h1>Loading all posts...</h1> : <h1>All posts</h1>}
