@@ -20,7 +20,7 @@ import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post } from "../actions";
+import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -59,6 +59,10 @@ const GET_TOPCATS = gql`
 function CategoryView() {
   const { catid } = useParams();
   const MakeAPost = useSelector((state) => state.MakeAPost);
+  const ShowCats = useSelector((state) => state.ShowCats);
+  const ShowSubCats = useSelector((state) => state.ShowSubCats);
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
   const GET_SUBCATS_BY_CATID = gql`
   query {
@@ -118,8 +122,6 @@ function CategoryView() {
     currCategory: "",
     subCategories: [],
   });
-
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
@@ -374,13 +376,76 @@ function CategoryView() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        <div className="flex flex-row justify-around rounded bg-white shadow visible lg:hidden">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_CATS());
+            }}
+          >
+            Explore
+          </div>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_SUB_CATS());
+            }}
+          >
+            Subcategories
+          </div>
+          {isLoggedIn ? (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Make_Post());
+              }}
+            >
+              Ask
+            </div>
+          ) : (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Login_Box());
+              }}
+            >
+              Login
+            </div>
+          )}
+        </div>
+        <br className="lg:hidden"></br>
+        {ShowCats ? (
+          <div>
+            <AllCat
+              category={allCategories.title}
+              list={allCategories.allCategories}
+            />
+            <br className="lg:hidden"></br>
+          </div>
+        ) : (
+          ""
+        )}
+        {ShowSubCats ? (
+          <div>
+            <Subcategory
+              // selectCat={handleCategoryClick}
+              category={subCategories.parentCategory}
+              parentId={catid}
+              list={subCategories.subCategories}
+            />
+            <br className="lg:hidden"></br>
+          </div>
+        ) : (
+          ""
+        )}
+        {ShowLoginBox ? <LoginBox /> : ""}
         {MakeAPost ? (
           <InputPost category={catid} list={subCategories.subCategories} />
         ) : (
           ""
         )}
         <div className="container rounded px-2">
-          <div className="container rounded bg-white text-center shadow">
+          <div className="container rounded bg-white text-center shadow font-bold text-xl">
             {postsByCatLoading ? (
               <h1>Loading posts in {subCategories.currCategory}...</h1>
             ) : (
@@ -446,14 +511,14 @@ function CategoryView() {
             list={topPosters.topPosters}
           />
           {topPostersLoading ? <Loading /> : ""}
+          <br></br>
+          <Mods
+            // selectItem={handleUserClick}
+            category={categoryMods.title}
+            list={categoryMods.mods}
+          />
+          {modLoading ? <Loading /> : ""}
         </div>
-        <br></br>
-        <Mods
-          // selectItem={handleUserClick}
-          category={categoryMods.title}
-          list={categoryMods.mods}
-        />
-        {modLoading ? <Loading /> : ""}
       </Col>
     </VGrid>
   );
