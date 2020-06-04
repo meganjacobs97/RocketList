@@ -471,7 +471,7 @@ function CategoryView() {
             )}
           </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
-            <h1>No posts in this category</h1>
+            <h1 className="shadow-2xl bg-white container rounded my-2 p-3">No posts in this category yet :( Be the first to make a post in a subcategory!</h1>
           ) : (
             posts.postsDisplay.map((post) => (
               <Card

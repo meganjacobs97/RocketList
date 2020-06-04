@@ -119,7 +119,7 @@ function InputPost(props) {
             {subCat.map((subcategory) => {
               console.log(subcategory);
               return (
-                <option value={subcategory.id} name="subcategory">
+                <option value={subcategory.id} key={subcategory.id} name="subcategory">
                   {subcategory.name}
                 </option>
               );
