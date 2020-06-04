@@ -39,7 +39,8 @@ const Chat = ({ location }) => {
   } = useQuery(GET_CURRENT_USER);
 
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
+    const { room, name } = queryString.parse(location.search);
+    
 
     //query for username 
     // Queries database to get user info based on logged in user (token)
@@ -48,7 +49,9 @@ const Chat = ({ location }) => {
     socket = io(ENDPOINT);
 
     setRoom(room);
-    setName(currUserData.currentUser.name)
+    setName(name); 
+
+    
 
     socket.emit('join', { name, room }, (error) => {
       if(error) {
