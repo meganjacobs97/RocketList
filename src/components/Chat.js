@@ -49,7 +49,14 @@ const Chat = ({ location }) => {
     socket = io(ENDPOINT);
 
     setRoom(room);
-    setName(currUserData.currentUser.name)
+    if(currUserData) {
+      console.log(currUserData)
+      setName(currUserData.currentUser.name)
+    }
+    else {
+      setName(name); 
+    }
+    
 
     socket.emit('join', { name, room }, (error) => {
       if(error) {
