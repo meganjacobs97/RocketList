@@ -39,7 +39,7 @@ const Chat = ({ location }) => {
   } = useQuery(GET_CURRENT_USER);
 
   useEffect(() => {
-    const { room } = queryString.parse(location.search);
+    const { room, name } = queryString.parse(location.search);
     
 
     //query for username 
@@ -49,7 +49,14 @@ const Chat = ({ location }) => {
     socket = io(ENDPOINT);
 
     setRoom(room);
-    setName(currUserData.currentUser.name)
+    if(currUserData) {
+      console.log(currUserData)
+      setName(currUserData.currentUser.name)
+    }
+    else {
+      setName(name); 
+    }
+    
 
     socket.emit('join', { name, room }, (error) => {
       if(error) {
