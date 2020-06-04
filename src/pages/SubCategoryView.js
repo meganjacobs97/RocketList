@@ -440,12 +440,12 @@ function SubCategoryView() {
             ""
           )}
           {ShowLoginBox ? <LoginBox /> : ""}
-          {MakeAPost ? (
-            <InputPost category={catid} list={subCategories.subCategories} />
-          ) : (
-            ""
-          )}
         </div>
+        {MakeAPost ? (
+          <InputPost category={catid} list={subCategories.subCategories} />
+        ) : (
+          ""
+        )}
         <br className="lg:hidden"></br>
         <div className="container px-2">
           <div className="container rounded bg-white text-center shadow">
