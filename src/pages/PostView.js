@@ -6,7 +6,7 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
 // import OrderedList from "../components/OrderedList";
@@ -24,7 +24,7 @@ import Subcategory from "../components/Subcategory";
 import InputComment from "../components/InputComment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post } from "../actions";
+import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -59,6 +59,9 @@ function PostView() {
   const { postId } = useParams();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const MakeAPost = useSelector((state) => state.MakeAPost);
+  const ShowCats = useSelector((state) => state.ShowCats);
+  const ShowSubCats = useSelector((state) => state.ShowSubCats);
+  const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
 
   const GET_POST_BY_ID = gql`
@@ -130,10 +133,10 @@ function PostView() {
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -172,11 +175,11 @@ function PostView() {
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -202,24 +205,24 @@ function PostView() {
   } = useQuery(GET_ALL_COMMENTS_BY_ID);
 
   // on page load, updates state objects
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   useEffect(() => {
     if (topPostersLoading) {
@@ -408,29 +411,101 @@ function PostView() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
+        <div className="flex flex-row justify-around rounded bg-white shadow visible lg:hidden">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_CATS());
+            }}
+          >
+            Explore
+          </div>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_SUB_CATS());
+            }}
+          >
+            Subcategories
+          </div>
+          {isLoggedIn ? (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Make_Post());
+              }}
+            >
+              Ask
+            </div>
+          ) : (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Login_Box());
+              }}
+            >
+              Login
+            </div>
+          )}
+        </div>
+        <br className="lg:hidden"></br>
+        <div className="lg:hidden">
+          {ShowCats ? (
+            <div>
+              <AllCat
+                category={allCategories.title}
+                list={allCategories.allCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowSubCats ? (
+            <div>
+              <Subcategory
+                // selectCat={handleCategoryClick}
+                category={subCategories.parentCategory}
+                parentId={catid}
+                list={subCategories.subCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowLoginBox ? <LoginBox /> : ""}
+          {MakeAPost ? (
+            <InputPost category={catid} list={subCategories.subCategories} />
+          ) : (
+            ""
+          )}
+        </div>
         <div className="container px-2">
           {MakeAPost ? (
             <InputPost category={catid} list={subCategories.subCategories} />
           ) : (
             ""
           )}
-          {postByIdLoading ? (
-            <h1>Loading post...</h1>
-          ) : (
-            <h1>
-              Current category:{" "}
-              <Link className="text-RocketJessie" to={`/category/${catid}`}>
-                {newPosts.postDisplay.parentCategory}
-              </Link>{" "}
-              >>{" "}
-              <Link
-                className="text-RocketJames"
-                to={`/category/${catid}/subcategory/${subcatid}`}
-              >
-                {newPosts.postDisplay.subCategory}
-              </Link>
-            </h1>
-          )}
+          <div className="container rounded bg-white text-center shadow">
+            {postByIdLoading ? (
+              <h1>Loading post...</h1>
+            ) : (
+              <h1>
+                Current category:{" "}
+                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                  {newPosts.postDisplay.parentCategory}
+                </Link>{" "}
+                >>{" "}
+                <Link
+                  className="text-RocketJames"
+                  to={`/category/${catid}/subcategory/${subcatid}`}
+                >
+                  {newPosts.postDisplay.subCategory}
+                </Link>
+              </h1>
+            )}
+          </div>
           {postByIdLoading ? (
             <Loading />
           ) : (
@@ -486,13 +561,13 @@ function PostView() {
           ) : (
             <LoginBox />
           )}
-          <br></br>
+          {/* <br></br>
           <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
-          {topPointsLoading ? <Loading /> : ""}
+          {topPointsLoading ? <Loading /> : ""} */}
           <br></br>
           <TPoster
             // selectItem={handleUserClick}

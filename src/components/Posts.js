@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 function PostCard(props) {
   return (
     <div
-      className="border-2 border-RocketJames container rounded my-2"
+      className="shadow-2xl bg-white container rounded my-2 p-3"
       id={props.postId}
     >
-      <h1>Title: {props.title}</h1>
-      <p>Body: {props.body}</p>
-      <p>Date: {props.date_created}</p>
+      <h1>{props.title}</h1>
+      <br />
+      <p>{props.body}</p>
+      <br />
       <p>
         Posted under:{" "}
         <Link
@@ -25,9 +26,23 @@ function PostCard(props) {
         >
           {props.category}
         </Link>{" "}
-        by{" "} <Link className="hover:underline" to={`/profile/${props.authorId}`}>{props.author}</Link>
+        by{" "}
+        <Link className="hover:underline" to={`/profile/${props.authorId}`}>
+          {props.author}
+        </Link>
       </p>
-      <button className="underline text-blue-700" onClick={() => window.open(`https://rocketlist.herokuapp.com/join/${props.postId}`, "Join Chat")}>Chat</button>
+      <p>{props.date_created}</p>
+      <button
+        className="underline text-blue-700"
+        onClick={() =>
+          window.open(
+            `https://rocketlist.herokuapp.com/join/${props.postId}`,
+            "Join Chat"
+          )
+        }
+      >
+        Chat
+      </button>
     </div>
   );
 }

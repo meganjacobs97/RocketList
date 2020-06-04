@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { useDispatch } from "react-redux";
-import { SIGN_IN } from "../actions";
+import { SIGN_IN, Login_Box } from "../actions";
 
 function LoginBox() {
   //username and password states
@@ -93,6 +93,7 @@ function LoginBox() {
     if (!SignInloading && SignIndata) {
       if (SignIndata.authenticate) {
         dispatch(SIGN_IN());
+        dispatch(Login_Box());
         //store username, id, and token in local storage
         localStorage.setItem(
           "userId",
@@ -125,7 +126,7 @@ function LoginBox() {
   };
 
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed">
+    <div className="bg-white shadow-2xl rounded px-8 pt-6 pb-8 mb-4">
       <form
         onSubmit={(e) => {
           e.preventDefault();

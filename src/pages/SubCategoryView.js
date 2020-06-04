@@ -6,7 +6,7 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 // import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
 // import OrderedList from "../components/OrderedList";
@@ -22,7 +22,7 @@ import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post } from "../actions";
+import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -50,14 +50,12 @@ const GET_ALLCATS = gql`
 
 const GET_TOPCATS = gql`
   query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
   }
-`; 
+`;
 
 // import { connect } from 'react-redux'
 
@@ -66,6 +64,9 @@ function SubCategoryView() {
   const { subcatid } = useParams();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const MakeAPost = useSelector((state) => state.MakeAPost);
+  const ShowCats = useSelector((state) => state.ShowCats);
+  const ShowSubCats = useSelector((state) => state.ShowSubCats);
+  const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
   const GET_SUBCATS_BY_CATID = gql`
   query {
@@ -97,7 +98,7 @@ function SubCategoryView() {
   }
 `;
 
-const GET_TOPPOSTERS = gql`
+  const GET_TOPPOSTERS = gql`
     query {
       postsByCategory (categoryId: "${catid}") {
         user {
@@ -109,7 +110,7 @@ const GET_TOPPOSTERS = gql`
         }
       }
     }
-  `
+  `;
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // const hamburger = props.chicken;
@@ -128,10 +129,10 @@ const GET_TOPPOSTERS = gql`
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -164,11 +165,11 @@ const GET_TOPPOSTERS = gql`
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -187,24 +188,24 @@ const GET_TOPPOSTERS = gql`
   } = useQuery(GET_POSTS_BY_SUBCATID);
 
   // on page load, updates state objects
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   useEffect(() => {
     if (topPostersLoading) {
@@ -220,7 +221,7 @@ const GET_TOPPOSTERS = gql`
         topPosters: topPostersData.postsByCategory.map((postsByCategory) => ({
           name: postsByCategory.user.username,
           id: postsByCategory.user._id,
-          posts: postsByCategory.posts
+          posts: postsByCategory.posts,
         })),
       });
     }
@@ -375,32 +376,100 @@ const GET_TOPPOSTERS = gql`
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
-        ) : (
-          ""
-        )}
-        <div className="container px-2">
-          {postsLoading ? (
-            <h1>
-              Loading posts in {subCategories.parentCategory} >>{" "}
-              {subCategories.currCategory}
-            </h1>
+        <div className="flex flex-row justify-around rounded bg-white shadow visible lg:hidden">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_CATS());
+            }}
+          >
+            Explore
+          </div>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_SUB_CATS());
+            }}
+          >
+            Subcategories
+          </div>
+          {isLoggedIn ? (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Make_Post());
+              }}
+            >
+              Ask
+            </div>
           ) : (
-            <h1>
-              Current category:{" "}
-              <Link className="text-RocketJessie" to={`/category/${catid}`}>
-                {subCategories.parentCategory}
-              </Link>{" "}
-              >>{" "}
-              <Link
-                className="text-RocketJames"
-                to={`/category/${catid}/subcategory/${subcatid}`}
-              >
-                {subCategories.currCategory}
-              </Link>
-            </h1>
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Login_Box());
+              }}
+            >
+              Login
+            </div>
           )}
+        </div>
+        <br className="lg:hidden"></br>
+        <div className="lg:hidden">
+          {ShowCats ? (
+            <div>
+              <AllCat
+                category={allCategories.title}
+                list={allCategories.allCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowSubCats ? (
+            <div>
+              <Subcategory
+                // selectCat={handleCategoryClick}
+                category={subCategories.parentCategory}
+                parentId={catid}
+                list={subCategories.subCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowLoginBox ? <LoginBox /> : ""}
+          {MakeAPost ? (
+            <InputPost category={catid} list={subCategories.subCategories} />
+          ) : (
+            ""
+          )}
+        </div>
+        <br className="lg:hidden"></br>
+        <div className="container px-2">
+          <div className="container rounded bg-white text-center shadow">
+            {postsLoading ? (
+              <h1>
+                Loading posts in {subCategories.parentCategory} >>{" "}
+                {subCategories.currCategory}
+              </h1>
+            ) : (
+              <h1>
+                Current category:{" "}
+                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                  {subCategories.parentCategory}
+                </Link>{" "}
+                >>{" "}
+                <Link
+                  className="text-RocketJames"
+                  to={`/category/${catid}/subcategory/${subcatid}`}
+                >
+                  {subCategories.currCategory}
+                </Link>
+              </h1>
+            )}
+          </div>
           {!postsLoading && posts.postsDisplay.length === 0 ? (
             <h1>No posts in this subcategory</h1>
           ) : (
@@ -445,27 +514,27 @@ const GET_TOPPOSTERS = gql`
             <LoginBox />
           )}
           <br></br>
-          <TPoints
+          {/* <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
           {topPointsLoading ? <Loading /> : ""}
-          <br></br>
+          <br></br> */}
           <TPoster
             // selectItem={handleUserClick}
             category={topPosters.title}
             list={topPosters.topPosters}
           />
           {topPostersLoading ? <Loading /> : ""}
+          <br></br>
+          <Mods
+            // selectItem={handleUserClick}
+            category={categoryMods.title}
+            list={categoryMods.mods}
+          />
+          {modLoading ? <Loading /> : ""}
         </div>
-        <br></br>
-        <Mods
-          // selectItem={handleUserClick}
-          category={categoryMods.title}
-          list={categoryMods.mods}
-        />
-        {modLoading ? <Loading /> : ""}
       </Col>
     </VGrid>
   );

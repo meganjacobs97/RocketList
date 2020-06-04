@@ -85,7 +85,7 @@ function InputPost(props) {
           alert("Post Submitted Successfully");
         }
       }}
-      className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-RocketRed"
+      className="bg-white shadow-2xl rounded px-8 pt-6 pb-8 mb-4"
     >
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2" htmlFor="postTitle">
@@ -114,7 +114,7 @@ function InputPost(props) {
           <select
             onChange={handleChange}
             value={dropDownValue}
-            className="form-select block w-full mt-1"
+            className="form-select block w-full mt-1 border-2 rounded border-RocketSteel"
           >
             {subCat.map((subcategory) => {
               console.log(subcategory);
@@ -126,44 +126,6 @@ function InputPost(props) {
             })}
           </select>
         </label>
-        <div className="block">
-          <span className="text-sm font-bold mb-2">Post Type</span>
-          <div className="mt-2">
-            <div>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  className="form-radio"
-                  name="radio"
-                  value="1"
-                />
-                <span className="ml-2">Discussion</span>
-              </label>
-            </div>
-            <div>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  className="form-radio"
-                  name="radio"
-                  value="2"
-                />
-                <span className="ml-2">Help</span>
-              </label>
-            </div>
-            <div>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  className="form-radio"
-                  name="radio"
-                  value="3"
-                />
-                <span className="ml-2">Question</span>
-              </label>
-            </div>
-          </div>
-        </div>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="submit"

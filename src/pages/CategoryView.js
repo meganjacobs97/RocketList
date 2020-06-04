@@ -6,7 +6,7 @@ import VGrid from "../components/VGrid";
 import TopCat from "../components/TopCat";
 import AllCat from "../components/AllCat";
 import Posts from "../components/Posts";
-import TPoints from "../components/TPoints";
+// import TPoints from "../components/TPoints";
 import TPoster from "../components/TPoster";
 import Mods from "../components/Mods";
 // import queryForSubCatsByParentId from "../utils/API";
@@ -20,7 +20,7 @@ import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Subcategory from "../components/Subcategory";
 import { useSelector, useDispatch } from "react-redux";
-import { Make_Post } from "../actions";
+import { Make_Post, Login_Box, SHOW_CATS, SHOW_SUB_CATS } from "../actions";
 
 const GET_USERS = gql`
   query {
@@ -47,21 +47,34 @@ const GET_ALLCATS = gql`
 
 const GET_TOPCATS = gql`
   query {
-    categories(categoryInput: {
-      sortByPosts: true
-    }) {
+    categories(categoryInput: { sortByPosts: true }) {
       name
       _id
     }
   }
-`; 
-
-// import { connect } from 'react-redux'
+`;
 
 function CategoryView() {
   const { catid } = useParams();
   const MakeAPost = useSelector((state) => state.MakeAPost);
+  const ShowCats = useSelector((state) => state.ShowCats);
+  const ShowSubCats = useSelector((state) => state.ShowSubCats);
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const ShowLoginBox = useSelector((state) => state.ShowLoginBox);
   const dispatch = useDispatch();
+
+  const Resetter = () => {
+    if (ShowCats === true) {
+      dispatch(SHOW_CATS());
+    }
+    if (ShowSubCats === true) {
+      dispatch(SHOW_SUB_CATS());
+    }
+    if (ShowLoginBox === true) {
+      dispatch(Login_Box());
+    }
+  };
+
   const GET_SUBCATS_BY_CATID = gql`
   query {
     category(id: "${catid}") {
@@ -110,7 +123,7 @@ function CategoryView() {
         }
       }
     }
-  `
+  `;
 
   // const { parentCategory, parentCategoryId, currCategory, subCategories } = props.subcategory;
   // Creates and sets state for rendered components (subcategories, topCategories, allCategories, topPoints, topPosters, and categoryMods)
@@ -121,8 +134,6 @@ function CategoryView() {
     subCategories: [],
   });
 
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
-
   const [topCategories, setTopCategories] = useState({
     topCategories: [],
     title: "",
@@ -131,10 +142,10 @@ function CategoryView() {
     allCategories: [],
     title: "",
   });
-  const [topPoints, setTopPoints] = useState({
-    topPoints: [],
-    title: "",
-  });
+  // const [topPoints, setTopPoints] = useState({
+  //   topPoints: [],
+  //   title: "",
+  // });
   const [topPosters, setTopPosters] = useState({
     topPosters: [],
     title: "",
@@ -167,11 +178,11 @@ function CategoryView() {
     data: topCatData,
   } = useQuery(GET_TOPCATS);
   // Queries database to get top points holders (placeholder)
-  const {
-    loading: topPointsLoading,
-    error: topPointsError,
-    data: topPointsData,
-  } = useQuery(GET_USERS);
+  // const {
+  //   loading: topPointsLoading,
+  //   error: topPointsError,
+  //   data: topPointsData,
+  // } = useQuery(GET_USERS);
   // Queries database to get top posters (placeholder)
   const {
     loading: topPostersLoading,
@@ -190,25 +201,25 @@ function CategoryView() {
   } = useQuery(GET_POSTS_BY_CATID);
 
   // on page load, updates state objects
-  useEffect(() => {
-    if (topPointsLoading) {
-      setTopPoints({
-        ...topPoints,
-        title: "Loading Top Points Holders...",
-      });
-    }
-    if (topPointsData) {
-      setTopPoints({
-        ...topPoints,
-        title: "Top Points Holders",
-        topPoints: topPointsData.users.map((user) => ({
-          name: user.username,
-          id: user._id,
-          points: user.points,
-        })),
-      });
-    }
-  }, [topPointsData]);
+  // useEffect(() => {
+  //   if (topPointsLoading) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Loading Top Points Holders...",
+  //     });
+  //   }
+  //   if (topPointsData) {
+  //     setTopPoints({
+  //       ...topPoints,
+  //       title: "Top Points Holders",
+  //       topPoints: topPointsData.users.map((user) => ({
+  //         name: user.username,
+  //         id: user._id,
+  //         points: user.points,
+  //       })),
+  //     });
+  //   }
+  // }, [topPointsData]);
 
   useEffect(() => {
     if (topPostersLoading) {
@@ -218,14 +229,14 @@ function CategoryView() {
       });
     }
     if (topPostersData) {
-      console.log(topPostersData)
+      console.log(topPostersData);
       setTopPosters({
         ...topPosters,
         title: "Top Posters",
         topPosters: topPostersData.postsByCategory.map((postsByCategory) => ({
           name: postsByCategory.user.username,
           id: postsByCategory.user._id,
-          posts: postsByCategory.posts
+          posts: postsByCategory.posts,
         })),
       });
     }
@@ -330,7 +341,7 @@ function CategoryView() {
           item.body = post.body;
           item.date_created = post.date_created;
           item.author = post.author.username;
-          item.authorId = post.author._id
+          item.authorId = post.author._id;
           item.postId = post._id;
           item.subCatId = subCategId;
           item.subCategory = subCategName;
@@ -376,22 +387,89 @@ function CategoryView() {
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
-        {MakeAPost ? (
-          <InputPost category={catid} list={subCategories.subCategories} />
-        ) : (
-          ""
-        )}
-        <div className="container rounded px-2">
-          {postsByCatLoading ? (
-            <h1>Loading posts in {subCategories.currCategory}...</h1>
+        <div className="flex flex-row justify-around rounded bg-white shadow visible lg:hidden">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_CATS());
+            }}
+          >
+            Explore
+          </div>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(SHOW_SUB_CATS());
+            }}
+          >
+            Subcategories
+          </div>
+          {isLoggedIn ? (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Make_Post());
+              }}
+            >
+              Ask
+            </div>
           ) : (
-            <h1>
-              Current category:{" "}
-              <Link className="text-RocketJessie" to={`/category/${catid}`}>
-                {subCategories.currCategory}
-              </Link>
-            </h1>
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                dispatch(Login_Box());
+              }}
+            >
+              Login
+            </div>
           )}
+        </div>
+        <br className="lg:hidden"></br>
+        <div className="lg:hidden">
+          {ShowCats ? (
+            <div>
+              <AllCat
+                category={allCategories.title}
+                list={allCategories.allCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowSubCats ? (
+            <div>
+              <Subcategory
+                // selectCat={handleCategoryClick}
+                category={subCategories.parentCategory}
+                parentId={catid}
+                list={subCategories.subCategories}
+              />
+              <br className="lg:hidden"></br>
+            </div>
+          ) : (
+            ""
+          )}
+          {ShowLoginBox ? <LoginBox /> : ""}
+          {MakeAPost ? (
+            <InputPost category={catid} list={subCategories.subCategories} />
+          ) : (
+            ""
+          )}
+        </div>
+        <div className="container rounded px-2">
+          <div className="container rounded bg-white text-center shadow font-bold text-xl">
+            {postsByCatLoading ? (
+              <h1>Loading posts in {subCategories.currCategory}...</h1>
+            ) : (
+              <h1>
+                Current category:{" "}
+                <Link className="text-RocketJessie" to={`/category/${catid}`}>
+                  {subCategories.currCategory}
+                </Link>
+              </h1>
+            )}
+          </div>
           {!postsByCatLoading && posts.postsDisplay.length === 0 ? (
             <h1>No posts in this category</h1>
           ) : (
@@ -432,13 +510,13 @@ function CategoryView() {
           ) : (
             <LoginBox />
           )}
-          <br></br>
+          {/* <br></br>
           <TPoints
             // selectItem={handleUserClick}
             category={topPoints.title}
             list={topPoints.topPoints}
           />
-          {topPointsLoading ? <Loading /> : ""}
+          {topPointsLoading ? <Loading /> : ""} */}
           <br></br>
           <TPoster
             // selectItem={handleUserClick}
@@ -446,14 +524,14 @@ function CategoryView() {
             list={topPosters.topPosters}
           />
           {topPostersLoading ? <Loading /> : ""}
+          <br></br>
+          <Mods
+            // selectItem={handleUserClick}
+            category={categoryMods.title}
+            list={categoryMods.mods}
+          />
+          {modLoading ? <Loading /> : ""}
         </div>
-        <br></br>
-        <Mods
-          // selectItem={handleUserClick}
-          category={categoryMods.title}
-          list={categoryMods.mods}
-        />
-        {modLoading ? <Loading /> : ""}
       </Col>
     </VGrid>
   );
