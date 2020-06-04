@@ -20,9 +20,6 @@ const Chat = ({ location }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const ENDPOINT = 'https://rocket-list-server.herokuapp.com/'
-<<<<<<< HEAD
-  
-=======
 
   //get user id by checking token and comparing it to db
   const userToken = JSON.parse(localStorage.getItem("token"));
@@ -41,11 +38,9 @@ const Chat = ({ location }) => {
       data: currUserData,
   } = useQuery(GET_CURRENT_USER);
 
->>>>>>> development
   useEffect(() => {
     const { room } = queryString.parse(location.search);
     
-    const userId = JSON.parse(localStorage.getItem("userId"));
 
     //query for username 
     // Queries database to get user info based on logged in user (token)
