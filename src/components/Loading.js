@@ -14,12 +14,12 @@ class Loading extends React.Component {
     super(props);
     this.state = {
       loading: true,
+      color: this.props.color,
     };
   }
-
   render() {
     return (
-      <div className="sweet-loading">
+      <div className="container rounded bg-white shadow-2xl divide-y-2 divide-RocketSteel sweet-loading">
         {/* <ClipLoader
           css={override}
           size={50}
@@ -29,7 +29,7 @@ class Loading extends React.Component {
         <ClimbingBoxLoader
           css={override}
           size={20}
-          color={"#220000"}
+          color={this.state.color}
           loading={this.state.loading}
         />
       </div>
@@ -37,4 +37,4 @@ class Loading extends React.Component {
   }
 }
 
-export default Loading
+export default Loading;
