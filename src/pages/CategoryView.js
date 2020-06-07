@@ -284,12 +284,12 @@ function CategoryView() {
 
   // when subcatid changes, update subcat state
   useEffect(() => {
-    // if (subCatIdLoading) {
-    //   setSubCategories({
-    //     ...subCategories,
-    //     title: "Loading Subcategories"
-    //   })
-    // }
+    if (subCatIdLoading) {
+      setSubCategories({
+        ...subCategories,
+        title: "Loading Subcategories",
+      });
+    }
     if (subCatIdData) {
       setSubCategories({
         ...subCategories,
@@ -382,26 +382,23 @@ function CategoryView() {
       <Col lgsize="2" visibility="hidden lg:block">
         <div className="grid invisible lg:visible">
           <Subcategory
-            // selectCat={handleCategoryClick}
             category={subCategories.parentCategory}
             parentId={catid}
             list={subCategories.subCategories}
           />
-          {subCatIdLoading ? <Loading /> : ""}
+          {subCatIdLoading ? <Loading color="#A36AD1" /> : ""}
           <br></br>
           <TopCat
-            // selectItem={handleCategoryClick}
             category={topCategories.title}
             list={topCategories.topCategories}
           />
-          {topCatLoading ? <Loading /> : ""}
+          {topCatLoading ? <Loading color="#BC3287" /> : ""}
           <br></br>
           <AllCat
-            // selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
-          {allCatLoading ? <Loading /> : ""}
+          {allCatLoading ? <Loading color="#BC3287" /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -503,7 +500,7 @@ function CategoryView() {
               <FontAwesome
                 className="super-crazy-colors"
                 name="rocket"
-                size="1"
+                size="lg"
                 spin
                 style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
               />{" "}
@@ -526,7 +523,7 @@ function CategoryView() {
               />
             ))
           )}
-          {postsByCatLoading ? <Loading /> : ""}
+          {postsByCatLoading ? <Loading color="#D9D9D9" /> : ""}
         </div>
       </Col>
       <Col lgsize="2" mobsize="10" visibility="lg:col-start-11">
@@ -561,14 +558,14 @@ function CategoryView() {
             category={topPosters.title}
             list={topPosters.topPosters}
           />
-          {topPostersLoading ? <Loading /> : ""}
+          {topPostersLoading ? <Loading color="#220000" /> : ""}
           <br></br>
           <Mods
             // selectItem={handleUserClick}
             category={categoryMods.title}
             list={categoryMods.mods}
           />
-          {modLoading ? <Loading /> : ""}
+          {modLoading ? <Loading color="#220000" /> : ""}
         </div>
       </Col>
     </VGrid>

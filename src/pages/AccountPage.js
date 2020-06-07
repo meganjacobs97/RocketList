@@ -184,14 +184,14 @@ function Account() {
             category={topCategories.title}
             list={topCategories.topCategories}
           />
-          {topCatLoading ? <Loading /> : ""}
+          {topCatLoading ? <Loading color="#BC3287" /> : ""}
           <br></br>
           <AllCat
             // selectCat={handleCategoryClick}
             category={allCategories.title}
             list={allCategories.allCategories}
           />
-          {allCatLoading ? <Loading /> : ""}
+          {allCatLoading ? <Loading color="#BC3287" /> : ""}
         </div>
       </Col>
       <Col lgsize="6" mobsize="10" visibility="col-start-2 lg:col-start-4">
@@ -207,7 +207,7 @@ function Account() {
               </h1>
             )}
           </div>
-          {postsByUserIdLoading ? <Loading /> : ""}
+          {postsByUserIdLoading ? <Loading color="#D9D9D9" /> : ""}
           {posts.postsDisplay.map((post) => (
             <Card
               title={post.title}
