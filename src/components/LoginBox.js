@@ -28,6 +28,7 @@ function LoginBox() {
       createAcc(credentials: { username: $username, password: $password }) {
         username
         userId
+        darkType
         token
       }
     }
@@ -48,6 +49,7 @@ function LoginBox() {
           "username",
           JSON.stringify(data.createAcc.username)
         );
+        localStorage.setItem("darkType", JSON.stringify(data.createAcc.darkType))
         localStorage.setItem("token", JSON.stringify(data.createAcc.token));
         //reset username and password fields
         setUsername("");
@@ -75,6 +77,7 @@ function LoginBox() {
         username
         userId
         token
+        darkType
       }
     }
   `;
@@ -105,6 +108,10 @@ function LoginBox() {
           "token",
           JSON.stringify(SignIndata.authenticate.token)
         );
+        localStorage.setItem(
+          "darkType",
+          JSON.stringify(SignIndata.authenticate.darkType)
+        )
         //reset username and password fields
         setUsername("");
         setPassword("");
