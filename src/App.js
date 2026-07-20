@@ -16,6 +16,7 @@ import { Token } from "./actions";
 const token = JSON.parse(localStorage.getItem("token"));
 
 // import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 
 const UserId = JSON.parse(localStorage.getItem("userId"));
 
@@ -55,8 +56,7 @@ const App = () => {
           </Route>
           <Route
             exact
-            path="/category/:catid/subcategory/:subcatid/post/:postId"
-          >
+            path="/category/:catid/subcategory/:subcatid/post/:postId">
             {" "}
             <PostView />
           </Route>
